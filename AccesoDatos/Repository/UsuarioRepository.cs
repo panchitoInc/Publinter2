@@ -1,5 +1,5 @@
 ﻿using AccesoDatos.Repository;
-using BibliotecaClases.Entities;
+using DataModule.Entities;
 using DataModule;
 using Mvc;
 using System;

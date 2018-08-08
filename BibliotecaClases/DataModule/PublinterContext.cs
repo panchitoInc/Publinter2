@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using DataModule.Migrations;
-using BibliotecaClases.Entities;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Web.UI.WebControls;
 using System;
+using DataModule.Entities;
 
 namespace DataModule
 {
@@ -33,6 +33,7 @@ namespace DataModule
         public DbSet<Material> Material { get; set; }
         public DbSet<Programa> Programa { get; set; }
         public DbSet<Orden> Orden { get; set; }
+        public DbSet<TipoMaterial> TipoMaterial { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Rol> Rol { get; set; }
         public DbSet<UsuarioAccess> UsuarioAccess { get; set; }

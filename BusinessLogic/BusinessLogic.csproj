@@ -53,7 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\AccountApplicationService.cs" />
+    <Compile Include="ApplicationServices\IMaterialApplicationService.cs" />
     <Compile Include="ApplicationServices\IMedioApplicationServices.cs" />
+    <Compile Include="ApplicationServices\MaterialApplicationService.cs" />
     <Compile Include="ApplicationServices\MedioApplicationServices.cs" />
     <Compile Include="ApplicationServices\UsuarioApplicationService.cs" />
     <Compile Include="ApplicationServices\IAccountApplicationService.cs" />

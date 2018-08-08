@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BibliotecaClases.Entities
+namespace DataModule.Entities
 {
     public class UsuarioAccess : DbSet
     {

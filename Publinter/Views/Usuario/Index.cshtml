@@ -1,15 +1,15 @@
-﻿@model BibliotecaClases.Entities.Usuario
+﻿@model DataModule.Entities.Usuario
 @{
     ViewBag.Title = "Usuarios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 
-    List<BibliotecaClases.Entities.Usuario> listaUsuario = ViewBag.ListaUsuarios;
+    List<DataModule.Entities.Usuario> listaUsuario = ViewBag.ListaUsuarios;
 }
-<script type="text/html">
-    $(document).ready(fucntion(){
-
-    $("#ListadoUsuariosTable").DataTable();
+<script>
+    $(document).ready(function()
+    {
+        $("#ListadoUsuariosTable").DataTable();
     });
 </script>
 
@@ -50,9 +50,6 @@
                                 <td>No hay datos para mostrar</td>
                             </tr>
                         }
-
-
-
                     </tbody>
                 </table>
             </div>

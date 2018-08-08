@@ -1,0 +1,63 @@
+﻿@model DataModule.Entities.Material
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    SelectList ListaTipos = new SelectList(ViewBag.TiposMaterial, "Value", "Text");
+}
+
+<script>
+    $(document).ready(function () {
+        $("#DuracionSegundos").val("");
+    })
+</script>
+
+<div class=" register-box-body col-lg-8 col-md-10">
+    <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar nuevo material</p>
+
+    @using (Html.BeginForm("Create", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MaterialCreateForm" }))
+    {
+        <div class="col-md-12">
+            <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
+                <font style="vertical-align: inherit;">Datos del material</font>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", @placeholder = "Titulo" })
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.TipoMaterialId, ListaTipos, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="height:49px;">
+            <div class="col-xs-6">
+                @Html.TextBoxFor(x => x.DuracionSegundos, new { @class = "form-control", @type = "number", @min = "0", @placeholder = "Duracion (segundos)" })
+            </div>
+        </div>
+
+        <div class="col-md-12" style="height:49px;">
+            <div class="col-xs-12">
+                @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control", @placeholder = "Descripcion" })
+            </div>
+        </div>
+
+        <div class="col-md-12" style="margin-top:20px">
+            <div class="col-xs-8">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+    }
+</div><!-- /.register-box -->
+
+<script src="~/Scripts/Utils.js"></script>
+<script src="~/Scripts/Publinter/Usuario.js"></script>
+
