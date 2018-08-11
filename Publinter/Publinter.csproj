@@ -237,6 +237,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Extensions\AppViewPage.cs" />
@@ -3074,9 +3075,14 @@
     <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\Medio\Index.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Medio\Create.cshtml" />
     <Content Include="Views\Shared\Contacto\_medio_contacto_renglon.cshtml" />
     <Content Include="Views\Shared\Contacto\_medio_contacto_renglones.cshtml" />
+=======
+    <Content Include="Views\Material\Create.cshtml" />
+    <Content Include="Views\Material\Index.cshtml" />
+>>>>>>> 9f121a9ed875cb6d76482d92385050f96c5a80fd
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

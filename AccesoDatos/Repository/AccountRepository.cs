@@ -1,4 +1,4 @@
-﻿using BibliotecaClases.Entities;
+﻿using DataModule.Entities;
 using DataModule;
 using System;
 using System.Collections.Generic;

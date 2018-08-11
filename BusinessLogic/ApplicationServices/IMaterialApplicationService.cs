@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.ApplicationServices
 {
-    public interface IMedioApplicationServices
+    public interface IMaterialApplicationService
     {
-        List<Medio> GetAll();
+        int Create(Material mat);
+
+        void Update(Material mat);
+
+        IList<Material> GetAll();
+
+        IList<TipoMaterial> GetTipos();
     }
 }

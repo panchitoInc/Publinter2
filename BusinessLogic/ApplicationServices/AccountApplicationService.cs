@@ -1,5 +1,5 @@
 ﻿using AccesoDatos.Repository;
-using BibliotecaClases.Entities;
+using DataModule.Entities;
 using ClassLibrary2.ApplicationServices;
 using System;
 using System.Collections.Generic;

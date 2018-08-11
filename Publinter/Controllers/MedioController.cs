@@ -1,6 +1,6 @@
 ﻿using AccesoDatos;
 using AccesoDatos.Repository;
-using BibliotecaClases.Entities;
+using DataModule.Entities;
 using BusinessLogic.ApplicationServices;
 using Mvc;
 using System.Web.Mvc;

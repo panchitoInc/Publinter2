@@ -61,6 +61,7 @@
     <Compile Include="Entities\Orden.cs" />
     <Compile Include="Entities\Programa.cs" />
     <Compile Include="Entities\Rol.cs" />
+    <Compile Include="Entities\TipoMaterial.cs" />
     <Compile Include="Entities\Usuario.cs" />
     <Compile Include="Entities\UsuarioAccess.cs" />
     <Compile Include="Migrations\Configuration.cs" />

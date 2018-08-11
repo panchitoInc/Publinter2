@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace AccesoDatos.Repository
 {
-    public interface IAccountRepository
+    public interface IMaterialRepository
     {
-        Usuario GetUserByNameAndPass(string email, string clave, string ip);
+        int Create(Material mat);
 
+        void Update(Material mat);
+
+        IList<Material> GetAll();
+
+        IList<TipoMaterial> GetTipos();
     }
 }

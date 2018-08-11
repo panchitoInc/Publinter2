@@ -1,4 +1,4 @@
-﻿using BibliotecaClases.Entities;
+﻿using DataModule.Entities;
 using BusinessLogic.ApplicationServices;
 using ClassLibrary2.ApplicationServices;
 using Mvc;

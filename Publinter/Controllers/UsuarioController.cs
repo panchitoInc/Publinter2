@@ -1,6 +1,6 @@
 ﻿using AccesoDatos;
 using AccesoDatos.Repository;
-using BibliotecaClases.Entities;
+using DataModule.Entities;
 using BusinessLogic.ApplicationServices;
 using Mvc;
 using System;
@@ -34,7 +34,6 @@ namespace Publinter.Controllers
         {
 
             var usuarios = usuarioApplicationService.GetAll();
-            var a = 1 + 1;
             ViewBag.ListaUsuarios = usuarios;
            
             return View();
