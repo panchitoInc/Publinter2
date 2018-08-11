@@ -3074,6 +3074,9 @@
     <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\Medio\Index.cshtml" />
+    <Content Include="Views\Medio\Create.cshtml" />
+    <Content Include="Views\Shared\Contacto\_medio_contacto_renglon.cshtml" />
+    <Content Include="Views\Shared\Contacto\_medio_contacto_renglones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

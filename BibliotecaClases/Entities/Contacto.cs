@@ -21,5 +21,7 @@ namespace BibliotecaClases.Entities
         public string Ciudad { get; set; }
 
         public string Departamento { get; set; }
+
+        public bool  Delete { get; set; }
     }
 }
