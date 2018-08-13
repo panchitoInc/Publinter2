@@ -6,12 +6,16 @@
     List<DataModule.Entities.Medio> listaMedios = ViewBag.ListaMedios;
 }
 
-}
+
 <script type="text/html">
     $(document).ready(fucntion(){
 
     $("#ListadoMediosTable").DataTable();
     });
+
+    function GetUpdateMedio(id){
+    windows.location.href = "Medio/Update/" + id;
+    }
 </script>
 
 <link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -37,7 +41,7 @@
                         {
                             foreach (var i in listaMedios)
                             {
-                                <tr>
+                                <tr onclick="javascript:GetUpdateMedio(@i.MedioId);">
                                     <td>@i.Nombre</td>
                                     <td>@i.Descripcion</td>
                                     <td href="tel:@i.Contactos.FirstOrDefault().Telefono">@i.Contactos.FirstOrDefault().Telefono</td>

@@ -20,5 +20,16 @@ namespace BusinessLogic.ApplicationServices
         {
             return medioRepository.GetAll();
         }
+        public int Add(Medio model)
+        {
+            model.Contactos = model.Contactos.FindAll(x => x.Delete.Equals(false) && x.Nombre != "");
+            model.Programas = model.Programas.FindAll(x => x.Delete.Equals(false) && x.Nombre != "");
+            return medioRepository.Add(model);
+        }
+        public Medio Get(int id)
+        {
+            return medioRepository.Get(id);
+        }
+       
     }
 }

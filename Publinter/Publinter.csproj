@@ -3075,14 +3075,16 @@
     <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\Medio\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Medio\Create.cshtml" />
     <Content Include="Views\Shared\Contacto\_medio_contacto_renglon.cshtml" />
     <Content Include="Views\Shared\Contacto\_medio_contacto_renglones.cshtml" />
-=======
     <Content Include="Views\Material\Create.cshtml" />
     <Content Include="Views\Material\Index.cshtml" />
->>>>>>> 9f121a9ed875cb6d76482d92385050f96c5a80fd
+    <Content Include="Views\Medio\_medio_contacto.cshtml" />
+    <Content Include="Views\Medio\_medio_programas.cshtml" />
+    <Content Include="Views\Medio\Programa\_medio_programa_renglones.cshtml" />
+    <Content Include="Views\Medio\Programa\_medio_programa_renglon.cshtml" />
+    <Content Include="Views\Medio\Programa\_medio_programa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

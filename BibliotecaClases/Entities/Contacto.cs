@@ -22,6 +22,9 @@ namespace DataModule.Entities
 
         public string Departamento { get; set; }
 
+        [NotMapped]
         public bool  Delete { get; set; }
+
+        public string Nombre { get; set; }
     }
 }
