@@ -41,7 +41,17 @@ namespace Publinter.Controllers
 
         public ActionResult Create()
         {
-            return View();
+
+            Medio model = new Medio();
+
+            for(var i = 0; i < 3; i++)
+            {
+                Contacto c = new Contacto();
+                model.Contactos.Add(c);
+                Programa p = new Programa();
+                model.Programas.Add(p);
+            }
+            return View(model);
         }
 
         [HttpPost]
@@ -65,11 +75,11 @@ namespace Publinter.Controllers
             return Json(html, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpDate(int id)
+        public ActionResult Edit(int id)
         {
             Medio unMedio = medioApplicationService.Get(id);
 
-            return View("Create",unMedio);
+            return View(unMedio);
         }
     }
 }

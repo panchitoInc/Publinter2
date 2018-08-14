@@ -3085,6 +3085,7 @@
     <Content Include="Views\Medio\Programa\_medio_programa_renglones.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa_renglon.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa.cshtml" />
+    <Content Include="Views\Medio\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

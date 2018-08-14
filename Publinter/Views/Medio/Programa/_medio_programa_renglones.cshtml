@@ -1,8 +1,6 @@
 ﻿@model DataModule.Entities.Medio
 @{
-                /**/
-
-                int index = (ViewData["indexPrograma"] == null) ? 0 : (int)ViewData["indexPrograma"];
+    int index = (ViewData["indexPrograma"] == null) ? 0 : (int)ViewData["indexPrograma"];
 }
 
 
@@ -25,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < 3; i++)
+                        @for (int i = 0; i < Model.Programas.Count; i++)
                         {
                             ViewData["indexPrograma"] = i;
                             @Html.Partial("~/Views/Medio/Programa/_medio_programa_renglon.cshtml")

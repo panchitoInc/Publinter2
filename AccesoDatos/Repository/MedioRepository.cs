@@ -26,7 +26,10 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                Medios = context.Medio.ToList();
+                Medios = context.Medio
+                                .Include("Contactos")
+                                .Include("Programas")
+                                .ToList();
             }
 
             return Medios.ToList();
@@ -37,7 +40,10 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                med = context.Medio.FirstOrDefault(x => x.MedioId == id);
+                med = context.Medio
+                                   .Include("Contactos")
+                                   .Include("Programas") 
+                                   .FirstOrDefault(x => x.MedioId == id);
             }
 
             return med;
