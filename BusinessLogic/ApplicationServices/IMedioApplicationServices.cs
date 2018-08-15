@@ -10,5 +10,9 @@ namespace BusinessLogic.ApplicationServices
     public interface IMedioApplicationServices
     {
         List<Medio> GetAll();
+
+        int Add(Medio model);
+
+        Medio Get(int id);
     }
 }

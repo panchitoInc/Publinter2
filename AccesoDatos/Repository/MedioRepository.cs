@@ -26,7 +26,10 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                Medios = context.Medio.ToList();
+                Medios = context.Medio
+                                .Include("Contactos")
+                                .Include("Programas")
+                                .ToList();
             }
 
             return Medios.ToList();
@@ -37,10 +40,71 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                med = context.Medio.FirstOrDefault(x => x.MedioId == id);
+                med = context.Medio
+                                   .Include("Contactos")
+                                   .Include("Programas") 
+                                   .FirstOrDefault(x => x.MedioId == id);
             }
 
             return med;
+        }
+
+        public int Add(Medio model)
+        {
+            try
+            {
+                using (var context = new PublinterContext())
+                {
+                    context.Medio.Add(model);
+                    context.SaveChanges();
+                }
+                return model.MedioId;
+
+            }
+            catch (Exception)
+            {
+
+                return -1;
+            }
+            
+        }
+
+
+        public bool Update(Medio model)
+        {
+            try
+            {
+                using (var context = new PublinterContext())
+                {
+                    var medioBd = context.Medio
+                                          .FirstOrDefault(x => x.MedioId.Equals(model.MedioId));
+                    if (medioBd == null) throw new Exception(String.Format("No se encontro el medio."));
+
+                    medioBd.Descripcion = model.Descripcion;
+                    medioBd.Nombre = medioBd.Nombre;
+
+                    if (model.Contactos != null && model.Contactos.Count > 0)
+                    {
+                        medioBd.Contactos = model.Contactos;
+                        medioBd.Contactos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                    }
+
+                    if (model.Programas != null && model.Programas.Count() > 0)
+                    {
+                        medioBd.Programas = model.Programas;
+                        medioBd.Programas.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                    }
+
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
+
+                
         }
     }
 }

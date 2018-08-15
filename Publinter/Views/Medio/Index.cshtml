@@ -6,18 +6,22 @@
     List<DataModule.Entities.Medio> listaMedios = ViewBag.ListaMedios;
 }
 
-}
+
 <script type="text/html">
     $(document).ready(fucntion(){
 
     $("#ListadoMediosTable").DataTable();
+
+
     });
+
+   
 </script>
 
 <link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
 <div class="box">
     <div class="box-header">
-        <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Listados de usuarios</font></font></h3>
+        <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Listados de medios</font></font></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -37,8 +41,8 @@
                         {
                             foreach (var i in listaMedios)
                             {
-                                <tr>
-                                    <td>@i.Nombre</td>
+                                <tr onclick="javascript:GetUpdateMedio(@i.MedioId);">
+                                    <td><a href="../Medio/Edit/@i.MedioId" >@i.Nombre</a></td>
                                     <td>@i.Descripcion</td>
                                     <td href="tel:@i.Contactos.FirstOrDefault().Telefono">@i.Contactos.FirstOrDefault().Telefono</td>
                                     <td><a href="mailto:@i.Contactos.FirstOrDefault().Email">@i.Contactos.FirstOrDefault().Email</a> </td>

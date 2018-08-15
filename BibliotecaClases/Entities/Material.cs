@@ -9,6 +9,8 @@ namespace DataModule.Entities
 {
     public class Material
     {
+        
+
         [Key, Column("MaterialId"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaterialId { get; set; }
 

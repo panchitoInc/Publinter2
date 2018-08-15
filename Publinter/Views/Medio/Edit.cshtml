@@ -1,0 +1,128 @@
+﻿@model DataModule.Entities.Medio
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .nav-tabs-custom > .nav-tabs > li.active {
+        border-top-color: #3faf52;
+    }
+
+    div.box-body {
+        height: 203px;
+        overflow-y: scroll;
+    }
+
+        div.box-body::-webkit-scrollbar {
+            width: 1em !important;
+        }
+
+        div.box-body::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important;
+        }
+
+        div.box-body::-webkit-scrollbar-thumb {
+            background-color: darkgrey !important;
+            outline: 1px solid slategrey !important;
+        }
+</style>
+<script type="text/javascript">
+
+    //////////Contacto///////////
+    function AddMedioRenglon() {
+
+        AjaxPost("../../Medio/AddMedioRenglon", GetCurrentModel("MedioCreateForm"), AddMedioRenglonSuccess, 0);
+    }
+
+    function AddMedioRenglonSuccess(data, index) {
+        $("#ListadoUsuariosTable tbody").append(data);
+    }
+
+    function DeleteRenglon(index) {
+        $("#tr_" + index).fadeOut(200);
+        $("#Contactos_" + index + "__Delete").prop('checked', true);
+    }
+    ///////////////////////////
+    //////////Programa////////
+    function AddProgramaRenglon() {
+        debugger;
+        AjaxPost("../../Medio/AddProgramaRenglon", GetCurrentModel("MedioCreateForm"), AddProgramaRenglonSuccess, 0);
+    }
+
+    function AddProgramaRenglonSuccess(data, index) {
+        $("#ListadoProgramasTable tbody").append(data);
+    }
+
+
+
+    function DeleteRenglonPrograma(index) {
+        $("#tr_programa_" + index).fadeOut(200);
+        $("#Programas_" + index + "__Delete").prop('checked', true);
+    }
+    /////////////////////////
+
+</script>
+
+<div class=" register-box-body">
+    <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar nuevo medio</p>
+
+    @using (Html.BeginForm("Create", "Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MedioCreateForm" }))
+    {
+        <!--Datos del medio-->
+        <div class="row">
+            <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
+                <font style="vertical-align: inherit;">Datos del medio</font>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Descripcion, new { @class = "form-control", @placeholder = "Descripción" })
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Tabs Contactos y programas -->
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">Contactos</a></li>
+                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Programas</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane panel active" id="tab_1">
+                    @Html.Partial("~/Views/Medio/_medio_contacto.cshtml")
+                </div>
+
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                    @Html.Partial("~/Views/Medio/_medio_programas.cshtml")
+                </div>
+
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+    }
+</div>
+<!-- jQuery 3 -->
+<script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>

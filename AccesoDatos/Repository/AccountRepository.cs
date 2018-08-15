@@ -11,7 +11,7 @@ namespace AccesoDatos.Repository
     public class AccountRepository: IAccountRepository
     {
 
-        public Usuario GetUserByNameAndPass(string email, string clave,string ip)
+        public Usuario GetUserByNameAndPass(string usuario, string clave,string ip)
         {
             Usuario _user;
 
@@ -19,12 +19,11 @@ namespace AccesoDatos.Repository
             {
                 _user = context.Usuario
                     .Include("Rol")
-                    .FirstOrDefault(x => x.NombreUsuario.Equals(email) && x.Password.Equals(clave));
-
+                   .FirstOrDefault(x => x.NombreUsuario.Equals(usuario) && x.Password.Equals(clave));
                 UsuarioAccess useraccess = new UsuarioAccess
                 {
-                    User = email
-                    
+                    User = usuario
+
                 };
 
                 if (_user == null)

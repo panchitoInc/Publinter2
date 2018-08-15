@@ -31,9 +31,55 @@ namespace Publinter.Controllers
             return View();
         }
 
-        //public JsonResult Create(Medio model)
-        //{
+        public JsonResult AddMedioRenglon(Medio medio)
+        {
+            var html=string.Empty;
+            ViewData["indexContacto"] = medio.Contactos.Count - 1;//indica el index del ultimo obj agregado.
+            html = RenderPartialViewToString("~/Views/Shared/Contacto/_medio_contacto_renglon.cshtml",null);
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
 
-        //}
+        public ActionResult Create()
+        {
+
+            Medio model = new Medio();
+
+            for(var i = 0; i < 3; i++)
+            {
+                Contacto c = new Contacto();
+                model.Contactos.Add(c);
+                Programa p = new Programa();
+                model.Programas.Add(p);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(Medio model)
+        {
+            var id =medioApplicationService.Add(model);
+            if(id > 0)
+            {
+                ViewBag.error = "no se puede guardar";
+                return View(model);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddProgramaRenglon(Medio medio)
+        {
+            var html = string.Empty;
+            ViewData["indexPrograma"] = medio.Programas.Count - 1;//indica el index del ultimo obj agregado.
+            html = RenderPartialViewToString("~/Views/Medio/Programa/_medio_programa_renglon.cshtml", null);
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            Medio unMedio = medioApplicationService.Get(id);
+
+            return View(unMedio);
+        }
     }
 }

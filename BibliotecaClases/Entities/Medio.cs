@@ -8,6 +8,12 @@ namespace DataModule.Entities
 {
     public class Medio
     {
+        public Medio()
+        {
+            this.Programas = new List<Programa>();
+            this.Contactos = new List<Contacto>();
+        }
+
         [Key, Column("MedioId"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MedioId { get; set; }
 
