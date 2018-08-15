@@ -26,5 +26,14 @@ namespace DataModule.Entities
         public decimal Total { get; set; }
 
         public virtual List<LineaOrden> LineasOrden { get; set; }
+
+        /// <summary>
+        /// Usuario Navigation
+        /// </summary>
+        public int UsuarioId { get; set; }
+
+        [ForeignKey("UsuarioId")]
+        public Usuario Usuario { get; set; }
+
     }
 }

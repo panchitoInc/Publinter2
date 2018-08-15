@@ -54,9 +54,11 @@
     <Compile Include="Repository\IAccountRepository.cs" />
     <Compile Include="Repository\IMaterialRepository.cs" />
     <Compile Include="Repository\IMedioRepository.cs" />
+    <Compile Include="Repository\IOrdenRepository.cs" />
     <Compile Include="Repository\IUsuarioRepository.cs" />
     <Compile Include="Repository\MaterialRepository.cs" />
     <Compile Include="Repository\MedioRepository.cs" />
+    <Compile Include="Repository\OrdenRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
   </ItemGroup>
   <ItemGroup>

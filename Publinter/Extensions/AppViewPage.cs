@@ -1,5 +1,5 @@
 ﻿
-namespace Publinter.Extencions
+namespace Publinter.Extensions
 {
     using Mvc;
     using System.Security.Claims;

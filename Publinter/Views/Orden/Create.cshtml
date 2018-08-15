@@ -1,0 +1,42 @@
+﻿@model Publinter.Models.Orden_Create_Model
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Admin/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+<script src="~/Content/Admin/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/Admin/bower_components/moment/min/moment-with-locales.min.js"></script>
+<script src="~/Content/Admin/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#Emision").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            "autoApply": true,
+            "showCustomRangeLabel": false,
+            locale: {
+                format: 'D/M/YYYY'
+            }
+        });
+    })
+</script>
+
+<div class=" register-box-body col-sm-12">
+
+    <div id="divEncabezado">
+        @Html.Partial("CreateEncabezado", Model)
+    </div>
+
+    <div id="divLineas">
+        @Html.Partial("CreateLineas", Model)
+    </div>
+
+    <div id="divFooter">
+        @Html.Partial("CreateFooter", Model)
+    </div>
+
+</div>

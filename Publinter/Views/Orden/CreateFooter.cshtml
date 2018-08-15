@@ -1,0 +1,25 @@
+﻿@model Publinter.Models.Orden_Create_Model
+
+<style>
+    .inline-element {
+        display: inline-block;
+    }
+
+    #datosFooter {
+        padding-top: 15px;
+        border-top: 1px solid #eeecec;
+        margin-top: 10px;
+        padding-bottom: 10px;
+    }
+
+</style>
+
+<div class="col-sm-12">
+
+    <div id="datosFooter" class="col-sm-12">
+        <label class="inline-element">INVERSIÓN TOTAL: $</label>
+        <label id="totalOrden" class="inline-element">0.00</label>
+        @Html.HiddenFor(x => x.TotalOrden)
+    </div>
+
+</div>
