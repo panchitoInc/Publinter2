@@ -1,0 +1,51 @@
+﻿@model Publinter.Models.Orden_Create_Model
+
+<style>
+    .inline-element {
+        display: inline-block;
+    }
+
+    .title {
+        margin-top: 10px;
+    }
+
+    #datosEncabezado {
+        padding-top: 15px;
+        border-top: 1px solid #eeecec;
+        margin-top: 10px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eeecec;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="col-sm-12">
+    
+    <div class="col-sm-6">
+        <h3 class="title">Órden Nro. @Html.DisplayFor(x => x.NroOrden)</h3>
+
+        @Html.HiddenFor(x => x.NroOrden)
+        @Html.HiddenFor(x => x.UsuarioId)
+    </div>
+
+    <div class="col-sm-6">
+        <img class="pull-right" src="~/Content/Images/Logo-Publinter-dark-2017-final.png" style="width:190px" />
+    </div>
+
+    <div id="datosEncabezado" class="col-sm-12">
+        <div class="col-sm-4">
+            <label class="inline-element" style="width:75px">Medio: </label>
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:150px" })
+        </div>
+        <div class="col-sm-4">
+            <label class="inline-element" style="width:75px">Cliente: </label>
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:150px" })
+        </div>
+        <div class="col-sm-4">
+            <label class="inline-element" style="width:75px">Emisión: </label>
+            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right" })
+        </div>
+    </div>
+    
+</div>
+
