@@ -81,7 +81,7 @@ namespace AccesoDatos.Repository
                     if (medioBd == null) throw new Exception(String.Format("No se encontro el medio."));
 
                     medioBd.Descripcion = model.Descripcion;
-                    medioBd.Nombre = medioBd.Nombre;
+                    medioBd.Nombre = model.Nombre;
 
                     if (model.Contactos != null && model.Contactos.Count > 0)
                     {
@@ -94,11 +94,14 @@ namespace AccesoDatos.Repository
                         medioBd.Programas = model.Programas;
                         medioBd.Programas.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
                     }
-
+                    
+                    
+                    context.Entry(medioBd).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

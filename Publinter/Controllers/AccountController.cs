@@ -58,6 +58,8 @@ namespace Publinter.Controllers
                     new Claim(ClaimTypes.Name, _usuario.Nombre + " " +  _usuario.Apellido),
                     new Claim("NombreUsuario", _usuario.NombreUsuario),
                     new Claim(ClaimTypes.Sid, _usuario.UsuarioId.ToString()),
+                    new Claim(ClaimTypes.PrimarySid, _usuario.UsuarioId.ToString()),
+                    new Claim("Id",_usuario.UsuarioId.ToString()),
                     new Claim("UserApellido", _usuario.Apellido),
                     new Claim("Rol", _usuario.RolId.ToString()),
                     new Claim("RolDescripcion", _usuario.Rol.Descripcion)
@@ -68,9 +70,9 @@ namespace Publinter.Controllers
                 var authManager = ctx.Authentication;
 
                 authManager.SignIn(identity);
-                var a = CurrentUser.Id;
+                
 
-                return RedirectToAction("Index","Home");//CheckIsDefaultPass(model, _usuario);
+                return RedirectToAction("Index","Usuario");//CheckIsDefaultPass(model, _usuario);
             }
             ViewBag.error = "Usuario o password invalida.";
             return View(model);

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace Publinter.Controllers
 {
-    public class MedioController : PublinteController    {
+    public class MedioController : PublinteController {
 
         IMedioApplicationServices _medioApplicationService;
 
@@ -33,9 +33,9 @@ namespace Publinter.Controllers
 
         public JsonResult AddMedioRenglon(Medio medio)
         {
-            var html=string.Empty;
+            var html = string.Empty;
             ViewData["indexContacto"] = medio.Contactos.Count - 1;//indica el index del ultimo obj agregado.
-            html = RenderPartialViewToString("~/Views/Shared/Contacto/_medio_contacto_renglon.cshtml",null);
+            html = RenderPartialViewToString("~/Views/Shared/Contacto/_medio_contacto_renglon.cshtml", null);
             return Json(html, JsonRequestBehavior.AllowGet);
         }
 
@@ -44,7 +44,7 @@ namespace Publinter.Controllers
 
             Medio model = new Medio();
 
-            for(var i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 Contacto c = new Contacto();
                 model.Contactos.Add(c);
@@ -57,8 +57,8 @@ namespace Publinter.Controllers
         [HttpPost]
         public ActionResult Create(Medio model)
         {
-            var id =medioApplicationService.Add(model);
-            if(id > 0)
+            var id = medioApplicationService.Add(model);
+            if (id > 0)
             {
                 ViewBag.error = "no se puede guardar";
                 return View(model);
@@ -80,6 +80,18 @@ namespace Publinter.Controllers
             Medio unMedio = medioApplicationService.Get(id);
 
             return View(unMedio);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Medio model)
+        {
+            var bandera = medioApplicationService.Update(model);
+            if (bandera)
+            {
+                return View("Index");
+            }
+            ViewBag.error = "Ocurrio un error al guardar el medio";
+            return View(model);
         }
     }
 }

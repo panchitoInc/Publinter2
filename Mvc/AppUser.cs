@@ -41,7 +41,7 @@ namespace Mvc
         {
             get
             {
-                return int.Parse(this.FindFirst(ClaimTypes.Sid).Value);
+                return int.Parse(this.FindFirst("Id").Value);
             }
         }
 
