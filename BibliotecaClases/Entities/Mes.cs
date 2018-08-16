@@ -13,6 +13,8 @@ namespace DataModule.Entities
 
         public int MesNumero { get; set; }
 
+        public int MesAnio { get; set; }
+
         public string MesNombre { get; set; }
 
         public virtual List<Dia> Dias { get; set; }

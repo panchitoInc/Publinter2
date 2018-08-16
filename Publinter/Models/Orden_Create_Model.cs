@@ -23,6 +23,7 @@ namespace Publinter.Models
             Mes mesActual = new Mes();
 
             mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
+            mesActual.MesAnio = DateTime.Now.AddMonths(1).Year;
             mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
 
             mesActual.Dias = new List<Dia>();

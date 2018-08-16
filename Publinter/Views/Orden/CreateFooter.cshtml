@@ -5,20 +5,51 @@
         display: inline-block;
     }
 
+    .lblTotal {
+        color: black;
+        font-size: 20px;
+    }
+
+    .iconLineas {
+        font-size: 28px;
+    }
+
+    .btnLineas {
+        margin-top: 15px;
+        position: relative;
+        top: 15px;
+    }
+
     #datosFooter {
-        padding-top: 15px;
+        text-align: center;
+        padding-top: 5px;
         border-top: 1px solid #eeecec;
-        margin-top: 10px;
-        padding-bottom: 10px;
+        position: relative;
+        top:15px;
     }
 
 </style>
 
 <div class="col-sm-12">
+    <div class="pull-left">
+        <a class="inline-element btnLineas" href="javascript:AgregarSiguienteMes()" title="Agregar siguiente mes">
+            <i class="material-icons iconLineas">
+                add_box
+            </i>
+        </a>
+        <a class="inline-element btnLineas" href="javascript:CopiarUltimoMes()" title="Copiar último mes">
+            <i class="material-icons iconLineas" style="    font-size: 25px !important;position: relative;bottom: 1px;">
+                file_copy
+            </i>
+        </a>
+    </div>
+</div>
+
+<div class="col-sm-12">
 
     <div id="datosFooter" class="col-sm-12">
-        <label class="inline-element">INVERSIÓN TOTAL: $</label>
-        <label id="totalOrden" class="inline-element">0.00</label>
+        <label class="inline-element lblTotal">INVERSIÓN TOTAL: $</label>
+        <label id="totalOrden" class="inline-element lblTotal">0.00</label>
         @Html.HiddenFor(x => x.TotalOrden)
     </div>
 
