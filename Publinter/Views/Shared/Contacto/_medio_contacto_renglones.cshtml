@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < 3; i++)
+                        @for (int i = 0; i < Model.Contactos.Count; i++)
                         {
                             ViewData["indexContacto"] = i;
                             @Html.Partial("~/Views/Shared/Contacto/_medio_contacto_renglon.cshtml")

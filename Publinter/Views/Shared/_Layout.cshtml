@@ -17,6 +17,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../../Content/Admin/dist/css/skins/_all-skins.css">
+    <link href="~/Content/Publinter/_layout.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,7 +26,7 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- jQuery 3 -->
     <script src="../../Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
@@ -47,7 +48,7 @@
                 </span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" style="background:#3faf52;">
+            <nav class="navbar navbar-static-top" style="background:#3faf52;height:50px;">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                     <span class="sr-only">Toggle navigation</span>
@@ -60,37 +61,37 @@
 
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height:50px;">
-                                <img src="../../Content/Admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height:50px;padding-top: 8px;">
+                                
+                                <img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image" style="height:35px;">
                                 <span class="hidden-xs"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="../../Content/Admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image">
+                                    @*<i class="material-icons">person</i>*@
                                     <p>
                                         @CurrentUser.UserData
 
                                         <small>@CurrentUser.RolDescripcion</small>
                                     </p>
                                 </li>
-                                
+
                                 <!-- Menu Body -->
-                
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    <div class="col-xs-12">
+                                        <a href="../../Account/LogOut" )" class="btn btn-block btn-default btn-sm">Salir</a>
                                     </div>
-                                    <div class="pull-right">
-                                        @Html.ActionLink("Sign out", "../Account", "LogOut", new { @class = "btn btn-default btn-flat" })
-                                    </div>
+
+
                                 </li>
                             </ul>
                     </li>
                     <!-- Control Sidebar Toggle Button -->
                     <li>
-                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        <a href="#" data-toggle="control-sidebar"><i class="material-icons">menu</i></a>
                     </li>
                 </ul>
             </div>
@@ -142,8 +143,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="../Medio/Index"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="../Medio/Create"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        <li><a href="../../Medio/Index"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="../../Medio/Create"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -227,108 +228,38 @@
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            <li><a href="#control-sidebar-home-tab" data-toggle="tab" aria-expanded="true"><i class="fa fa-home hidden"></i></a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Home tab content -->
-            <div class="tab-pane" id="control-sidebar-home-tab">
-                <h3 class="control-sidebar-heading">Recent Activity</h3>
-                <ul class="control-sidebar-menu">
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-                            <div class="menu-info">
-                                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-                                <p>Will be 23 on April 24th</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="menu-icon fa fa-user bg-yellow"></i>
-                            <div class="menu-info">
-                                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-                                <p>New phone +1(800)555-1234</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-                            <div class="menu-info">
-                                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-                                <p>nora@example.com</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="menu-icon fa fa-file-code-o bg-green"></i>
-                            <div class="menu-info">
-                                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-                                <p>Execution time 5 seconds</p>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.control-sidebar-menu -->
-                <h3 class="control-sidebar-heading">Tasks Progress</h3>
-                <ul class="control-sidebar-menu">
-                    <li>
-                        <a href="javascript:void(0)">
-                            <h4 class="control-sidebar-subheading">
-                                Custom Template Design
-                                <span class="label label-danger pull-right">70%</span>
-                            </h4>
-                            <div class="progress progress-xxs">
-                                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <h4 class="control-sidebar-subheading">
-                                Update Resume
-                                <span class="label label-success pull-right">95%</span>
-                            </h4>
-                            <div class="progress progress-xxs">
-                                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <h4 class="control-sidebar-subheading">
-                                Laravel Integration
-                                <span class="label label-warning pull-right">50%</span>
-                            </h4>
-                            <div class="progress progress-xxs">
-                                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <h4 class="control-sidebar-subheading">
-                                Back End Framework
-                                <span class="label label-primary pull-right">68%</span>
-                            </h4>
-                            <div class="progress progress-xxs">
-                                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.control-sidebar-menu -->
+            <div class="tab-pane active" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading text-center">Usuario</h3>
+
+
             </div>
             <!-- /.tab-pane -->
             <!-- Stats tab content -->
             <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    @*<img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image">*@
+                    @*<i class="material-icons">person</i>*@
+                    <h3 style="margin-bottom:0;">
+                        @CurrentUser.Name 
+                    </h3>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <p>@CurrentUser.RolDescripcion</p>
+                </div>
+                <div class="col-xs-12">
+                    <a href="../../Account/LogOut" class="btn btn-block btn-default btn-sm">Cerrar sesión</a>
+                </div>
+            </div>
             <!-- /.tab-pane -->
             <!-- Settings tab content -->
-            <div class="tab-pane" id="control-sidebar-settings-tab">
+            @*<div class="tab-pane" id="control-sidebar-settings-tab">
                 <form method="post">
                     <h3 class="control-sidebar-heading">General Settings</h3>
                     <div class="form-group">
@@ -384,7 +315,7 @@
                     </div>
                     <!-- /.form-group -->
                 </form>
-            </div>
+            </div>*@
             <!-- /.tab-pane -->
         </div>
     </aside>

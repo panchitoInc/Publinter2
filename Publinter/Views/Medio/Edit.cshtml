@@ -67,7 +67,7 @@
 <div class=" register-box-body">
     <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar nuevo medio</p>
 
-    @using (Html.BeginForm("Create", "Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MedioCreateForm" }))
+    @using (Html.BeginForm("Edit", "Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MedioCreateForm" }))
     {
         <!--Datos del medio-->
         <div class="row">
@@ -118,7 +118,9 @@
             <!-- /.col -->
         </div>
 
-
+        <div>
+            @Html.HiddenFor(x => x.MedioId)
+        </div>
     }
 </div>
 <!-- jQuery 3 -->

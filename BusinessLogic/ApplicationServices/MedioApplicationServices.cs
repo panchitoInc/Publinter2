@@ -30,6 +30,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return medioRepository.Get(id);
         }
+        public bool Update(Medio model)
+        {
+            return medioRepository.Update(model);
+        }
        
     }
 }
