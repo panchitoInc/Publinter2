@@ -5,6 +5,7 @@ using System.Globalization;
 using Publinter.Extensions;
 using System.Linq;
 using System.Web;
+using DataModule.EntitiesResult;
 
 namespace Publinter.Models
 {
@@ -13,8 +14,9 @@ namespace Publinter.Models
         public Orden_Create_Model()
         {
             this.Emision = DateTime.Now;
-            this.ListaProgramas = new List<Programa>();
+            this.ListaProgramas = new List<Get_Programa_Data>();
             this.ListaMateriales = new List<Material>();
+            this.ListaClientes = new List<Cliente>();
 
             this.Lineas = new List<LineaOrden>();
 
@@ -63,13 +65,19 @@ namespace Publinter.Models
 
         public Medio Medio { get; set; }
 
+        public int ClienteId { get; set; }
+
+        public Cliente Cliente { get; set; }
+
         public List<LineaOrden> Lineas { get; set; }
 
         public decimal TotalOrden { get; set; }
 
         public List<Medio> ListaMedios { get; set; }
 
-        public List<Programa> ListaProgramas { get; set; }
+        public List<Cliente> ListaClientes { get; set; }
+
+        public List<Get_Programa_Data> ListaProgramas { get; set; }
 
         public List<Material> ListaMateriales { get; set; }
 
@@ -80,7 +88,9 @@ namespace Publinter.Models
             orden.Emision = this.Emision;
             orden.NroOrden = this.NroOrden;
 
+            orden.ClienteId = this.ClienteId;
             orden.MedioId = this.MedioId;
+
             orden.LineasOrden = this.Lineas;
 
             orden.Total = this.TotalOrden;

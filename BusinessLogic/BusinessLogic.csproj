@@ -53,12 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\AccountApplicationService.cs" />
+    <Compile Include="ApplicationServices\ClienteApplicationService.cs" />
+    <Compile Include="ApplicationServices\IClienteApplicationService.cs" />
     <Compile Include="ApplicationServices\IMaterialApplicationService.cs" />
     <Compile Include="ApplicationServices\IMedioApplicationServices.cs" />
     <Compile Include="ApplicationServices\IOrdenApplicationService.cs" />
+    <Compile Include="ApplicationServices\IProgramaApplicationService.cs" />
     <Compile Include="ApplicationServices\MaterialApplicationService.cs" />
     <Compile Include="ApplicationServices\MedioApplicationServices.cs" />
     <Compile Include="ApplicationServices\OrdenApplicationService.cs" />
+    <Compile Include="ApplicationServices\ProgramaApplicationService.cs" />
     <Compile Include="ApplicationServices\UsuarioApplicationService.cs" />
     <Compile Include="ApplicationServices\IAccountApplicationService.cs" />
     <Compile Include="ApplicationServices\IUsuarioApplicationService.cs" />

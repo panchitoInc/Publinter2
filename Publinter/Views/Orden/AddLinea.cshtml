@@ -86,8 +86,12 @@
                 }
             </tr>
             <tr>
-                <td rowspan="2">Programa</td>
-                <td rowspan="2">Material</td>
+                <td rowspan="2">
+                    @Html.DropDownListFor(x => x.Lineas[Model.IndexLinea].ProgramaId, new SelectList(Model.ListaProgramas, "ProgramaId", "Nombre"), new { @style = "border:none;width: 100px" })
+                </td>
+                <td rowspan="2">
+                    @Html.DropDownListFor(x => x.Lineas[Model.IndexLinea].MaterialId, new SelectList(Model.ListaMateriales, "MaterialId", "Titulo"), new { @style = "border:none;width: 100px" })
+                </td>
 
                 @for (var d = 0; d < Model.Lineas[Model.IndexLinea].Mes.Dias.Count; d++)
                 {

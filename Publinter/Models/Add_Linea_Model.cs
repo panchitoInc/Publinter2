@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using DataModule.EntitiesResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,9 @@ namespace Publinter.Models
         public int IndexLinea { get; set; }
 
         public List<LineaOrden> Lineas { get; set; }
+
+        public List<Get_Programa_Data> ListaProgramas { get; set; }
+
+        public List<Material> ListaMateriales { get; set; }
     }
 }

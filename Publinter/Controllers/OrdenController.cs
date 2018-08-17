@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using BusinessLogic.ApplicationServices;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using Publinter.Models;
 
@@ -16,6 +17,8 @@ namespace Publinter.Controllers
         IOrdenApplicationService _ordenApplicationService; 
         IMedioApplicationServices _medioApplicationService;
         IMaterialApplicationService _materialApplicationService;
+        IClienteApplicationService _clienteApplicationService;
+        IProgramaApplicationService _programaApplicationService;
 
         private IOrdenApplicationService ordenApplicationService
         {
@@ -53,12 +56,39 @@ namespace Publinter.Controllers
             }
         }
 
+        private IClienteApplicationService clienteApplicationService
+        {
+            get
+            {
+                if (this._clienteApplicationService == null)
+                {
+                    this._clienteApplicationService = new ClienteApplicationService(CurrentUser);
+                }
+                return this._clienteApplicationService;
+            }
+        }
+
+        private IProgramaApplicationService programaApplicationService
+        {
+            get
+            {
+                if (this._programaApplicationService == null)
+                {
+                    this._programaApplicationService = new ProgramaApplicationService(CurrentUser);
+                }
+                return this._programaApplicationService;
+            }
+        }
+
         public ActionResult Create()
         {
             Orden_Create_Model model = new Orden_Create_Model();
 
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaMateriales = materialApplicationService.GetAll().ToList();
+            model.ListaClientes = clienteApplicationService.GetClientes();
+            model.ListaProgramas = programaApplicationService.GetProgramas();
+
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
 
@@ -145,6 +175,9 @@ namespace Publinter.Controllers
 
             viewModel.Lineas.Add(nueva);
 
+            viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
+            viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+
             string html = RenderPartialViewToString("AddLinea", viewModel);
             bool value = true;
 
@@ -190,6 +223,10 @@ namespace Publinter.Controllers
 
             viewModel.Lineas.Add(nueva);
 
+
+            viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
+            viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+            
             string html = RenderPartialViewToString("AddLinea", viewModel);
             bool value = true;
 

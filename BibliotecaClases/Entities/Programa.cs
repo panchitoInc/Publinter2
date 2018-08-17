@@ -18,6 +18,7 @@ namespace DataModule.Entities
         public int? Duracion { get; set; }
 
         public decimal PrecioSegundo { get; set; }
+
         [NotMapped]
         public bool Delete { get; set; }
     }

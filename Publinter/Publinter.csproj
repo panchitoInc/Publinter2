@@ -240,6 +240,7 @@
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Extensions\AppViewPage.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
