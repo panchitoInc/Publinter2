@@ -240,6 +240,7 @@
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Extensions\AppViewPage.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Add_Linea_Model.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Orden_Create_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -3462,6 +3464,7 @@
     <Content Include="Views\Medio\Programa\_medio_programa_renglon.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa.cshtml" />
     <Content Include="Views\Medio\Edit.cshtml" />
+    <Content Include="Views\Orden\AddLinea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

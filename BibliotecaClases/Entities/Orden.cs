@@ -28,6 +28,14 @@ namespace DataModule.Entities
         public virtual List<LineaOrden> LineasOrden { get; set; }
 
         /// <summary>
+        /// Cliente Navigation
+        /// </summary>
+        public int ClienteId { get; set; }
+
+        [ForeignKey("ClienteId")]
+        public Cliente Cliente { get; set; }
+
+        /// <summary>
         /// Usuario Navigation
         /// </summary>
         public int UsuarioId { get; set; }

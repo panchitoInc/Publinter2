@@ -57,6 +57,7 @@
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesId)
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesNombre)
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesNumero)
+                            @Html.HiddenFor(x => x.Lineas[i].Mes.MesAnio)
                         </th>
                     </tr>
                 </thead>
@@ -128,8 +129,12 @@
                         }
                     </tr>
                     <tr>
-                        <td rowspan="2">Programa</td>
-                        <td rowspan="2">Material</td>
+                        <td rowspan="2">
+                            @Html.DropDownListFor(x => x.Lineas[i].ProgramaId, new SelectList(Model.ListaProgramas, "ProgramaId", "Nombre"), new { @style = "border:none;width: 100px" })
+                        </td>
+                        <td rowspan="2">
+                            @Html.DropDownListFor(x => x.Lineas[i].MaterialId, new SelectList(Model.ListaMateriales, "MaterialId", "Titulo"), new { @style = "border:none;width: 100px" })
+                        </td>
 
                         @for (var d = 0; d < Model.Lineas[i].Mes.Dias.Count; d++)
                         {
