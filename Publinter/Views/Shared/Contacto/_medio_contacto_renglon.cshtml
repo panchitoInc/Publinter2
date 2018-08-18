@@ -15,6 +15,7 @@
     </td>
     <td class="text-center">
         @Html.CheckBoxFor(x => x.Contactos[index].Delete, new {@class="hidden" })
+        @Html.HiddenFor(x => x.Contactos[index].ContactoId)
         <a href="javascript:void(0);" onclick="javascript:DeleteRenglon(@index)">
             <i class="material-icons">clear</i>
         </a>
