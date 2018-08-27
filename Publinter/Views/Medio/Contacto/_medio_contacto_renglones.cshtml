@@ -1,0 +1,37 @@
+﻿@model DataModule.Entities.Medio
+@{
+    int index = (ViewData["indexContacto"] == null) ? 0 : (int)ViewData["indexContacto"];
+}
+
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Contactos</font></font></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="col-sm-12">
+                <table id="ListadoUsuariosTable" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                            <th class="text-center">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Contactos.Count; i++)
+                        {
+                            ViewData["indexContacto"] = i;
+                            @Html.Partial("~/Views/Medio/Contacto/_medio_contacto_renglon.cshtml")
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>

@@ -1,0 +1,15 @@
+﻿@model DataModule.Entities.Medio
+
+
+<div class="row">
+    <div class="col-xs-12">
+
+        @Html.Partial("~/Views/Medio/Contacto/_medio_contacto_renglones.cshtml")
+        <a href="javascript:void(0);" title="Agregar contacto" onclick="AddMedioRenglon();">
+            @*<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>*@
+            <i class="material-icons" style="font-size:33px;">
+                add_box
+            </i>
+        </a>
+    </div>
+</div>
