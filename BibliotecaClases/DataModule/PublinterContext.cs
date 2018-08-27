@@ -38,6 +38,7 @@ namespace DataModule
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Rol> Rol { get; set; }
         public DbSet<UsuarioAccess> UsuarioAccess { get; set; }
+        public DbSet<TipoMedio> TipoMedio { get; set; }
 
     }
 }

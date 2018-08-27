@@ -2,8 +2,18 @@
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<SelectListItem> ListaTipoMedios = new List<SelectListItem>()
+    {
+        new SelectListItem(){Value="1",Text="Televisión" },
+        new SelectListItem(){Value="2",Text="Radio" },
+        new SelectListItem(){Value="3",Text="Vía publica" },
+        new SelectListItem(){Value="4",Text="Digital" }
+    };
+
 }
 
+<link href="~/Content/Admin/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
 <style type="text/css">
     .nav-tabs-custom > .nav-tabs > li.active {
         border-top-color: #3faf52;
@@ -26,8 +36,26 @@
             background-color: darkgrey !important;
             outline: 1px solid slategrey !important;
         }
+    table#ListadoUsuariosTable td input, table#ListadoProgramasTable td input{
+        padding-left:12px;
+    }
 </style>
+
 <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('input.hourPicker').timepicker({
+            minuteStep: 1,
+            template: 'modal',
+            appendWidgetTo: 'body',
+            showSeconds: true,
+            showMeridian: false,
+            defaultTime: false
+        });
+
+    });
+
 
     //////////Contacto///////////
     function AddMedioRenglon() {
@@ -46,12 +74,14 @@
     ///////////////////////////
     //////////Programa////////
     function AddProgramaRenglon() {
-        debugger;
         AjaxPost("../../Medio/AddProgramaRenglon", GetCurrentModel("MedioCreateForm"), AddProgramaRenglonSuccess, 0);
     }
 
     function AddProgramaRenglonSuccess(data, index) {
-        $("#ListadoProgramasTable tbody").append(data);
+        $("#ListadoProgramasTable tbody").append(data.html);
+        setTimeout(function () {
+            bindDatePicker(data.index)
+        }, 300);
     }
 
 
@@ -60,6 +90,17 @@
         $("#tr_programa_" + index).fadeOut(200);
         $("#Programas_" + index + "__Delete").prop('checked', true);
     }
+
+    function bindDatePicker(id) {
+        $('input#Programas_'+id+'__HoraInicio').timepicker({
+            minuteStep: 1,
+            template: 'modal',
+            appendWidgetTo: 'body',
+            showSeconds: true,
+            showMeridian: false,
+            defaultTime: false
+        });
+    }
     /////////////////////////
 
 </script>
@@ -67,23 +108,27 @@
 <div class=" register-box-body">
     <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar nuevo medio</p>
 
-    @using (Html.BeginForm("Edit", "Medio", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MedioCreateForm" }))
+    @using (Html.BeginForm("Edit", "Medio", FormMethod.Post, new { @id = "MedioCreateForm" }))
     {
         <!--Datos del medio-->
         <div class="row">
             <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
                 <font style="vertical-align: inherit;">Datos del medio</font>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <div class="form-group has-feedback">
                     @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <div class="form-group has-feedback">
                     @Html.TextBoxFor(x => x.Descripcion, new { @class = "form-control", @placeholder = "Descripción" })
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.TipoMedioId, ListaTipoMedios, new { @class = "form-control" })
+                    @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
                 </div>
             </div>
         </div>
@@ -96,12 +141,12 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane panel active" id="tab_1">
-                    @Html.Partial("~/Views/Medio/_medio_contacto.cshtml")
+                    @Html.Partial("~/Views/Medio/Contacto/_medio_contacto.cshtml")
                 </div>
 
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_2">
-                    @Html.Partial("~/Views/Medio/_medio_programas.cshtml")
+                    @Html.Partial("~/Views/Medio/Programa/_medio_programa.cshtml")
                 </div>
 
             </div>
@@ -128,3 +173,4 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/Scripts/Utils.js"></script>
+<script src="~/Content/Admin/plugins/timepicker/bootstrap-timepicker.min.js"></script>

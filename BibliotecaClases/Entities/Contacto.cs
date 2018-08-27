@@ -26,5 +26,7 @@ namespace DataModule.Entities
         public bool  Delete { get; set; }
 
         public string Nombre { get; set; }
+
+ 
     }
 }

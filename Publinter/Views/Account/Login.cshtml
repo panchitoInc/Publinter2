@@ -4,12 +4,58 @@
 }
 
 <!DOCTYPE html>
+<style>
+    div#loginFondo {
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        filter: brightness(82%);
+        filter: FlipH;
+        height: 100%;
+        background-image: url('../../Content/Images/fondoLogin.png');
+    }
+    div.login-box-body {
+        background-color: transparent;
+        /*margin-left:40%;*/
+    }
 
+    form#formLogin input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid #fff;
+        color: white;
+        padding-left:34px;
+    }
+
+        form#formLogin input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: white;
+            opacity: 1; /* Firefox */
+        }
+
+    #validar {
+        border-radius: 3px;
+        color:white;
+        opacity:0.7;
+    }
+
+
+
+
+    .form-control-feedback {
+        left: 0!important;
+        color:white!important;
+    }
+</style>
+
+<script type="text/javascript">
+
+</script>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Source+Sans+Pro" rel="stylesheet">
     <title>Publinter</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -34,27 +80,35 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="../../index2.html"><b>PUBLINTER</b></a>
-        </div>
-        
+    <div id="loginFondo" class="col-xs-12">
         <!-- /.login-logo -->
-        <div class="login-box-body">
-            <p class="login-box-msg">Iniciar sesion</p>
-            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        <div class="row">
+            <div class="col-xs-6" style="margin-left:5%;margin-top:5%;">
+                <img style="max-width:300px" src="~/Content/Images/Logo-Publinter-light-2017.png" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:12%;">
+           <div class="login-box-body col-xs-4 col-xs-offset-4">
+
+                <p class="login-box-msg" style="padding-left:0; font-family: 'Source Sans Pro', sans-serif;font-family: 'Raleway', sans-serif; font-size:30px;color:white;text-align:left;">Bienvenido</p>
+
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "formLogin" }))
             {
                 <div class="form-group has-feedback">
-                    <input id="Usuario" name="Usuario" type="text" class="form-control" placeholder="Usuario">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <input id="Usuario" name="Usuario" type="text" class="form-control" placeholder="Usuario" onfocusout="javascript:focusOutUser(this.value);">
+                    @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
+
                 </div>
                 <div class="form-group has-feedback">
-                    <input id="Clave" name="Clave" type="password" class="form-control" placeholder="Password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <input id="Clave" name="Clave" type="password" class="form-control" placeholder="Password" onfocusout="javascript: focusOutPass(this.values);">
+
                 </div>
                 <div class="row">
-                    <div class="col-xs-12" style="color:red;">
-                        @ViewBag.error
+                    <div class="col-xs-12" style="height:20px;">
+                        <span id="error" style="color:red; display:none;"> Usuario o clave invalida.</span>
                     </div>
                 </div>
                 <div class="row">
@@ -66,16 +120,18 @@
                         </div>
                     </div>*@
                     <!-- /.col -->
-                    <div class="col-xs-offset-8 col-xs-4">
-                        <button id="validar" type="submit" class="btn btn-primary btn-block btn-flat">Enrtrar</button>
+                    <div class="col-xs-12">
+                        <button id="validar" type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript: ValidarLogin();">Enrtrar</button>
                     </div>
                     <!-- /.col -->
                 </div>
-            }
+        }
 
+            </div>
+            <!-- /.login-box-body -->
         </div>
-        <!-- /.login-box-body -->
     </div>
+    
     <!-- /.login-box -->
     <!-- jQuery 3 -->
 

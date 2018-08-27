@@ -2937,6 +2937,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\fondoLogin.png" />
     <Content Include="Content\Images\Logo-Publinter-dark-2017-final.png" />
     <Content Include="Content\Images\Logo-Publinter-light-2017.png" />
     <Content Include="Content\Publinter\_layout.css" />
@@ -3425,6 +3426,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Publinter\Login.js" />
     <Content Include="Scripts\Publinter\Usuario.js" />
+    <Content Include="Scripts\Publinter\Validar.js" />
     <Content Include="Scripts\Publinter\_Layout.js" />
     <Content Include="Scripts\Utils.js" />
     <Content Include="Web.config">
@@ -3450,21 +3452,25 @@
     <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\Medio\Index.cshtml" />
     <Content Include="Views\Medio\Create.cshtml" />
-    <Content Include="Views\Shared\Contacto\_medio_contacto_renglon.cshtml" />
-    <Content Include="Views\Shared\Contacto\_medio_contacto_renglones.cshtml" />
+    <Content Include="Views\Medio\Contacto\_medio_contacto_renglon.cshtml" />
+    <Content Include="Views\Medio\Contacto\_medio_contacto_renglones.cshtml" />
     <Content Include="Views\Material\Create.cshtml" />
     <Content Include="Views\Material\Index.cshtml" />
     <Content Include="Views\Orden\Create.cshtml" />
     <Content Include="Views\Orden\CreateEncabezado.cshtml" />
     <Content Include="Views\Orden\CreateLineas.cshtml" />
     <Content Include="Views\Orden\CreateFooter.cshtml" />
-    <Content Include="Views\Medio\_medio_contacto.cshtml" />
-    <Content Include="Views\Medio\_medio_programas.cshtml" />
+    <Content Include="Views\Medio\Contacto\_medio_contacto.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa_renglones.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa_renglon.cshtml" />
     <Content Include="Views\Medio\Programa\_medio_programa.cshtml" />
     <Content Include="Views\Medio\Edit.cshtml" />
     <Content Include="Views\Orden\AddLinea.cshtml" />
+    <Content Include="Views\Cliente\Create.cshtml" />
+    <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Cliente\Contacto\contacto_renglon.cshtml" />
+    <Content Include="Views\Cliente\Contacto\contacto_renglones.cshtml" />
+    <Content Include="Views\Cliente\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

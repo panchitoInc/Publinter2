@@ -16,7 +16,7 @@ namespace Publinter.Models
             this.Emision = DateTime.Now;
             this.ListaProgramas = new List<Get_Programa_Data>();
             this.ListaMateriales = new List<Material>();
-            this.ListaClientes = new List<Cliente>();
+            this.ListaClientes = new List<Get_Cliente_Data>();
 
             this.Lineas = new List<LineaOrden>();
 
@@ -75,7 +75,7 @@ namespace Publinter.Models
 
         public List<Medio> ListaMedios { get; set; }
 
-        public List<Cliente> ListaClientes { get; set; }
+        public List<Get_Cliente_Data> ListaClientes { get; set; }
 
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 

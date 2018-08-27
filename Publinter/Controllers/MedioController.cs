@@ -4,6 +4,7 @@ using DataModule.Entities;
 using BusinessLogic.ApplicationServices;
 using Mvc;
 using System.Web.Mvc;
+using System;
 
 namespace Publinter.Controllers
 {
@@ -34,8 +35,8 @@ namespace Publinter.Controllers
         public JsonResult AddMedioRenglon(Medio medio)
         {
             var html = string.Empty;
-            ViewData["indexContacto"] = medio.Contactos.Count - 1;//indica el index del ultimo obj agregado.
-            html = RenderPartialViewToString("~/Views/Shared/Contacto/_medio_contacto_renglon.cshtml", null);
+            ViewData["indexContacto"] = medio.Contactos.Count == 0 ? 0 : medio.Contactos.Count;//indica el index del ultimo obj agregado.
+            html = RenderPartialViewToString("~/Views/Medio/Contacto/_medio_contacto_renglon.cshtml", null);
             return Json(html, JsonRequestBehavior.AllowGet);
         }
 
@@ -57,22 +58,32 @@ namespace Publinter.Controllers
         [HttpPost]
         public ActionResult Create(Medio model)
         {
-            var id = medioApplicationService.Add(model);
-            if (id > 0)
+            try{
+                var id = medioApplicationService.Add(model);
+
+                if (id == 0)
+                {
+                    ViewBag.error = "no se puede guardar";
+                    return View(model);
+                }
+                
+                return RedirectToAction("Create");
+            }
+            catch(Exception e)
             {
-                ViewBag.error = "no se puede guardar";
+                ViewBag.error = e.Message;
                 return View(model);
             }
-            return View();
+            
         }
 
         [HttpPost]
         public JsonResult AddProgramaRenglon(Medio medio)
         {
             var html = string.Empty;
-            ViewData["indexPrograma"] = medio.Programas.Count - 1;//indica el index del ultimo obj agregado.
+            ViewData["indexPrograma"] = medio.Programas.Count == 0 ? 0 : medio.Programas.Count;//indica el index del ultimo obj agregado.
             html = RenderPartialViewToString("~/Views/Medio/Programa/_medio_programa_renglon.cshtml", null);
-            return Json(html, JsonRequestBehavior.AllowGet);
+            return Json(new {html = html, index = medio.Programas.Count }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit(int id)
@@ -88,9 +99,9 @@ namespace Publinter.Controllers
             var bandera = medioApplicationService.Update(model);
             if (bandera)
             {
-                return View("Index");
+                ViewBag.error = "Ocurrio un error al guardar el medio";
             }
-            ViewBag.error = "Ocurrio un error al guardar el medio";
+            
             return View(model);
         }
     }

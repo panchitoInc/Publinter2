@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+.danger {
+    border-bottom-color :#de0900;
+}
+.success {
+    border-bottom-color: #76bb65;
+}

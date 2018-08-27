@@ -14,7 +14,12 @@ namespace DataModule.Entities
         public int ClienteId { get; set; }
 
         public string Nombre { get; set; }
-
+        
         public virtual List<Contacto> Contactos { get; set; }
+
+        public string RazonSocial { get; set; }
+
+        public string RUT { get; set; }
+
     }
 }

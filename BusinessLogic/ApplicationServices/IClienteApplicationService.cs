@@ -10,6 +10,11 @@ namespace BusinessLogic.ApplicationServices
 {
     public interface IClienteApplicationService
     {
-        List<Cliente> GetClientes();
+        Cliente Get(int id);
+        List<Get_Cliente_Data> GetClientes();
+        List<Get_All_Cliente> GetAll();
+        Cliente GetByRut(string rut);
+        int Add(Cliente model);
+        bool Update(Cliente model);
     }
 }

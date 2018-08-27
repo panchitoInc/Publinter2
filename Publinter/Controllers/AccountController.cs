@@ -70,12 +70,11 @@ namespace Publinter.Controllers
                 var authManager = ctx.Authentication;
 
                 authManager.SignIn(identity);
-                
 
-                return RedirectToAction("Index","Usuario");//CheckIsDefaultPass(model, _usuario);
+                //    return Json(new{ access }, JsonRequestBehavior.AllowGet);//CheckIsDefaultPass(model, _usuario);
+                return Json(new { access }, JsonRequestBehavior.AllowGet);
             }
-            ViewBag.error = "Usuario o password invalida.";
-            return View(model);
+            return Json(new { access }, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// 

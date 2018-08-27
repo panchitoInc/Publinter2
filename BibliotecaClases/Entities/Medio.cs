@@ -10,6 +10,8 @@ namespace DataModule.Entities
     {
         public Medio()
         {
+            this.Nombre = "";
+            this.Descripcion = "";
             this.Programas = new List<Programa>();
             this.Contactos = new List<Contacto>();
         }
@@ -24,5 +26,12 @@ namespace DataModule.Entities
         public virtual List<Contacto> Contactos { get; set; }
 
         public virtual List<Programa> Programas { get; set; }
+
+
+        //TipoMedio navigation
+        public int? TipoMedioId { get; set; }
+
+        [ForeignKey("TipoMedioId")]
+        public virtual TipoMedio TipoMedio { get; set; }
     }
 }

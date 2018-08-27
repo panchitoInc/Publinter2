@@ -11,6 +11,7 @@ namespace AccesoDatos.Repository
     {
         List<Medio> GetAll();
         Medio Get(int id);
+        Medio GetByNameAndType(string nombre, int tipoMedio);
         int Add(Medio model);
         bool Update(Medio model);
     }

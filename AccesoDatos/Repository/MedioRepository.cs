@@ -49,6 +49,14 @@ namespace AccesoDatos.Repository
             return med;
         }
 
+        public Medio GetByNameAndType(string nombre, int tipoMedio)
+        {
+            using (var context = new PublinterContext())
+            {
+                return context.Medio.FirstOrDefault(x => x.Nombre.Equals(nombre) && x.TipoMedioId == tipoMedio);
+            }
+                
+        }
         public int Add(Medio model)
         {
             try
@@ -61,9 +69,9 @@ namespace AccesoDatos.Repository
                 return model.MedioId;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                var a = e.Message;
                 return -1;
             }
             
@@ -82,41 +90,76 @@ namespace AccesoDatos.Repository
 
                     medioBd.Descripcion = model.Descripcion;
                     medioBd.Nombre = model.Nombre;
+
+                    //Contactos
                     if (model.Contactos != null && model.Contactos.Count > 0)
                     {
 
                         // quito los vacios 
-                        model.Contactos = model.Contactos.Where(x => x.ContactoId > 0 && x.Nombre != "").ToList();
+                        model.Contactos = model.Contactos.Where(x => (x.ContactoId == 0 && x.Nombre != "" && (x.Email != "" || x.Telefono != "")) || x.ContactoId > 0).ToList();
 
-                        // contactos Nuevos
-                        var contactosNuevos = model.Contactos.Where(x => x.Delete.Equals(false) && x.ContactoId == 0 && x.Nombre != "" && (x.Telefono != "" || x.Email != "")).ToList();
-                        if (contactosNuevos != null)
+                        //Eliminados
+                        var ContactosEliminados = model.Contactos.Where(x => x.Delete.Equals(true)).ToList();
+                        if(ContactosEliminados.Count > 0)
                         {
-                            SaveNewContacto(medioBd, contactosNuevos);
+                            ContactosEliminados.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Deleted);
+                            context.SaveChanges();
                         }
-
                         // los viejos que se pudireran modificar
                         var contactosModificados = model.Contactos.Where(x => x.ContactoId > 0 && x.Delete.Equals(false)).ToList();
-                        if(contactosModificados != null)
+                        if (contactosModificados.Count > 0)
                         {
                             UpdateContacto(medioBd, contactosModificados);
+                            medioBd.Contactos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                            context.SaveChanges();
+                        }
+                        // contactos Nuevos
+                        var contactosNuevos = model.Contactos.Where(x => x.Delete.Equals(false) && x.ContactoId == 0 && x.Nombre != "" && (x.Telefono != "" || x.Email != "")).ToList();
+                        if (contactosNuevos.Count > 0)
+                        {
+                            SaveNewContacto(medioBd, contactosNuevos);
+
+                            contactosNuevos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Added);
+                            context.SaveChanges();
                         }
 
-                        //medioBd.Contactos = model.Contactos.Where(x => x.Delete.Equals(false).ToList();
-                        medioBd.Contactos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                        
+                        
                     }
 
-                    context.SaveChanges();
                     // Programas
                     if (model.Programas != null && model.Programas.Count() > 0)
                     {
                         //quiton los vacios.
-                        medioBd.Programas = model.Programas.Where(x => x.ProgramaId > 0 && x.Nombre !="").ToList();
-                        var ProgramasNuevos = model.Programas.Where(x =>x.Delete.Equals(false) && x.ProgramaId == 0 && x.Nombre != "" && x.HoraInicio  != null && x.PrecioSegundo > 0).ToList();
+                        model.Programas = model.Programas.Where(x => x.Nombre !="" && x.PrecioSegundo > 0 && x.Duracion > 0 ).ToList();
 
+                        // Programas eliminados
+                        var ProgramasEliminados = medioBd.Programas.Where(x => x.Equals(true)).ToList();
+                        if(ProgramasEliminados.Count() > 0)
+                        {
+                            ProgramasEliminados.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Deleted);
+                            context.SaveChanges();
+                        }
+
+                        //Programas nuevos
+                        var ProgramasNuevos = model.Programas.Where(x =>x.Delete.Equals(false) && x.ProgramaId == 0 && x.Nombre != "" && x.HoraInicio  != null && x.PrecioSegundo > 0).ToList();
+                        if(ProgramasNuevos.Count > 0)
+                        {
+                            SaveNewPrograma(medioBd, ProgramasNuevos);
+                        }
+                        context.SaveChanges();
+                        //viejos modificados
+                        var ProgramasModificados = model.Programas.Where(x => x.ProgramaId > 0 && x.Delete.Equals(false)).ToList();
+                        if(ProgramasModificados.Count > 0)
+                        {
+                            UpdatePrograma(medioBd, ProgramasModificados);
+                        }
                         medioBd.Programas.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                        context.SaveChanges();
                     }
                     
+
+
                     context.Entry(medioBd).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                 }
@@ -142,6 +185,7 @@ namespace AccesoDatos.Repository
                     existingInBd.Ciudad = contAct.Ciudad;
                     existingInBd.Departamento = contAct.Ciudad;
                     existingInBd.Direccion = contAct.Direccion;
+                    existingInBd.Nombre = contAct.Nombre;
                     existingInBd.Email = contAct.Email;
                     existingInBd.Telefono = contAct.Telefono;
                 }
@@ -157,6 +201,35 @@ namespace AccesoDatos.Repository
                 medioBd.Contactos.Add(c);
             }
             
+        }
+
+        public void SaveNewPrograma(Medio medioBd, List<Programa> nuevos)
+        {
+            foreach (var p in nuevos)
+            {
+                medioBd.Programas.Add(p);
+            }
+
+        }
+
+        public void UpdatePrograma(Medio mediobd, List<Programa> Nuevos)
+        {
+            foreach (var progAct in Nuevos)
+            {
+                var existingInBd = mediobd.Programas
+                                          .Where(p => p.ProgramaId == progAct.ProgramaId)
+                                          .SingleOrDefault();
+
+                if(existingInBd != null)
+                {
+                    existingInBd.Duracion = progAct.Duracion;
+                    existingInBd.HoraInicio = progAct.HoraInicio;
+                    existingInBd.Nombre = progAct.Nombre;
+                    existingInBd.PrecioSegundo = progAct.PrecioSegundo;
+                    existingInBd.ProgramaId = progAct.ProgramaId;
+                }
+            }
+
         }
     }
 }
