@@ -5,15 +5,15 @@
 
 <tr id="tr_@index">
     <td>
-        @Html.TextBoxFor(x => x.Contactos[index].Nombre, new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Contactos[index].Nombre, new { @class = "form-control", @placeholder = "Nombre", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
         @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
     </td>
     <td>
-        @Html.TextBoxFor(x => x.Contactos[index].Email, new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Contactos[index].Email, new { @class = "form-control", @placeholder = "Email", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
         @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
     </td>
     <td>
-        @Html.TextBoxFor(x => x.Contactos[index].Telefono, new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Contactos[index].Telefono, new { @class = "form-control", @placeholder = "Teléfono", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
     <td class="text-center">
         @Html.CheckBoxFor(x => x.Contactos[index].Delete, new {@class="hidden" })

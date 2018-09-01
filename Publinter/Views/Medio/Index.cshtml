@@ -1,4 +1,5 @@
-﻿
+﻿@model IList<DataModule.Entities.Medio>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,40 +8,36 @@
 }
 
 
-<script type="text/html">
+<script>
     $(document).ready(fucntion(){
 
-    $("#ListadoMediosTable").DataTable({
-    "language": {
-    "sProcessing": "Procesando...",
-    "sLengthMenu": "Mostrar _MENU_ registros",
-    "sZeroRecords": "No se encontraron resultados",
-    "sEmptyTable": "Ningún dato disponible en esta tabla",
-    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-    "sInfoPostFix": "",
-    "sSearch": "Buscar:",
-    "sUrl": "",
-    "sInfoThousands": ",",
-    "sLoadingRecords": "Cargando...",
-    "oPaginate": {
-    "sFirst": " Primero",
-    "sLast": "Último ",
-    "sNext": "Siguiente",
-    "sPrevious": "Anterior"
-    },
-
-    "oAria": {
-    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-    }
-    }
+        $("#ListadoMediosTable").DataTable({
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                "sFirst": " Primero",
+                "sLast": "Último ",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+                },
+                "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+        });
     });
-
-
-    });
-
 
 </script>
 
@@ -68,15 +65,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (listaMedios != null)
+                        @if (Model != null)
                         {
-                            foreach (var i in listaMedios)
+                            foreach (var i in Model)
                             {
                                 <tr onclick="javascript:GetUpdateMedio(@i.MedioId);">
-                                    <td><a href="../Medio/Edit/@i.MedioId" >@i.Nombre</a></td>
+                                    <td><a href="../Medio/Edit/@i.MedioId">@i.Nombre</a></td>
+
                                     <td>@i.Descripcion</td>
-                                    <td href="tel:@i.Contactos.FirstOrDefault().Telefono">@i.Contactos.FirstOrDefault().Telefono</td>
-                                    <td><a href="mailto:@i.Contactos.FirstOrDefault().Email">@i.Contactos.FirstOrDefault().Email</a> </td>
+
+                                    @if (i.Contactos != null && i.Contactos.Count > 0)
+                                    {
+                                        <td href="tel:@i.Contactos.FirstOrDefault().Telefono">@i.Contactos.FirstOrDefault().Telefono</td>
+                                        <td><a href="mailto:@i.Contactos.FirstOrDefault().Email">@i.Contactos.FirstOrDefault().Email</a> </td>
+                                    }
+                                    else
+                                    {
+                                        <td>No ha teléfono</td>
+                                        <td>No hay mail</td>
+                                    }
+
                                 </tr>
                             }
                         }

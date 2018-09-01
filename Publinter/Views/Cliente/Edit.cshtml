@@ -5,6 +5,11 @@
 }
 
 <style type="text/css">
+
+    .content-wrapper {
+        padding-top: 0px !important;
+    }
+
     .nav-tabs-custom > .nav-tabs > li.active {
         border-top-color: #3faf52;
     }
@@ -31,7 +36,9 @@
         padding-left: 12px;
     }
 </style>
+
 <link href="~/Content/Site.css" rel="stylesheet" />
+
 <script type="text/javascript">
     function AddContactoRenglon() {
 
@@ -47,10 +54,6 @@
         $("#Contactos_" + index + "__Delete").prop('checked', true);
     }
 
-    function CrearUsuario() {
-        $("#ClienteCreateForm").submit();
-    }
-
     function OnFocusOutRut(value){
         if (validarRUT(value)) {
             SetBorderBottomTrue("RUT");
@@ -60,68 +63,60 @@
     }
     //function SetBorderBottomFalse(value) {
 </script>
+
 <div class=" register-box-body">
+    <p style="font-size: 22px;padding-bottom: 7px;margin-bottom:10px;">Editar cliente</p>
 
-    <div class=" register-box-body">
-        <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar cliente</p>
+    @using (Html.BeginForm("Edit", "Cliente", FormMethod.Post, new { @id = "ClienteCreateForm" }))
+    {
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT", onblur = "javascript:OnFocusOutRut(this.value);" })
 
-        @using (Html.BeginForm("Edit", "Cliente", FormMethod.Post, new { @id = "ClienteCreateForm" }))
-        {
-            <div class="row">
-                <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
-                    <font style="vertical-align: inherit;">Datos del cliente</font>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT", onblur = "javascript:OnFocusOutRut(this.value);" })
-
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control", @placeholder = "Razon social", onblur = "validarLargo('#RazonSocial',0);" })
-                        @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
-                        @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
-                    </div>
                 </div>
             </div>
-
-            <!--Contactos-->
-            <div class="row">
-                <div class="col-xs-12">
-
-
-                    @Html.Partial("~/Views/Cliente/Contacto/contacto_renglones.cshtml", Model)
-                    <a href="javascript:void(0);" title="Agregar contacto" onclick="AddContactoRenglon();">
-                        @*<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>*@
-                        <i class="material-icons" style="font-size:33px;">
-                            add_box
-                        </i>
-                    </a>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control", @placeholder = "Razon social", onblur = "validarLargo('#RazonSocial',0);" })
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-xs-8">
-                    <span id="Mensaje" style="display:none;"></span>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
                 </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button type="button" class="btn btn-primary btn-block btn-flat" onclick="CrearUsuario();">Guardar</button>
-                </div>
-                <!-- /.col -->
             </div>
+        </div>
 
-            <div>
-                @Html.HiddenFor(x => x.ClienteId)
+        <!--Contactos-->
+        <div class="row">
+
+            @Html.Partial("~/Views/Cliente/Contacto/contacto_renglones.cshtml", Model)
+
+            <div class="col-lg-12">
+                <a href="javascript:void(0);" title="Agregar contacto" onclick="AddContactoRenglon();">
+                    <i class="material-icons" style="font-size:33px;">
+                        add_box
+                    </i>
+                </a>
             </div>
-        }
-    </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8 col-md-10">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4 col-md-2">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div>
+            @Html.HiddenFor(x => x.ClienteId)
+        </div>
+    }
     <!-- /.form-box -->
 </div><!-- /.register-box -->
 <!-- jQuery 3 -->

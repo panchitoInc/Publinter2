@@ -3,38 +3,26 @@
     int index = (ViewData["indexPrograma"] == null) ? 0 : (int)ViewData["indexPrograma"];
 }
 
+<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+    <table id="ListadoProgramasTable" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Hora inicio</th>
+                <th>Duración</th>
+                <th class="text-right">Precio/seg</th>
+                <th class="text-center">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
 
-<div class="box">
-    <div class="box-header">
-        <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Programa</font></font></h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-            <div class="col-sm-12">
-                <table id="ListadoProgramasTable" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Hora inicio</th>
-                            <th>Duración</th>
-                            <th class="text-right">Precio/seg</th>
-                            <th class="text-center">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @for (int i = 0; i < Model.Programas.Count; i++)
-                        {
-                            ViewData["indexPrograma"] = i;
-                            @Html.Partial("~/Views/Medio/Programa/_medio_programa_renglon.cshtml")
-                        }
+            @for (int i = 0; i < Model.Programas.Count; i++)
+            {
+                ViewData["indexPrograma"] = i;
+                @Html.Partial("~/Views/Medio/Programa/_medio_programa_renglon.cshtml")
+            }
 
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <!-- /.box-body -->
+        </tbody>
+    </table>
 </div>

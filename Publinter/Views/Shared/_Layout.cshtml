@@ -61,20 +61,20 @@
 
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height:50px;padding-top: 8px;">
-                                
-                                <img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image" style="height:35px;">
-                                <span class="hidden-xs"></span>
-                            </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image">
                                     @*<i class="material-icons">person</i>*@
                                     <p>
-                                        @CurrentUser.UserData
-
-                                        <small>@CurrentUser.RolDescripcion</small>
+                                        @if (CurrentUser.RolDescripcion == "Duenio")
+                                        {
+                                            <small>Dueño</small>
+                                        }
+                                        else
+                                        {
+                                            <small>@CurrentUser.UserData</small>
+                                        }
                                     </p>
                                 </li>
 
@@ -103,13 +103,10 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="../../Content/Admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p>Alexander Pierce</p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            <div class="user-panel" style="height: 58px;padding: 5px;">
+                <div style="color: #fff;padding: 5px 5px 5px 15px;">
+                    <p style="font-weight: 600;margin-bottom: 0px;">@CurrentUser.Name</p>
+                    <a href="#" style="text-decoration: none;padding-right: 5px;margin-top: 3px;font-size: 11px;"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
 
@@ -119,49 +116,26 @@
                 <li class="header">Acciones rápidas</li>
                 <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o text-red"></i> <span>Nueva Órden</span></a></li>
                 <li><a href="@Url.Action("Create", "Medio")"><i class="fa fa-circle-o text-yellow"></i> <span>Nuevo Medio</span></a></li>
-                <li><a href="@Url.Action("Create", "Material")"><i class="fa fa-circle-o text-aqua"></i> <span>Nuevo Material</span></a></li>
+                <li><a href="@Url.Action("Create", "Cliente")"><i class="fa fa-circle-o text-aqua"></i> <span>Nuevo Cliente</span></a></li>
 
                 <li class="header">Navegación</li>
 
                 <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <i class="fa fa-user"></i> <span>Usuarios</span>
+                    <a href="#">
+                        <span>Órdenes</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="../Usuario/Index"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="../Usuario/Create"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        <li><a href="@Url.Action("Index", "Orden")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o"></i> Nueva</a></li>
                     </ul>
                 </li>
+
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-user"></i> <span>Medios</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="../../Medio/Index"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="../../Medio/Create"><i class="fa fa-circle-o"></i> Nuevo</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-user"></i> <span>Cliente</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="../../Cliente/Index"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="../../Cliente/Create"><i class="fa fa-circle-o"></i> Nuevo</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-user"></i> <span>Materiales</span>
+                        <span>Materiales</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -171,18 +145,46 @@
                         <li><a href="@Url.Action("Create", "Material")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
+
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-user"></i> <span>Órdenes</span>
+                        <span>Medios</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href=""><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o"></i> Nueva</a></li>
+                        <li><a href="@Url.Action("Index", "Medio")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Medio")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <span>Cliente</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Cliente")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Cliente")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="javascript:void(0);">
+                        <span>Usuarios</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Usuario")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Usuario")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                    </ul>
+                </li>
+
                 <li class="treeview" style="display:none">
                     <a href="#">
                         <i class="fa fa-share"></i> <span>Multilevel</span>
@@ -256,14 +258,21 @@
 
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    @*<img src="../../Content/Admin/dist/img/boss.png" class="img-circle" alt="User Image">*@
-                    @*<i class="material-icons">person</i>*@
-                    <h3 style="margin-bottom:0;">
+                    <h4 style="margin-bottom:0;">
                         @CurrentUser.Name 
-                    </h3>
+                    </h4>
                 </div>
                 <div class="col-xs-12 text-center">
-                    <p>@CurrentUser.RolDescripcion</p>
+                    <p>
+                        @if (CurrentUser.RolDescripcion == "Duenio")
+                        {
+                            <small>Dueño</small>
+                        }
+                        else
+                        {
+                            <small>@CurrentUser.UserData</small>
+                        }
+                    </p>
                 </div>
                 <div class="col-xs-12">
                     <a href="../../Account/LogOut" class="btn btn-block btn-default btn-sm">Cerrar sesión</a>

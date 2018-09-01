@@ -5,38 +5,31 @@
 }
 
 
-<div class="box">
-    <div class="box-header">
-        <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Contactos</font></font></h3>
+<div class="col-lg-12">
+    <h4 class="box-title">Contactos</h4>
+</div>
+    
+<div class="col-lg-12">
+    <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+        <table id="ListaContactos" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr>
+                    <th class="ContactoNobre">Nombre</th>
+                    <th class="Email">Email</th>
+                    <th class="Telefono">Telefono</th>
+                    <th class="Direccion">Direccion</th>
+                    <th class="Ciudad">Ciudad</th>
+                    <th class="Departamento">Departamento</th>
+                    <th class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Contactos.Count; i++)
+                {
+                    ViewData["indexContacto"] = i;
+                    @Html.Partial("~/Views/Cliente/Contacto/contacto_renglon.cshtml")
+                }
+            </tbody>
+        </table>
     </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-            <div class="col-sm-12">
-                <table id="ListaContactos" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr>
-                            <th class="ContactoNobre">Nombre</th>
-                            <th class="Email">Email</th>
-                            <th class="Telefono">Telefono</th>
-                            <th class="Direccion">Direccion</th>
-                            <th class="Ciudad">Ciudad</th>
-                            <th class="Departamento">Departamento</th>
-                            <th class="text-center">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.Contactos.Count; i++)
-                        {
-                            ViewData["indexContacto"] = i;
-                            @Html.Partial("~/Views/Cliente/Contacto/contacto_renglon.cshtml")
-                        }
-
-                        
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <!-- /.box-body -->
 </div>

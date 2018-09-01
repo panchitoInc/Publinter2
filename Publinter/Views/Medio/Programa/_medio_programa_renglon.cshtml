@@ -7,22 +7,19 @@
 
 <tr id="tr_programa_@index">
     <td>
-        @Html.TextBoxFor(x => x.Programas[index].Nombre, new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Programas[index].Nombre, new { @class = "form-control", @placeholder = "Nombre", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
     <td>
         <div class="input-group bootstrap-timepicker timepicker">
-            @Html.TextBoxFor(x => x.Programas[index].HoraInicio, new { @class = "hourPicker", style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+            @Html.TextBoxFor(x => x.Programas[index].HoraInicio, new { @class = "hourPicker form-control", style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
         </div>
-
-        
-
     </td>
     <td>
-        @Html.TextBoxFor(x => x.Programas[index].Duracion, new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Programas[index].Duracion, new { @class = "form-control", @placeholder = "Duración", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
     <td>
-        @Html.TextBoxFor(x => x.Programas[index].PrecioSegundo, "{0:0.00}", new { style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
+        @Html.TextBoxFor(x => x.Programas[index].PrecioSegundo, "{0:0.00}", new { @class = "form-control", @style = "width: 100%;border: 1px solid #ccc;height: 30px;text-align: right" })
     </td>
     <td class="text-center">
         @Html.CheckBoxFor(x => x.Programas[index].Delete, new { @class = "hidden" })

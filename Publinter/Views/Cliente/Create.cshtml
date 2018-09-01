@@ -5,6 +5,11 @@
 }
 
 <style type="text/css">
+
+    .content-wrapper {
+        padding-top: 0px !important;
+    }
+
     .nav-tabs-custom > .nav-tabs > li.active {
         border-top-color: #3faf52;
     }
@@ -14,24 +19,26 @@
         overflow-y: scroll;
     }
 
-        div.box-body::-webkit-scrollbar {
-            width: 1em !important;
-        }
+    div.box-body::-webkit-scrollbar {
+        width: 1em !important;
+    }
 
-        div.box-body::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important;
-        }
+    div.box-body::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important;
+    }
 
-        div.box-body::-webkit-scrollbar-thumb {
-            background-color: darkgrey !important;
-            outline: 1px solid slategrey !important;
-        }
+    div.box-body::-webkit-scrollbar-thumb {
+        background-color: darkgrey !important;
+        outline: 1px solid slategrey !important;
+    }
 
     table#ListadoUsuariosTable td input, table#ListadoProgramasTable td input {
         padding-left: 12px;
     }
 </style>
+
 <link href="~/Content/Site.css" rel="stylesheet" />
+
 <script type="text/javascript">
     function AddContactoRenglon() {
 
@@ -65,73 +72,63 @@
     }
     
 </script>
-<div class=" register-box-body">
 
-    <div class=" register-box-body">
-        <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar cliente</p>
+<div class="register-box-body">
+    <p style="font-size: 22px;padding-bottom: 7px;margin-bottom:10px;">Nuevo cliente</p>
 
-        @using (Html.BeginForm("Create", "Cliente", FormMethod.Post, new { @id = "ClienteCreateForm" }))
-        {
-            <div class="row">
-                <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
-                    <font style="vertical-align: inherit;">Datos del cliente</font>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT" ,onblur = "javascript:OnFocusOutRut(this.value);" })
+    @using (Html.BeginForm("Create", "Cliente", FormMethod.Post, new { @id = "ClienteCreateForm" }))
+    {
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT" ,onblur = "javascript:OnFocusOutRut(this.value);" })
                         
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control", @placeholder = "Razon social", onblur = "validarLargo('#RazonSocial',0);" })
-                        @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group has-feedback">
-                        @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
-                        @*<span class="glyphicon glyphicon-user form-control-feedback"></span>*@
-                    </div>
                 </div>
             </div>
-
-            <!--Contactos-->
-            <div class="row">
-                <div class="col-xs-12">
-
-
-                    @Html.Partial("~/Views/Cliente/Contacto/contacto_renglones.cshtml", Model)
-                    <a href="javascript:void(0);" title="Agregar contacto" onclick="AddContactoRenglon();">
-                        @*<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>*@
-                        <i class="material-icons" style="font-size:33px;">
-                            add_box
-                        </i>
-                    </a>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control", @placeholder = "Razon social", onblur = "validarLargo('#RazonSocial',0);" })
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-xs-8">
-                    <span id="Mensaje" style="display:none;"></span>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
                 </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button type="button" class="btn btn-primary btn-block btn-flat" onclick="CrearCliente();">Guardar</button>
-                </div>
-                <!-- /.col -->
             </div>
-        }
-    </div>
-    <!-- /.form-box -->
+        </div>
+
+        <!--Contactos-->
+        <div class="row">
+            
+            @Html.Partial("~/Views/Cliente/Contacto/contacto_renglones.cshtml", Model)
+
+            <div class="col-xs-12">
+                <a href="javascript:void(0);" title="Agregar contacto" onclick="AddContactoRenglon();">
+                    <i class="material-icons" style="font-size:33px;">
+                        add_box
+                    </i>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8 col-md-10">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4 col-md-2">
+                <button type="button" class="btn btn-primary btn-block btn-flat" onclick="CrearCliente();">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+    }
 </div><!-- /.register-box -->
+
 <!-- jQuery 3 -->
 <script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- iCheck -->
-
 <script src="~/Content/Admin/plugins/iCheck/icheck.min.js"></script>
-
 <script src="~/Scripts/Utils.js"></script>
 <script src="~/Scripts/Publinter/Validar.js"></script>

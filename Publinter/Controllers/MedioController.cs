@@ -5,6 +5,7 @@ using BusinessLogic.ApplicationServices;
 using Mvc;
 using System.Web.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace Publinter.Controllers
 {
@@ -27,9 +28,9 @@ namespace Publinter.Controllers
         // GET: Medio
         public ActionResult Index()
         {
-            ViewBag.ListaMedios = medioApplicationService.GetAll();
+            List<Medio> ListaMedios = medioApplicationService.GetAll();
 
-            return View();
+            return View(ListaMedios);
         }
 
         public JsonResult AddMedioRenglon(Medio medio)
