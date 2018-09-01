@@ -3409,6 +3409,8 @@
     <Content Include="Content\Admin\bower_components\moment\package-lock.json" />
     <Content Include="Content\Admin\bower_components\moment\README.md" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Publinter - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Publinter20180901062231 - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
