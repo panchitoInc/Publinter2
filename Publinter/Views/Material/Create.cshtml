@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     SelectList ListaTipos = new SelectList(ViewBag.TiposMaterial, "Value", "Text");
+    SelectList ListaClientes = new SelectList(ViewBag.Clientes, "Value", "Text");
 }
 
 <script>
@@ -35,10 +36,16 @@
 
         <div class="col-md-12" style="height:49px;">
             <div class="col-xs-6">
-                @Html.TextBoxFor(x => x.DuracionSegundos, new { @class = "form-control", @type = "number", @min = "0", @placeholder = "Duracion (segundos)" })
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.ClienteId, ListaClientes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.DuracionSegundos, new { @class = "form-control", @type = "number", @min = "0", @placeholder = "Duracion (segundos)" })
+                </div>
             </div>
         </div>
-
         <div class="col-md-12" style="height:49px;">
             <div class="col-xs-12">
                 @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control", @placeholder = "Descripcion" })

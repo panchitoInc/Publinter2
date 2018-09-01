@@ -35,11 +35,11 @@
     <div id="datosEncabezado" class="col-sm-12">
         <div class="col-sm-4">
             <label class="inline-element" style="width:75px">Medio: </label>
-            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:150px" })
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @onchange= "FiltrarProgramas()", @class = "inline-element", @style = "width:150px" })
         </div>
         <div class="col-sm-4">
             <label class="inline-element" style="width:75px">Cliente: </label>
-            @Html.DropDownListFor(x => x.ClienteId, new SelectList(Model.ListaClientes, "ClienteId", "Nombre"), new { @class = "inline-element", @style = "width:150px" })
+            @Html.DropDownListFor(x => x.ClienteId, new SelectList(Model.ListaClientes, "ClienteId", "Nombre"), new { @onchange = "FiltrarMateriales()", @class = "inline-element", @style = "width:150px" })
         </div>
         <div class="col-sm-4">
             <label class="inline-element" style="width:75px">Emisión: </label>

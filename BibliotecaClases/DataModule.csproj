@@ -54,6 +54,7 @@
     <Compile Include="DataModule\PublinterContext.cs" />
     <Compile Include="EntitiesResult\Get_All_Cliente.cs" />
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />
+    <Compile Include="EntitiesResult\Get_orden_index.cs" />
     <Compile Include="EntitiesResult\Get_Programa_Data.cs" />
     <Compile Include="Entities\Cliente.cs" />
     <Compile Include="Entities\Contacto.cs" />

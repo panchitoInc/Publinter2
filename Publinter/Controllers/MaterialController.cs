@@ -14,6 +14,7 @@ namespace Publinter.Controllers
     public class MaterialController : PublinteController
     {
         IMaterialApplicationService _materialApplicationService;
+        IClienteApplicationService _clienteApplicationService;
 
 
         private IMaterialApplicationService materialApplicationService
@@ -25,6 +26,18 @@ namespace Publinter.Controllers
                     this._materialApplicationService = new MaterialApplicationService(CurrentUser);
                 }
                 return this._materialApplicationService;
+            }
+        }
+
+        private IClienteApplicationService clienteApplicationService
+        {
+            get
+            {
+                if (this._clienteApplicationService == null)
+                {
+                    this._clienteApplicationService = new ClienteApplicationService(CurrentUser);
+                }
+                return this._clienteApplicationService;
             }
         }
 
@@ -40,6 +53,9 @@ namespace Publinter.Controllers
         {
             var tipos = materialApplicationService.GetTipos();
             ViewBag.TiposMaterial = tipos.Select(x => new SelectListItem() { Value = x.TipoMaterialId.ToString(), Text = x.Descripcion });
+
+            var clientes = clienteApplicationService.GetClientes();
+            ViewBag.Clientes = clientes.Select(x => new SelectListItem() { Value = x.ClienteId.ToString(), Text = x.Nombre });
 
             Material model = new Material();
 

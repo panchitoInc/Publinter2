@@ -27,5 +27,8 @@ namespace DataModule.Entities
 
         [ForeignKey("TipoMaterialId")]
         public TipoMaterial TipoMaterial { get; set; }
+
+        [NotMapped]
+        public int ClienteId { get; set; }
     }
 }

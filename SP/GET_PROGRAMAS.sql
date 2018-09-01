@@ -6,7 +6,8 @@ BEGIN
 	
 	SELECT
 		P.ProgramaId,
-		P.Nombre
+		P.Nombre,
+		P.PrecioSegundo as Precio
 	FROM 
 		PROGRAMA P
 END

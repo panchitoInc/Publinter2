@@ -104,5 +104,26 @@ namespace Publinter.Controllers
             
             return View(model);
         }
+
+        public JsonResult GetProgramas(int medioId)
+        {
+            Medio m = medioApplicationService.Get(medioId);
+
+            string html = "";
+
+            if (m.Programas != null && m.Programas.Count > 0)
+            {
+                foreach (Programa p in m.Programas)
+                {
+                    html += "<option value='" + p.ProgramaId + "' data-precio='" + p.PrecioSegundo + "'>" + p.Nombre + "</option>";
+                }
+            }
+            else
+            {
+                html += "<option value='0' data-precio='0'>No hay programas</option>";
+            }
+
+            return Json(new { html }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

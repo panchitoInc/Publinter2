@@ -1,49 +1,9 @@
 ﻿@model Publinter.Models.Orden_Create_Model
 
-<style>
-    th {
-        text-align: center;
-    }
-
-    td {
-        text-align: center;
-        border: 1px solid;
-    }
-
-    tr {
-        height: 20px
-    }
-    
-    .dato {
-        width:25px;
-    }
-
-    .noHabil {
-        background-color: #ececec;
-    }
-
-    th {
-        padding: 5px;
-    }
-
-    .tdBlack {
-        width: 100px;
-        background-color: black;
-        color: white;
-    }
-
-    .txtEmisiones {
-        width: 25px;
-        height: 40px;
-        text-align: center;
-        border: none;
-    }
-</style>
-
 <div id="Lineas">
     @for (var i = 0; i < Model.Lineas.Count; i++)
     {
-        <div class="col-sm-12">
+        <div class="col-sm-12 lineaOrden">
             <table>
                 <thead>
                     <tr>
@@ -58,6 +18,7 @@
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesNombre)
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesNumero)
                             @Html.HiddenFor(x => x.Lineas[i].Mes.MesAnio)
+                            @Html.HiddenFor(x => x.Lineas[i].TotalLinea)
                         </th>
                     </tr>
                 </thead>
@@ -130,18 +91,30 @@
                     </tr>
                     <tr>
                         <td rowspan="2">
-                            @Html.DropDownListFor(x => x.Lineas[i].ProgramaId, new SelectList(Model.ListaProgramas, "ProgramaId", "Nombre"), new { @style = "border:none;width: 100px" })
+                            <select id="Programa_@i" class="Programa" onchange="SetPrograma(@i)" style="border:none;width: 100px">
+                                @foreach (var p in Model.ListaProgramas)
+                                {
+                                    <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
+                                }
+                            </select>
+                            @Html.HiddenFor(x => x.Lineas[i].ProgramaId)
                         </td>
                         <td rowspan="2">
-                            @Html.DropDownListFor(x => x.Lineas[i].MaterialId, new SelectList(Model.ListaMateriales, "MaterialId", "Titulo"), new { @style = "border:none;width: 100px" })
+                            <select id="Material_@i" class="Material" onchange="SetMaterial(@i)" style="border:none;width: 100px">
+                                @foreach (var m in Model.ListaMateriales)
+                                {
+                                    <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>
+                                }
+                            </select>
+                            @Html.HiddenFor(x => x.Lineas[i].MaterialId)
                         </td>
 
                         @for (var d = 0; d < Model.Lineas[i].Mes.Dias.Count; d++)
                         {
                             if (Model.Lineas[i].Mes.Dias[d].DiaNombre != "Sábado" && Model.Lineas[i].Mes.Dias[d].DiaNombre != "Domingo")
                             {
-                                <td rowspan="2" class="dato">
-                                    @Html.TextBoxFor(x => x.Lineas[i].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones" })
+                                <td rowspan="2" class="dato dia_@i">
+                                    @Html.TextBoxFor(x => x.Lineas[i].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + i + ")" })
 
                                     @Html.HiddenFor(x => x.Lineas[i].Mes.Dias[d].DiaId)
                                     @Html.HiddenFor(x => x.Lineas[i].Mes.Dias[d].DiaNombre)

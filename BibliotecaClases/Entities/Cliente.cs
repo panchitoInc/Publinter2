@@ -21,5 +21,6 @@ namespace DataModule.Entities
 
         public string RUT { get; set; }
 
+        public virtual List<Material> Materiales { get; set; }
     }
 }

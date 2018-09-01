@@ -1,5 +1,6 @@
 ﻿using AccesoDatos.Repository;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace BusinessLogic.ApplicationServices
         public int CrearOrden(Orden nueva)
         {
             return ordenRepository.CrearOrden(nueva);
+        }
+
+        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, string search)
+        {
+            return ordenRepository.GetIndex(start, length, sortColumn, sortDirection, search);
         }
     }
 }

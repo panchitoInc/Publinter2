@@ -26,6 +26,7 @@ namespace AccesoDatos.Repository
             {
                 CliBuscado = context.Cliente
                                             .Include("Contactos")
+                                            .Include("Materiales")
                                             .FirstOrDefault(x => x.ClienteId.Equals(id));
             }
             return CliBuscado;

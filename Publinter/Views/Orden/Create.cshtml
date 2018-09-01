@@ -10,17 +10,88 @@
 <script src="~/Content/Admin/bower_components/moment/min/moment.min.js"></script>
 <script src="~/Content/Admin/bower_components/moment/min/moment-with-locales.min.js"></script>
 <script src="~/Content/Admin/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="~/Content/Utils.js"></script>
 
 <style>
     .content-wrapper {
         display: inline-grid;
         min-height: -webkit-fill-available !important;
     }
+
+    #mensajeExito {
+        display: none;
+        position: absolute;
+        left: CALC(50%);
+        bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        color: white;
+        background-color: rgb(63, 175, 82);
+        width: 200px;
+    }
+
+    #mensajeErrorBack {
+        display: none;
+        position: absolute;
+        left: CALC(50%);
+        bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        color: white;
+        background-color: #da6262;
+        width: 250px;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+        border: 1px solid;
+    }
+
+    tr {
+        height: 20px
+    }
+
+    .dato {
+        width: 25px;
+    }
+
+    .noHabil {
+        background-color: #ececec;
+    }
+
+    th {
+        padding: 5px;
+    }
+
+    .tdBlack {
+        width: 100px;
+        background-color: black;
+        color: white;
+    }
+
+    .txtEmisiones {
+        width: 25px;
+        height: 40px;
+        text-align: center;
+        border: none;
+    }
 </style>
 
 <script>
 
     $(document).ready(function () {
+
+        FiltrarProgramas();
+        FiltrarMateriales();
+
+        SetPrograma(0);
+
+        $("#Emision").val(formattedDate($("#Emision").val()));
+
         $("#Emision").daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
@@ -31,6 +102,24 @@
             }
         });
     })
+
+    function AgregarPrimeraLinea()
+    {
+        var form = $("#formOrden");
+        $(".btnLineas").attr("disabled","disabled")
+        $.ajax({
+            url: '@Url.Action("AgregarPrimeraLinea", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                $('#divLineas').append(data.html);
+                SetPrograma(data.index);
+                SetMaterial(data.index);
+                CalcularTotalLinea(data.index);
+            }
+        });
+    }
 
     function AgregarSiguienteMes()
     {
@@ -43,6 +132,9 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
+                SetPrograma(data.index);
+                SetMaterial(data.index);
+                CalcularTotalLinea(data.index);
             }
         });
     }
@@ -58,6 +150,158 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
+                SetPrograma(data.index);
+                SetMaterial(data.index);
+                CalcularTotalLinea(data.index);
+            }
+        });
+    }
+
+    function SetPrograma(index)
+    {
+        var progId = $("#Programa_" + index).val();
+        $("#Lineas_" + index + "__ProgramaId").val(progId);
+    }
+
+    function SetMaterial(index)
+    {
+        var matId = $("#Material_" + index).val();
+        $("#Lineas_" + index + "__MaterialId").val(matId);
+    }
+
+    function CalcularTotalLinea(index)
+    {
+        var precio = parseFloat($("#Programa_" + index + " option:selected").data("precio"));
+        var duracion = parseInt($("#Material_" + index + " option:selected").data("duracion")); 
+        var nroDias = $(".dia_" + index).length;
+        var emisiones = 0;
+
+        for(var i = 0; i < nroDias; i++)
+        {
+            var emisionesDia = parseInt($("#Lineas_" + index + "__Mes_Dias_" + i + "__NroEmisiones").val());
+
+            var totalDia = emisionesDia * precio * duracion;
+            $("#Lineas_" + index + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+
+            emisiones += emisionesDia;
+        }     
+
+        var totalLinea = precio * emisiones;
+
+        $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
+        $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
+
+        CalcularTotalOrden();
+    }
+
+    function CalcularTotalOrden()
+    {
+        var cantLineas = $(".lineaOrden").length;
+        var totalOrden = 0;
+
+        for(var i = 0; i < cantLineas; i++)
+        {
+            totalOrden += parseFloat($("#Lineas_" + i + "__TotalLinea").val());
+        }
+
+        $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals(totalOrden, 2)));
+        $("#TotalOrden").val(totalOrden);
+    }
+
+    function FiltrarProgramas()
+    {
+        var medioId = $("#MedioId").val();
+
+        $.ajax({
+            url: '@Url.Action("GetProgramas", "Medio")',
+            type: 'POST',
+            dataType: 'json',
+            data: { "medioId" : medioId },
+            success: function (data) {
+                $(".Programa").html(data.html);
+            }
+        });
+    }
+
+    function FiltrarMateriales()
+    {
+        var clienteId = $("#ClienteId").val();
+        
+        $.ajax({
+            url: '@Url.Action("GetMateriales", "Cliente")',
+            type: 'POST',
+            dataType: 'json',
+            data: { "clienteId" : clienteId },
+            success: function (data) {
+                $(".Material").html(data.html);
+            }
+        });
+    }
+
+    function openMensajeExito() 
+    {
+        $("#mensajeExito").fadeIn();
+        setTimeout(function () { $("#mensajeExito").fadeOut(); $("#errorMsgDiv").fadeOut(); }, 10000)
+    }
+
+    function openMensajeErrorBack() 
+    {
+        $("#mensajeErrorBack").fadeIn();
+        setTimeout(function () { $("#mensajeErrorBack").fadeOut(); $("#errorMsgDivBack").fadeOut(); }, 10000)
+    }
+
+    function ShowMsgErrorComp() {
+        $("#errorMsgDiv").slideDown();
+    }
+
+    function closeMessage() 
+    {
+        $("#mensajeExito").fadeOut();
+        $("#mensajeError").fadeOut();
+        $("#errorMsgDiv").fadeOut();
+    }
+
+    function LimpiarDatos()
+    {
+        ReiniciarLineas();
+        AddNumero();
+    }
+
+    function ReiniciarLineas()
+    {
+        $("#divLineas").html("");
+        AgregarPrimeraLinea();
+    }
+
+    function AddNumero()
+    {
+        $("#NroOrden").val(parseInt($("#NroOrden").val()) + 1);
+        $("h3.title").text("Órden Nro. " + $("#NroOrden").val());
+    }
+
+    function GuardarOrden()
+    {
+        var form = $("#formOrden");
+        $(".btnGuardar").attr("disabled", "disabled");
+        $.ajax({
+            url: '@Url.Action("Create", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                if(data.value)
+                {
+                    LimpiarDatos();
+                    $(".btnGuardar").removeAttr("disabled");
+                    $("#txtMensajeExito").text(data.descripcion);
+                    $("#txtMensajeExito").attr("href", "IndexDetalle");
+                    openMensajeExito();
+                }
+                else
+                {
+                    $("#msgErrorBack").text(data.errorMsg);
+                    openMensajeErrorBack();
+                }
             }
         });
     }
@@ -81,4 +325,28 @@
         </div>
     }
 
+</div>
+
+<div id="mensajeExito">
+    <div style="opacity: 1; margin-top: 0px;">
+        <div>
+            <a href="#" class="pull-right" onclick="closeMessage()" style="color:white"><i class="fa fa-close" aria-hidden="true"></i></a>
+            <a id="txtMensajeExito" target="_blank" href="" style="font-weight:bold;color:white"></a> generada correctamente.
+        </div>
+    </div>
+</div>
+
+<div id="mensajeErrorBack">
+    <div style="opacity: 1; margin-top: 0px;">
+        <div>
+            <a href="#" class="pull-right" onclick="closeMessage()" style="color:white"><i class="fa fa-close" aria-hidden="true"></i></a>
+            <span id="spanErrorCompBack">Hubo un error al generar la órden.</span>
+            <div>
+                <a id="errorMsgVerDetalle" href="javascript:ShowMsgErrorComp()" style="color:white;font-size:12px">Ver detalle</a>
+                <div id="errorMsgDiv" style="display:none">
+                    <span id="msgError"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

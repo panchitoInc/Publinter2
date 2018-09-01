@@ -22,8 +22,13 @@ namespace AccesoDatos.Repository
             {
                 using (var context = new PublinterContext())
                 {
-                    context.Material.Add(mat);
+                    Cliente cli = context.Cliente.Include("Materiales").FirstOrDefault(x => x.ClienteId.Equals(mat.ClienteId));
+                    cli.Materiales.Add(mat);
+
+                    context.Entry(mat).State = System.Data.Entity.EntityState.Added;
+                    context.Entry(cli).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
+
                     return mat.MaterialId;
                 }
             }

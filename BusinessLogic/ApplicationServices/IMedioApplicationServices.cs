@@ -14,6 +14,7 @@ namespace BusinessLogic.ApplicationServices
         int Add(Medio model);
 
         Medio Get(int id);
+
         bool Update(Medio model);
     }
 }

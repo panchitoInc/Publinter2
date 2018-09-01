@@ -125,6 +125,95 @@ namespace Publinter.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult AjaxGetDataOrdenIndex(int draw, int start, int length)
+        {
+            int TOTAL_ROWS = 0;
+            string search = Request["search[value]"];
+            int sortColumn = 0;
+            string sortDirection = "asc";
+
+            if (Request["order[0][column]"] != null)
+            {
+                sortColumn = int.Parse(Request["order[0][column]"]);
+            }
+            if (Request["order[0][dir]"] != null)
+            {
+                sortDirection = Request["order[0][dir]"];
+            }
+
+            DataTableDataOrden dataTableData = new DataTableDataOrden();
+
+            dataTableData.draw = draw;
+
+            var ordenes = ordenApplicationService.GetIndex(start, length, sortColumn, sortDirection, search).ToList();
+
+            if (ordenes != null && ordenes.Count > 0)
+            {
+                TOTAL_ROWS = ordenes[0].TotalRows;
+            }
+            else
+            {
+                TOTAL_ROWS = 0;
+            }
+            dataTableData.recordsTotal = TOTAL_ROWS;
+
+            dataTableData.data = ordenes;
+            dataTableData.recordsFiltered = TOTAL_ROWS;
+
+            return Json(dataTableData, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AgregarPrimeraLinea(Orden_Create_Model model)
+        {
+            Add_Linea_Model viewModel = new Add_Linea_Model();
+
+            int cantLineas = 0;
+
+            viewModel.IndexLinea = cantLineas;
+
+            LineaOrden nueva = new LineaOrden();
+
+            Mes mesActual = new Mes();
+
+            mesActual.MesAnio = DateTime.Now.Year;
+            mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
+            mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
+
+            mesActual.Dias = new List<Dia>();
+
+            int nroDias = DateTime.DaysInMonth(mesActual.MesAnio, mesActual.MesNumero);
+
+            for (int i = 0; i < nroDias; i++)
+            {
+                Dia dia = new Dia();
+                dia.DiaNumero = i + 1;
+
+                DateTime fecha = new DateTime();
+                string fechaString = dia.DiaNumero + "/" + mesActual.MesNumero + "/" + DateTime.Now.Year;
+                DateTime.TryParseExact(fechaString, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha);
+                dia.DiaNombre = this.GetDiaNombre(fecha.DayOfWeek.ToString());
+
+                dia.NroEmisiones = 0;
+                dia.TotalDia = 0;
+
+                mesActual.Dias.Add(dia);
+            }
+
+            nueva.Mes = mesActual;
+
+            viewModel.Lineas.Add(nueva);
+
+            viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
+            viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+
+            string html = RenderPartialViewToString("AddLinea", viewModel);
+            int index = 0;
+            bool value = true;
+
+            return Json(new { value, html, index }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult AgregarSiguienteMes(Orden_Create_Model model)
         {
             Add_Linea_Model viewModel = new Add_Linea_Model();
@@ -179,9 +268,10 @@ namespace Publinter.Controllers
             viewModel.ListaProgramas = programaApplicationService.GetProgramas();
 
             string html = RenderPartialViewToString("AddLinea", viewModel);
+            int index = viewModel.Lineas.Count - 1;
             bool value = true;
 
-            return Json(new { value, html }, JsonRequestBehavior.AllowGet);
+            return Json(new { value, html, index }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult CopiarUltimoMes(Orden_Create_Model model)
@@ -228,9 +318,10 @@ namespace Publinter.Controllers
             viewModel.ListaProgramas = programaApplicationService.GetProgramas();
             
             string html = RenderPartialViewToString("AddLinea", viewModel);
+            int index = viewModel.Lineas.Count - 1;
             bool value = true;
 
-            return Json(new { value, html }, JsonRequestBehavior.AllowGet);
+            return Json(new { value, html, index }, JsonRequestBehavior.AllowGet);
         }
 
         private string GetMesNombre(int mes)

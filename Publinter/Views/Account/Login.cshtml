@@ -83,50 +83,49 @@
     <div id="loginFondo" class="col-xs-12">
         <!-- /.login-logo -->
         <div class="row">
-            <div class="col-xs-6" style="margin-left:5%;margin-top:5%;">
+            <div class="col-xs-6" style="margin-left:1%;margin-top:1%;">
                 <img style="max-width:300px" src="~/Content/Images/Logo-Publinter-light-2017.png" />
             </div>
         </div>
 
-        <div class="row" style="margin-top:12%;">
-           <div class="login-box-body col-xs-4 col-xs-offset-4">
+        <div class="col-xs-10 col-xs-offset-1" style="margin-top:3%;">
+           <div class="login-box-body col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4">
 
                 <p class="login-box-msg" style="padding-left:0; font-family: 'Source Sans Pro', sans-serif;font-family: 'Raleway', sans-serif; font-size:30px;color:white;text-align:left;">Bienvenido</p>
 
                 @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "formLogin" }))
-            {
-                <div class="form-group has-feedback">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                    <input id="Usuario" name="Usuario" type="text" class="form-control" placeholder="Usuario" onfocusout="javascript:focusOutUser(this.value);">
-                    @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
+                {
+                    <div class="form-group has-feedback">
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <input id="Usuario" name="Usuario" type="text" class="form-control" placeholder="Usuario" onfocusout="javascript:focusOutUser(this.value);">
+                        @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
 
-                </div>
-                <div class="form-group has-feedback">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                    <input id="Clave" name="Clave" type="password" class="form-control" placeholder="Password" onfocusout="javascript: focusOutPass(this.values);">
-
-                </div>
-                <div class="row">
-                    <div class="col-xs-12" style="height:20px;">
-                        <span id="error" style="color:red; display:none;"> Usuario o clave invalida.</span>
                     </div>
-                </div>
-                <div class="row">
-                    @*<div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            <label>
-                                <input type="checkbox"> Recordarme
-                            </label>
+                    <div class="form-group has-feedback" style="margin-bottom:0px">
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        <input id="Clave" name="Clave" type="password" class="form-control" placeholder="Password" onfocusout="javascript: focusOutPass(this.values);">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="height:20px;">
+                            <span id="error" style="color:red; display:none;"> Usuario o clave invalida.</span>
                         </div>
-                    </div>*@
-                    <!-- /.col -->
-                    <div class="col-xs-12">
-                        <button id="validar" type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript: ValidarLogin();">Enrtrar</button>
                     </div>
-                    <!-- /.col -->
-                </div>
-        }
-
+                    <div class="row">
+                        @*<div class="col-xs-8">
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox"> Recordarme
+                                </label>
+                            </div>
+                        </div>*@
+                        <!-- /.col -->
+                        <div class="col-xs-12">
+                            <button id="validar" type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript: ValidarLogin();">Entrar</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                }
             </div>
             <!-- /.login-box-body -->
         </div>

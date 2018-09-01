@@ -249,6 +249,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Add_Linea_Model.cs" />
+    <Compile Include="Models\DataTableDataOrden.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Orden_Create_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2940,7 +2941,9 @@
     <Content Include="Content\Images\fondoLogin.png" />
     <Content Include="Content\Images\Logo-Publinter-dark-2017-final.png" />
     <Content Include="Content\Images\Logo-Publinter-light-2017.png" />
+    <Content Include="Content\JS\Orden.Datatable.ServerSide.js" />
     <Content Include="Content\Publinter\_layout.css" />
+    <Content Include="Content\Utils.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -3471,6 +3474,7 @@
     <Content Include="Views\Cliente\Contacto\contacto_renglon.cshtml" />
     <Content Include="Views\Cliente\Contacto\contacto_renglones.cshtml" />
     <Content Include="Views\Cliente\Edit.cshtml" />
+    <Content Include="Views\Orden\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

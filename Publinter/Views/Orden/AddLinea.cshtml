@@ -1,6 +1,6 @@
 ﻿@model Publinter.Models.Add_Linea_Model
 
-<div class="col-sm-12" style="margin-top: 15px">
+<div class="col-sm-12 lineaOrden" style="margin-top: 15px">
     <table>
         <thead>
             <tr>
@@ -15,6 +15,7 @@
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Mes.MesNombre)
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Mes.MesNumero)
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Mes.MesAnio)
+                    @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].TotalLinea)
                 </th>
             </tr>
         </thead>
@@ -87,18 +88,31 @@
             </tr>
             <tr>
                 <td rowspan="2">
-                    @Html.DropDownListFor(x => x.Lineas[Model.IndexLinea].ProgramaId, new SelectList(Model.ListaProgramas, "ProgramaId", "Nombre"), new { @style = "border:none;width: 100px" })
+                    <select id="Programa_@Model.IndexLinea" class="Programa" onchange="SetPrograma(@Model.IndexLinea)" style="border:none;width: 100px">
+                        @foreach (var p in Model.ListaProgramas)
+                        {
+                            <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
+                        }
+                    </select>
+
+                    @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].ProgramaId)
                 </td>
                 <td rowspan="2">
-                    @Html.DropDownListFor(x => x.Lineas[Model.IndexLinea].MaterialId, new SelectList(Model.ListaMateriales, "MaterialId", "Titulo"), new { @style = "border:none;width: 100px" })
+                    <select id="Material_@Model.IndexLinea" class="Material" onchange="SetMaterial(@Model.IndexLinea)" style="border:none;width: 100px">
+                        @foreach (var m in Model.ListaMateriales)
+                        {
+                            <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>
+                        }
+                    </select>
+                    @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].MaterialId)
                 </td>
 
                 @for (var d = 0; d < Model.Lineas[Model.IndexLinea].Mes.Dias.Count; d++)
                 {
                     if (Model.Lineas[Model.IndexLinea].Mes.Dias[d].DiaNombre != "Sábado" && Model.Lineas[Model.IndexLinea].Mes.Dias[d].DiaNombre != "Domingo")
                     {
-                        <td rowspan="2" class="dato">
-                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones" })
+                        <td rowspan="2" class="dato dia_@Model.IndexLinea">
+                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + Model.IndexLinea + ")" })
 
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Mes.Dias[d].DiaId)
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Mes.Dias[d].DiaNombre)

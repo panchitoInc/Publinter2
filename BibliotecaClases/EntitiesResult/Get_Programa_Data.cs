@@ -11,5 +11,7 @@ namespace DataModule.EntitiesResult
         public int ProgramaId { get; set; }
 
         public string Nombre { get; set; }
+
+        public decimal Precio { get; set; }
     }
 }

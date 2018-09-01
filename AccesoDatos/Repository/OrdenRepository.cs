@@ -1,5 +1,6 @@
 ﻿using DataModule;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using System;
 using System.Collections.Generic;
@@ -42,10 +43,29 @@ namespace AccesoDatos.Repository
                     return nueva.OrdenId;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return -1;
             }
+        }
+
+        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, string search)
+        {
+            IEnumerable<Get_orden_index> ListaOrdenes = new List<Get_orden_index>();
+
+            using (var context = new PublinterContext())
+            {
+                var _usuid = new SqlParameter("@USUARIOID", this.Context.Id);
+                var _desde = new SqlParameter("@DESDE", start);
+                var _cantidad = new SqlParameter("@CANTIDAD", length);
+                var _sortColumn = new SqlParameter("@SORTCOLUMN", sortColumn);
+                var _sortDirection = new SqlParameter("@SORTDIRECTION", sortDirection);
+                var _search = new SqlParameter("@SEARCH", search);
+
+                ListaOrdenes = context.Database.SqlQuery<Get_orden_index>("INDEX_ORDEN_DATA_PAGE @USUARIOID, @DESDE, @CANTIDAD, @SORTCOLUMN, @SORTDIRECTION, @SEARCH", _usuid, _desde, _cantidad, _sortColumn, _sortDirection, _search).ToList();
+            }
+
+            return ListaOrdenes;
         }
     }
 }
