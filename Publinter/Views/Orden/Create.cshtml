@@ -89,6 +89,7 @@
         FiltrarMateriales();
 
         SetPrograma(0);
+        SetMaterial(0);
 
         $("#Emision").val(formattedDate($("#Emision").val()));
 
@@ -282,7 +283,7 @@
     function GuardarOrden()
     {
         var form = $("#formOrden");
-        $(".btnGuardar").attr("disabled", "disabled");
+        $("#btnGuardar").attr("disabled", "disabled");
         $.ajax({
             url: '@Url.Action("Create", "Orden")',
             type: 'POST',
@@ -292,7 +293,6 @@
                 if(data.value)
                 {
                     LimpiarDatos();
-                    $(".btnGuardar").removeAttr("disabled");
                     $("#txtMensajeExito").text(data.descripcion);
                     $("#txtMensajeExito").attr("href", "IndexDetalle");
                     openMensajeExito();
@@ -302,6 +302,7 @@
                     $("#msgErrorBack").text(data.errorMsg);
                     openMensajeErrorBack();
                 }
+                $("#btnGuardar").removeAttr("disabled");
             }
         });
     }
