@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace DataModule.Entities
 {
-    public class Cliente
+    public class Anunciante
     {
-        [Key, Column("ClienteId"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ClienteId { get; set; }
+        [Key, Column("AnuncianteId"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int AnuncianteId { get; set; }
 
         public string Nombre { get; set; }
-        
+
         public virtual List<Contacto> Contactos { get; set; }
+
+        public string RazonSocial { get; set; }
+
+        public string RUT { get; set; }
     }
 }

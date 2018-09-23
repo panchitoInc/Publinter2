@@ -13,27 +13,19 @@ namespace DataModule.Entities
 
         public int NroOrden { get; set; }
 
-        /// <summary>
-        /// Medio Navigation
-        /// </summary>
-        public int MedioId { get; set; }
-
-        [ForeignKey("MedioId")]
-        public Medio Medio { get; set; }
-
         public DateTime Emision { get; set; }
-
-        public decimal Total { get; set; }
-
-        public virtual List<LineaOrden> LineasOrden { get; set; }
 
         /// <summary>
         /// Cliente Navigation
         /// </summary>
-        public int ClienteId { get; set; }
+        public int CampaniaId { get; set; }
 
-        [ForeignKey("ClienteId")]
-        public Cliente Cliente { get; set; }
+        [ForeignKey("CampaniaId")]
+        public Campania Campania { get; set; }
+
+        public virtual List<LineaOrden> LineasOrden { get; set; }
+
+        public decimal Total { get; set; }
 
         /// <summary>
         /// Usuario Navigation
