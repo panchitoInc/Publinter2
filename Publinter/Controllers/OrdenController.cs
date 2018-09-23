@@ -173,6 +173,9 @@ namespace Publinter.Controllers
             viewModel.IndexLinea = cantLineas;
 
             LineaOrden nueva = new LineaOrden();
+            nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+
+            LineaInternaOrden primera = new LineaInternaOrden();
 
             Mes mesActual = new Mes();
 
@@ -200,7 +203,9 @@ namespace Publinter.Controllers
                 mesActual.Dias.Add(dia);
             }
 
-            nueva.Mes = mesActual;
+            primera.Mes = mesActual;
+
+            nueva.LineasInternasOrden.Add(primera);
 
             viewModel.Lineas.Add(nueva);
 
@@ -229,15 +234,14 @@ namespace Publinter.Controllers
 
             LineaOrden nueva = new LineaOrden();
 
+            nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+
+            LineaInternaOrden primera = new LineaInternaOrden();
+
             Mes mesActual = new Mes();
 
-            mesActual.MesAnio = model.Lineas[cantLineas - 1].Mes.MesAnio;
-            mesActual.MesNumero = model.Lineas[cantLineas - 1].Mes.MesNumero + 1;
-            if (mesActual.MesNumero > 12) {
-                mesActual.MesNumero = 1;
-                mesActual.MesAnio++;
-            } 
-
+            mesActual.MesAnio = DateTime.Now.Year;
+            mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
             mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
 
             mesActual.Dias = new List<Dia>();
@@ -260,7 +264,8 @@ namespace Publinter.Controllers
                 mesActual.Dias.Add(dia);
             }
 
-            nueva.Mes = mesActual;
+            primera.Mes = mesActual;
+            nueva.LineasInternasOrden.Add(primera);
 
             viewModel.Lineas.Add(nueva);
 
@@ -287,29 +292,40 @@ namespace Publinter.Controllers
                 viewModel.Lineas.Add(new LineaOrden());
             }
 
+            int cantLineasInternas = model.Lineas[cantLineas - 1].LineasInternasOrden.Count;
+
             LineaOrden nueva = new LineaOrden();
 
-            Mes mesActual = new Mes();
-
-            mesActual.MesAnio = model.Lineas[cantLineas -1].Mes.MesAnio;
-            mesActual.MesNumero = model.Lineas[cantLineas -1].Mes.MesNumero;
-
-            mesActual.MesNombre = model.Lineas[cantLineas - 1].Mes.MesNombre;
-
-            mesActual.Dias = new List<Dia>();
-            
-            foreach (Dia d in model.Lineas[cantLineas - 1].Mes.Dias)
+            for (int i = 0; i < cantLineasInternas; i++)
             {
-                Dia dia = new Dia();
-                dia.DiaNumero = d.DiaNumero;
-                dia.DiaNombre = d.DiaNombre;
-                dia.NroEmisiones = d.NroEmisiones;
-                dia.TotalDia = d.TotalDia;
+                Mes mesActual = new Mes();
 
-                mesActual.Dias.Add(dia);
+                LineaInternaOrden interna = new LineaInternaOrden();
+
+                model.Lineas[cantLineas - 1].LineasInternasOrden.Add(new LineaInternaOrden());
+
+                mesActual.MesAnio = model.Lineas[cantLineas - 1].LineasInternasOrden[i].Mes.MesAnio;
+                mesActual.MesNumero = model.Lineas[cantLineas - 1].LineasInternasOrden[i].Mes.MesNumero;
+
+                mesActual.MesNombre = model.Lineas[cantLineas - 1].LineasInternasOrden[i].Mes.MesNombre;
+
+                mesActual.Dias = new List<Dia>();
+
+                foreach (Dia d in model.Lineas[cantLineas - 1].LineasInternasOrden[i].Mes.Dias)
+                {
+                    Dia dia = new Dia();
+                    dia.DiaNumero = d.DiaNumero;
+                    dia.DiaNombre = d.DiaNombre;
+                    dia.NroEmisiones = d.NroEmisiones;
+                    dia.TotalDia = d.TotalDia;
+
+                    mesActual.Dias.Add(dia);
+                }
+
+                interna.Mes = mesActual;
+
+                nueva.LineasInternasOrden.Add(interna);
             }
-
-            nueva.Mes = mesActual;
 
             viewModel.Lineas.Add(nueva);
 
