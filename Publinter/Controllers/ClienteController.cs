@@ -113,26 +113,5 @@ namespace Publinter.Controllers
                 return View(model);
             }
         }
-
-        public JsonResult GetMateriales(int clienteId)
-        {
-            Cliente c = clienteApplicationService.Get(clienteId);
-
-            string html = "";
-
-            if (c.Materiales != null && c.Materiales.Count > 0)
-            {
-                foreach (Material m in c.Materiales)
-                {
-                    html += "<option value='" + m.MaterialId + "' data-duracion='" + m.DuracionSegundos + "'>" + m.Titulo + "</option>";
-                }
-            }
-            else
-            {
-                html += "<option value='0' data-duracion='0'>No hay materiales</option>";
-            }
-
-            return Json(new { html }, JsonRequestBehavior.AllowGet);
-        }
     }
 }

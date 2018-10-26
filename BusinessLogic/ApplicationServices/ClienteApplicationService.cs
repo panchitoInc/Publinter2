@@ -51,9 +51,10 @@ namespace BusinessLogic.ApplicationServices
 
         private bool Validar(Cliente model)
         {
-            bool Sinerror = false;
-            if (model.RUT != "" && model.RazonSocial != "")
-                Sinerror = true;
+            bool Sinerror = true;
+
+            //validaciones
+
             return Sinerror;
         }
         public Cliente GetByRut(string rut)

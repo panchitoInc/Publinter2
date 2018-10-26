@@ -29,6 +29,6 @@ namespace DataModule.Entities
         public TipoMaterial TipoMaterial { get; set; }
 
         [NotMapped]
-        public int ClienteId { get; set; }
+        public int AnuncianteId { get; set; }
     }
 }

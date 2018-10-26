@@ -115,8 +115,8 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                SetPrograma(data.index);
-                SetMaterial(data.index);
+                //SetPrograma(data.index);
+                //SetMaterial(data.index);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -133,8 +133,8 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                SetPrograma(data.index);
-                SetMaterial(data.index);
+                //SetPrograma(data.index);
+                //SetMaterial(data.index);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -151,8 +151,8 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                SetPrograma(data.index);
-                SetMaterial(data.index);
+                //SetPrograma(data.index);
+                //SetMaterial(data.index);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -172,25 +172,34 @@
 
     function CalcularTotalLinea(index)
     {
-        var precio = parseFloat($("#Programa_" + index + " option:selected").data("precio"));
-        var duracion = parseInt($("#Material_" + index + " option:selected").data("duracion")); 
-        var nroDias = $(".dia_" + index).length;
-        var emisiones = 0;
+        var totalLinea = 0;
 
-        for(var i = 0; i < nroDias; i++)
+        for(var e = 0; e < $(".LineaInterna").length; e++)
         {
-            var emisionesDia = parseInt($("#Lineas_" + index + "__Mes_Dias_" + i + "__NroEmisiones").val());
+            var precio = parseFloat($("#Programa_" + index + "_" + e + " option:selected").data("precio"));
+            var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion")); 
+            var nroDias = $(".dia_" + index + "_" + e).length;
+            var emisiones = 0;
 
-            var totalDia = emisionesDia * precio * duracion;
-            $("#Lineas_" + index + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+            for(var i = 0; i < nroDias; i++)
+            {
+                var emisionesDia = parseInt($("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
 
-            emisiones += emisionesDia;
-        }     
+                var totalDia = emisionesDia * precio * duracion;
+                $("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
 
-        var totalLinea = precio * emisiones;
+                emisiones += emisionesDia;
+            }     
 
+            var totalLineaInterna = precio * emisiones;
+
+            $("#Lineas_" + index + "__LineaInterna_" + e + "__TotalLinea").val(totalLineaInterna);
+            $("#totalMes_" + index + "_" + e).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLineaInterna, 2)));    
+
+            totalLinea += totalLineaInterna;
+        }
+        
         $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
-        $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
 
         CalcularTotalOrden();
     }

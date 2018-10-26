@@ -17,6 +17,8 @@ namespace Publinter.Models
             this.ListaProgramas = new List<Get_Programa_Data>();
             this.ListaMateriales = new List<Material>();
             this.ListaClientes = new List<Get_Cliente_Data>();
+            this.ListaAnunciantes = new List<Get_Anunciante_Data>();
+            this.ListaCampanias = new List<Campania>();
 
             this.Lineas = new List<LineaOrden>();
 
@@ -48,7 +50,12 @@ namespace Publinter.Models
                 mesActual.Dias.Add(dia);
             }
 
-            nueva.Mes = mesActual;
+            nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+
+            LineaInternaOrden nuevali = new LineaInternaOrden();
+            nuevali.Mes = mesActual;
+
+            nueva.LineasInternasOrden.Add(nuevali);
 
             this.Lineas.Add(nueva);
         }
@@ -61,13 +68,13 @@ namespace Publinter.Models
 
         public int NroOrden { get; set; }
 
-        public int MedioId { get; set; }
+        public int AnuncianteId { get; set; }
 
-        public Medio Medio { get; set; }
+        public Anunciante Anunciante { get; set; }
 
-        public int ClienteId { get; set; }
+        public int CampaniaId { get; set; }
 
-        public Cliente Cliente { get; set; }
+        public Campania Campania { get; set; }
 
         public List<LineaOrden> Lineas { get; set; }
 
@@ -75,7 +82,11 @@ namespace Publinter.Models
 
         public List<Medio> ListaMedios { get; set; }
 
+        public List<Get_Anunciante_Data> ListaAnunciantes { get; set; }
+
         public List<Get_Cliente_Data> ListaClientes { get; set; }
+
+        public List<Campania> ListaCampanias { get; set; }
 
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 
@@ -88,8 +99,7 @@ namespace Publinter.Models
             orden.Emision = this.Emision;
             orden.NroOrden = this.NroOrden;
 
-            orden.ClienteId = this.ClienteId;
-            orden.MedioId = this.MedioId;
+            orden.CampaniaId = this.CampaniaId;
 
             orden.LineasOrden = this.Lineas;
 

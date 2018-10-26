@@ -87,8 +87,9 @@ namespace AccesoDatos.Repository
                     if (cliBd == null) throw new Exception(string.Format("No se encontro el cliente"));
 
                     cliBd.Nombre = model.Nombre;
-                    cliBd.RazonSocial = model.RazonSocial;
-                    cliBd.RUT = model.RUT;
+                    //cliBd.RazonSocial = model.RazonSocial;
+                    //cliBd.RUT = model.RUT;
+
                     // Contactos
                     if (model.Contactos != null && model.Contactos.Count > 0)
                     {

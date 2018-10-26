@@ -36,5 +36,7 @@ namespace DataModule.Entities
 
         [ForeignKey("MesId")]
         public Mes Mes { get; set; }
+
+        public decimal TotalLineaInterna { get; set; }
     }
 }

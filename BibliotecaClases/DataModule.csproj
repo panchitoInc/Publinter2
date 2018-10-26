@@ -53,12 +53,16 @@
   <ItemGroup>
     <Compile Include="DataModule\PublinterContext.cs" />
     <Compile Include="EntitiesResult\Get_All_Cliente.cs" />
+    <Compile Include="EntitiesResult\Get_Anunciante_Data.cs" />
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />
     <Compile Include="EntitiesResult\Get_orden_index.cs" />
     <Compile Include="EntitiesResult\Get_Programa_Data.cs" />
+    <Compile Include="Entities\Anunciante.cs" />
+    <Compile Include="Entities\Campania.cs" />
     <Compile Include="Entities\Cliente.cs" />
     <Compile Include="Entities\Contacto.cs" />
     <Compile Include="Entities\Dia.cs" />
+    <Compile Include="Entities\LineaInternaOrden.cs" />
     <Compile Include="Entities\LineaOrden.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Medio.cs" />

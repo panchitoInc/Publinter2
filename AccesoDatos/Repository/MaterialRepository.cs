@@ -22,11 +22,11 @@ namespace AccesoDatos.Repository
             {
                 using (var context = new PublinterContext())
                 {
-                    Cliente cli = context.Cliente.Include("Materiales").FirstOrDefault(x => x.ClienteId.Equals(mat.ClienteId));
-                    cli.Materiales.Add(mat);
+                    Anunciante anunciante = context.Anunciante.Include("Materiales").FirstOrDefault(x => x.AnuncianteId.Equals(mat.AnuncianteId));
+                    anunciante.Materiales.Add(mat);
 
                     context.Entry(mat).State = System.Data.Entity.EntityState.Added;
-                    context.Entry(cli).State = System.Data.Entity.EntityState.Modified;
+                    context.Entry(anunciante).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
 
                     return mat.MaterialId;
