@@ -1,12 +1,12 @@
 
-CREATE PROCEDURE GET_CLIENTES
-	@USUARIOID int = 0
+CREATE PROCEDURE GET_ANUNCIANTES
+
 AS
 BEGIN
 	
 	SELECT
-		C.ClienteId,
-		C.Nombre
+		A.AnuncianteId,
+		A.Nombre
 	FROM 
-		CLIENTE C
+		Anunciante A
 END

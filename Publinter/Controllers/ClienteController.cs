@@ -67,6 +67,7 @@ namespace Publinter.Controllers
             }
             catch(Exception e)
             {
+                ViewBag.error = e.Message;
                 return View(model);
             }
             

@@ -142,5 +142,15 @@ namespace AccesoDatos.Repository
             }
 
         }
+
+        public Anunciante GetByRut(string rut)
+        {
+            Anunciante unAnunciante;
+            using (var context = new PublinterContext())
+            {
+                unAnunciante = context.Anunciante.FirstOrDefault(x => x.Equals(rut));
+            }
+            return unAnunciante;
+        }
     }
 }

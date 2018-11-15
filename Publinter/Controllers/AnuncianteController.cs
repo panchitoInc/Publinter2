@@ -25,6 +25,64 @@ namespace Publinter.Controllers
                 return this._anuncianteApplicationService;
             }
         }
+        public ActionResult Index()
+        {
+            var model = anuncianteApplicationService.GetAnunciantes();
+            return View(model);
+        }
+        public ActionResult Create()
+        {
+            Cliente model = new Cliente();
+            model.Contactos = new List<Contacto>();
+            for (var i = 0; i < 3; i++)
+            {
+                Contacto unContacto = new Contacto();
+                model.Contactos.Add(unContacto);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(Anunciante model)
+        {
+            try
+            {
+                anuncianteApplicationService.Add(model);
+                Cliente uncliente = new Cliente();
+                uncliente.Contactos = new List<Contacto>();
+                for (var i = 0; i < 3; i++)
+                {
+                    Contacto unc = new Contacto();
+                    uncliente.Contactos.Add(unc);
+                }
+
+                return View(uncliente);
+            }
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+                return View(model);
+            }
+
+        }
+
+        public ActionResult AddRenglonContacto(Cliente model)
+        {
+            if (model.Contactos == null) model.Contactos = new List<Contacto>();
+
+            var html = string.Empty;
+            ViewData["indexContacto"] = model.Contactos.Count == 0 ? 0 : model.Contactos.Count - 1;//indica el index del ultimo obj agregado.
+            html = RenderPartialViewToString("~/Views/Cliente/Contacto/contacto_renglon.cshtml", null);
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddContactoRenglon(Cliente model)
+        {
+            var html = string.Empty;
+            ViewData["indexContacto"] = model.Contactos.Count == 0 ? 0 : model.Contactos.Count - 1;//indica el index del ultimo obj agregado.
+            html = RenderPartialViewToString("~/Views/Shared/Contacto/contacto_renglon.cshtml", null);
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
 
         public IList<Get_Anunciante_Data> GetAnunciantes()
         {
@@ -33,13 +91,13 @@ namespace Publinter.Controllers
 
         public JsonResult GetMateriales(int anuncianteId)
         {
-            Anunciante a = anuncianteApplicationService.Get(anuncianteId);
+            Anunciante unAunciante = anuncianteApplicationService.Get(anuncianteId);
 
             string html = "";
 
-            if (a.Materiales != null && a.Materiales.Count > 0)
+            if (unAunciante.Materiales != null && unAunciante.Materiales.Count > 0)
             {
-                foreach (Material m in a.Materiales)
+                foreach (Material m in unAunciante.Materiales)
                 {
                     html += "<option value='" + m.MaterialId + "' data-duracion='" + m.DuracionSegundos + "'>" + m.Titulo + "</option>";
                 }
@@ -51,5 +109,6 @@ namespace Publinter.Controllers
 
             return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

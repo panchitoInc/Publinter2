@@ -3478,6 +3478,11 @@
     <Content Include="Views\Cliente\Contacto\contacto_renglones.cshtml" />
     <Content Include="Views\Cliente\Edit.cshtml" />
     <Content Include="Views\Orden\Index.cshtml" />
+    <Content Include="Views\Anunciante\Index.cshtml" />
+    <Content Include="Views\Anunciante\Contacto\contacto_renglon.cshtml" />
+    <Content Include="Views\Anunciante\Contacto\contacto_renglones.cshtml" />
+    <Content Include="Views\Anunciante\Create.cshtml" />
+    <Content Include="Views\Anunciante\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

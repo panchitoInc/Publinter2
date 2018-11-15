@@ -13,5 +13,7 @@ namespace BusinessLogic.ApplicationServices
         Anunciante Get(int anuncianteId);
 
         IList<Get_Anunciante_Data> GetAnunciantes();
+        int Add(Anunciante model);
+
     }
 }

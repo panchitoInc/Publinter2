@@ -17,5 +17,6 @@ namespace AccesoDatos.Repository
         int Add(Anunciante model);
 
         bool Update(Anunciante model);
+        Anunciante GetByRut(string rut);
     }
 }
