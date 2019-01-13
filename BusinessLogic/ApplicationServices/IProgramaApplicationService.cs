@@ -10,5 +10,6 @@ namespace BusinessLogic.ApplicationServices
     public interface IProgramaApplicationService
     {
         List<Get_Programa_Data> GetProgramas();
+        List<Get_Programa_Data> GetProgramasByMedio(int medioId);
     }
 }

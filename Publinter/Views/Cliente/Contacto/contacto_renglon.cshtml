@@ -13,13 +13,13 @@
     <td>
         @Html.TextBoxFor(x => x.Contactos[index].Telefono, new { @class = "form-control", @placeholder = "Teléfono", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
-    <td>
+    <td class="hidden">
         @Html.TextBoxFor(x => x.Contactos[index].Direccion, new { @class = "form-control", @placeholder = "Dirección", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
-    <td>
+    <td class="hidden">
         @Html.TextBoxFor(x => x.Contactos[index].Ciudad, new { @class = "form-control", @placeholder = "Ciudad", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
-    <td>
+    <td class="hidden">
         @Html.TextBoxFor(x => x.Contactos[index].Departamento, new { @class = "form-control", @placeholder = "Departamento", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
     <td class="text-center">

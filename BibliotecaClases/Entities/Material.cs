@@ -29,6 +29,9 @@ namespace DataModule.Entities
         public TipoMaterial TipoMaterial { get; set; }
 
         [NotMapped]
-        public int AnuncianteId { get; set; }
+        public int CampaniaId{ get; set; }
+
+        [NotMapped]
+        public bool Delete { get; set; }
     }
 }

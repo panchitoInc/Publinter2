@@ -32,7 +32,7 @@ namespace Publinter.Controllers
         }
         public ActionResult Create()
         {
-            Cliente model = new Cliente();
+            Anunciante model = new Anunciante();
             model.Contactos = new List<Contacto>();
             for (var i = 0; i < 3; i++)
             {
@@ -48,15 +48,15 @@ namespace Publinter.Controllers
             try
             {
                 anuncianteApplicationService.Add(model);
-                Cliente uncliente = new Cliente();
-                uncliente.Contactos = new List<Contacto>();
+                Anunciante uncanunciante = new Anunciante();
+                uncanunciante.Contactos = new List<Contacto>();
                 for (var i = 0; i < 3; i++)
                 {
                     Contacto unc = new Contacto();
-                    uncliente.Contactos.Add(unc);
+                    uncanunciante.Contactos.Add(unc);
                 }
 
-                return View(uncliente);
+                return View(uncanunciante);
             }
             catch (Exception e)
             {
@@ -66,7 +66,7 @@ namespace Publinter.Controllers
 
         }
 
-        public ActionResult AddRenglonContacto(Cliente model)
+        public ActionResult AddRenglonContacto(Anunciante model)
         {
             if (model.Contactos == null) model.Contactos = new List<Contacto>();
 
@@ -76,7 +76,7 @@ namespace Publinter.Controllers
             return Json(html, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddContactoRenglon(Cliente model)
+        public ActionResult AddContactoRenglon(Anunciante model)
         {
             var html = string.Empty;
             ViewData["indexContacto"] = model.Contactos.Count == 0 ? 0 : model.Contactos.Count - 1;//indica el index del ultimo obj agregado.
@@ -89,26 +89,26 @@ namespace Publinter.Controllers
             return anuncianteApplicationService.GetAnunciantes();
         }
 
-        public JsonResult GetMateriales(int anuncianteId)
-        {
-            Anunciante unAunciante = anuncianteApplicationService.Get(anuncianteId);
+        //public JsonResult GetMateriales(int anuncianteId)
+        //{
+        //    Anunciante unAunciante = anuncianteApplicationService.Get(anuncianteId);
 
-            string html = "";
+        //    string html = "";
 
-            if (unAunciante.Materiales != null && unAunciante.Materiales.Count > 0)
-            {
-                foreach (Material m in unAunciante.Materiales)
-                {
-                    html += "<option value='" + m.MaterialId + "' data-duracion='" + m.DuracionSegundos + "'>" + m.Titulo + "</option>";
-                }
-            }
-            else
-            {
-                html += "<option value='0' data-duracion='0'>No hay materiales</option>";
-            }
+        //    if (unAunciante.Materiales != null && unAunciante.Materiales.Count > 0)
+        //    {
+        //        foreach (Material m in unAunciante.Materiales)
+        //        {
+        //            html += "<option value='" + m.MaterialId + "' data-duracion='" + m.DuracionSegundos + "'>" + m.Titulo + "</option>";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        html += "<option value='0' data-duracion='0'>No hay materiales</option>";
+        //    }
 
-            return Json(new { html }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { html }, JsonRequestBehavior.AllowGet);
+        //}
 
     }
 }

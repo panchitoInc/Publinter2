@@ -39,7 +39,6 @@ namespace AccesoDatos.Repository
             {
                 buscado = context.Anunciante
                                             .Include("Contactos")
-                                            .Include("Materiales")
                                             .FirstOrDefault(x => x.AnuncianteId.Equals(id));
             }
             return buscado;
@@ -51,8 +50,8 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                var _usuId = new SqlParameter("@UsarioId", this.Context.Id);
-                anunciantes = context.Database.SqlQuery<Get_Anunciante_Data>("GET_ANUNCIANTES @UsarioId", _usuId).ToList();
+                //var _usuId = new SqlParameter("@UsarioId", this.Context.Id);
+                anunciantes = context.Database.SqlQuery<Get_Anunciante_Data>("GET_ANUNCIANTES").ToList();
             }
 
             return anunciantes;
@@ -107,7 +106,7 @@ namespace AccesoDatos.Repository
                 }
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -152,5 +151,7 @@ namespace AccesoDatos.Repository
             }
             return unAnunciante;
         }
+
+        
     }
 }

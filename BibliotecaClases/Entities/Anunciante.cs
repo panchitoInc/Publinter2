@@ -15,7 +15,7 @@ namespace DataModule.Entities
 
         public string Nombre { get; set; }
 
-        public virtual List<Material> Materiales { get; set; }
+        //public virtual List<Material> Materiales { get; set; }
 
         public virtual List<Contacto> Contactos { get; set; }
 

@@ -37,5 +37,16 @@ namespace BusinessLogic.ApplicationServices
         {
             return usuarioRepository.GetAll();
         }
+
+        public Usuario Get(int id)
+        {
+            Usuario usu = usuarioRepository.Get(id);
+            return usu;
+        }
+
+        public bool Update(Usuario usu)
+        {
+            return usuarioRepository.Update(usu);
+        }
     }
 }

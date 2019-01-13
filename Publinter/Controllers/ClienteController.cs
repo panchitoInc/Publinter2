@@ -50,25 +50,25 @@ namespace Publinter.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Cliente model)
+        public JsonResult Create(Cliente model)
         {
             try
             {
                 clienteApplicationService.Add(model);
-                Cliente uncliente = new Cliente();
-                uncliente.Contactos = new List<Contacto>();
-                for(var i = 0; i < 3; i++)
-                {
-                    Contacto unc = new Contacto();
-                    uncliente.Contactos.Add(unc);
-                }
-                
-                return View(uncliente);
+                //Cliente uncliente = new Cliente();
+                //uncliente.Contactos = new List<Contacto>();
+                //for (var i = 0; i < 3; i++)
+                //{
+                //    Contacto unc = new Contacto();
+                //    uncliente.Contactos.Add(unc);
+                //}
+
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch(Exception e)
             {
                 ViewBag.error = e.Message;
-                return View(model);
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
             
         }

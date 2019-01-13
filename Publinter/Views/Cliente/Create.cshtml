@@ -55,11 +55,22 @@
     }
 
     function CrearCliente() {
-        if (OnFocusOutRut($("#RUT").val()) && validarLargo('#RazonSocial', 0)) 
-            $("#ClienteCreateForm").submit();
+        if (validarLargo('#Nombre', 0))
+            //$("#ClienteCreateForm").submit();
+        AjaxPost("../Cliente/Create", GetCurrentModel("ClienteCreateForm"), CreateClienteSuccess, 0);
+        
     }
 
+    function CreateClienteSuccess(data,index) {
+        if (data) {
+            $("#ClienteCreateForm input").each(function (i) {
+                $(this).val("");
 
+            });
+        } else {
+            //mensaje error
+        }
+    }
 
     function OnFocusOutRut(value){
         if (validarRUT(value)) {
@@ -79,17 +90,7 @@
     @using (Html.BeginForm("Create", "Cliente", FormMethod.Post, new { @id = "ClienteCreateForm" }))
     {
         <div class="row">
-            <div class="col-xs-4">
-                <div class="form-group has-feedback">
-                    @Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT" ,onblur = "javascript:OnFocusOutRut(this.value);" })
-                        
-                </div>
-            </div>
-            <div class="col-xs-4">
-                <div class="form-group has-feedback">
-                    @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control", @placeholder = "Razon social", onblur = "validarLargo('#RazonSocial',0);" })
-                </div>
-            </div>
+          
             <div class="col-xs-4">
                 <div class="form-group has-feedback">
                     @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })

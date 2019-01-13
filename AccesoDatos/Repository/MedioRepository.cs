@@ -104,6 +104,7 @@ namespace AccesoDatos.Repository
                         {
                             ContactosEliminados.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Deleted);
                             context.SaveChanges();
+                            model.Contactos = model.Contactos.Where(x => x.Delete.Equals(false)).ToList();
                         }
                         // los viejos que se pudireran modificar
                         var contactosModificados = model.Contactos.Where(x => x.ContactoId > 0 && x.Delete.Equals(false)).ToList();
@@ -131,7 +132,7 @@ namespace AccesoDatos.Repository
                     if (model.Programas != null && model.Programas.Count() > 0)
                     {
                         //quiton los vacios.
-                        model.Programas = model.Programas.Where(x => x.Nombre !="" && x.PrecioSegundo > 0 && x.Duracion > 0 ).ToList();
+                        model.Programas = model.Programas.Where(x => x.Nombre !="" && x.PrecioSegundo > 0 ).ToList();
 
                         // Programas eliminados
                         var ProgramasEliminados = medioBd.Programas.Where(x => x.Equals(true)).ToList();
@@ -139,6 +140,7 @@ namespace AccesoDatos.Repository
                         {
                             ProgramasEliminados.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Deleted);
                             context.SaveChanges();
+                            model.Programas = model.Programas.Where(x => x.Delete.Equals(false)).ToList();
                         }
 
                         //Programas nuevos
@@ -146,8 +148,9 @@ namespace AccesoDatos.Repository
                         if(ProgramasNuevos.Count > 0)
                         {
                             SaveNewPrograma(medioBd, ProgramasNuevos);
+                            context.SaveChanges();
                         }
-                        context.SaveChanges();
+                        
                         //viejos modificados
                         var ProgramasModificados = model.Programas.Where(x => x.ProgramaId > 0 && x.Delete.Equals(false)).ToList();
                         if(ProgramasModificados.Count > 0)

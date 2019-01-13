@@ -19,7 +19,19 @@ namespace Publinter.Controllers
         IMaterialApplicationService _materialApplicationService;
         IClienteApplicationService _clienteApplicationService;
         IProgramaApplicationService _programaApplicationService;
+        ICampaniaApplicationService _campaniaAplicationService;
 
+        private ICampaniaApplicationService campaniaAplicationService
+        {
+            get
+            {
+                if (this._campaniaAplicationService == null)
+                {
+                    this._campaniaAplicationService = new CampaniaApplicationService(CurrentUser);
+                }
+                return this._campaniaAplicationService;
+            }
+        }
         private IOrdenApplicationService ordenApplicationService
         {
             get
@@ -83,12 +95,15 @@ namespace Publinter.Controllers
         public ActionResult Create()
         {
             Orden_Create_Model model = new Orden_Create_Model();
-
+            model.ListaCampanias = campaniaAplicationService.GetAll();
+            var PrimerCampania = model.ListaCampanias.FirstOrDefault();
+            var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
+            model.ListaMateriales = CampaniaConDependencias.Materiales;
             model.ListaMedios = medioApplicationService.GetAll();
-            model.ListaMateriales = materialApplicationService.GetAll().ToList();
+            model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
-            model.ListaProgramas = programaApplicationService.GetProgramas();
-
+            
+            
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
 
@@ -417,5 +432,55 @@ namespace Publinter.Controllers
 
             return retorno;
         }
+
+        //[HttpPost]
+        //public ActionResult CreatePdfDocument(string html)
+        //{
+        //    using (PdfDocument document = new PdfDocument())
+        //    {
+        //        //Add a page to the document
+        //        PdfPage page = document.Pages.Add();
+
+        //        //Create PDF graphics for the page
+        //        PdfGraphics graphics = page.Graphics;
+
+        //        //Set the standard font
+        //        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+
+        //        //Draw the text
+        //        graphics.DrawString(html, font, PdfBrushes.Black, new PointF(0, 0));
+
+        //        // Open the document in browser after saving it
+        //        document.Save("Output.pdf", HttpContext.ApplicationInstance.Response, HttpReadType.Save);
+        //    }
+        //    return View();
+        //}
+
+        //public ActionResult pdfCrete()
+        //{
+
+        //    Doc theDoc = new Doc();
+        //    theDoc.Rect.Inset(72, 144);
+        //    theDoc.HtmlOptions.Engine = EngineType.Chrome;
+        //    theDoc.HtmlOptions.UseScript = true; // enable JavaScript
+        //    theDoc.HtmlOptions.Media = MediaType.Print; // Or Screen for a more screen oriented output
+        //    theDoc.HtmlOptions.InitialWidth = 800; // In case we have a responsive site which is non-specific on good widths
+        //                                           //theDoc.HtmlOptions.RepaintDelay = 500; // Only required if you have AJAX or animated content such as graphs
+        //                                           //theDoc.HtmlOptions.IgnoreCertificateErrors = false; // Disabled for ease of debugging
+        //                                           //theDoc.HtmlOptions.FireShield.Policy = XHtmlFireShield.Enforcement.Deny; // Disabled for ease of debugging
+
+
+        //    theDoc.Page = theDoc.AddPage();
+        //    int theID;
+        //    theID = theDoc.AddImageUrl("http://www.yahoo.com/");
+        //    for (int i = 1; i <= theDoc.PageCount; i++)
+        //    {
+        //        theDoc.PageNumber = i;
+        //        theDoc.Flatten();
+        //    }
+        //    theDoc.Save(Server.MapPath("pagedhtml.pdf"));
+        //    theDoc.Clear();
+        //    return View();
+        //}
     }
 }

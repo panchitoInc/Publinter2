@@ -35,7 +35,7 @@ namespace BusinessLogic.ApplicationServices
             {
                 if (Validar(model))
                 {
-                    model.Contactos = model.Contactos.Where(x => x.Delete.Equals(false) && x.Nombre != "").ToList();
+                    model.Contactos = model.Contactos.Where(x => x.Delete.Equals(false) && x.Nombre != "" && x.Nombre != null  ).ToList();
                     anuncianteRepository.Add(model);
                 }
                 return model.AnuncianteId;

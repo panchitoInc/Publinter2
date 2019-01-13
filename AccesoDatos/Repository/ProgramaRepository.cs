@@ -29,5 +29,16 @@ namespace AccesoDatos.Repository
 
             return programas;
         }
+
+        public List<Get_Programa_Data> GetProgramasByMedio(int medioId)
+        {
+            List<Get_Programa_Data> programas;
+            using (var context = new PublinterContext())
+            {
+                var _mId = new SqlParameter("@MedioId", medioId);
+                programas = context.Database.SqlQuery<Get_Programa_Data>("GET_PROGRAMAS_BY_MEDIO @MedioId", _mId).ToList();
+            }
+            return programas;
+        }
     }
 }

@@ -6,22 +6,23 @@
 
 
 <tr id="tr_programa_@index">
-    <td>
+    <td style="width:40%;">
         @Html.TextBoxFor(x => x.Programas[index].Nombre, new { @class = "form-control", @placeholder = "Nombre", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
-    <td>
+    <td style="width:25%;">
         <div class="input-group bootstrap-timepicker timepicker">
             @Html.TextBoxFor(x => x.Programas[index].HoraInicio, new { @class = "hourPicker form-control", style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
         </div>
     </td>
-    <td>
+    <td class="hidden">
         @Html.TextBoxFor(x => x.Programas[index].Duracion, new { @class = "form-control", @placeholder = "Duración", @style = "width: 100%;border: 1px solid #ccc;height: 30px; " })
     </td>
-    <td>
+    <td style="width:25%;">
         @Html.TextBoxFor(x => x.Programas[index].PrecioSegundo, "{0:0.00}", new { @class = "form-control", @style = "width: 100%;border: 1px solid #ccc;height: 30px;text-align: right" })
     </td>
-    <td class="text-center">
+    <td>@Html.TextBoxFor(x => x.PorcentajeDescuento, "{0:0%}", new { @class = "form-control Percent", @style = "width: 100%;border: 1px solid #ccc;height: 30px;text-align: right" })</td>
+    <td class="text-center" style="width:10%;">
         @Html.CheckBoxFor(x => x.Programas[index].Delete, new { @class = "hidden" })
         @Html.HiddenFor(x => x.Programas[index].ProgramaId)
         <a href="javascript:void(0);" onclick="javascript:DeleteRenglonPrograma(@index)">

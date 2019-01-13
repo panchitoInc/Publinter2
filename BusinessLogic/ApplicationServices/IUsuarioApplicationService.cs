@@ -11,5 +11,8 @@ namespace BusinessLogic.ApplicationServices
     {
         int Create(Usuario usu);
         IList<Usuario> GetAll();
+        Usuario Get(int id);
+        bool Update(Usuario usu);
     }
+
 }

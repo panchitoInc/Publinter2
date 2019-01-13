@@ -57,7 +57,7 @@ namespace Mvc
         {
             get
             {
-                return int.Parse(this.FindFirst(ClaimTypes.Role).Value);
+                return int.Parse(this.FindFirst("Rol").Value);
             }
         }
 

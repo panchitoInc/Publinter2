@@ -1,0 +1,24 @@
+﻿@model Publinter.Models.CampaniaModel
+@{
+    SelectList ListaTipos = new SelectList(ViewBag.TiposMaterial, "Value", "Text");
+    int index = ViewData["indexMaterial"] != null ? (int)ViewData["indexMaterial"] : 0;
+
+}
+<div id="mtRenglon_@index" class="row Cliente-material-Renglon" style="padding-left:0;margin-bottom:10px;pa">
+
+    @*<td class="col-xs-3">@Html.DropDownListFor(x => x.MaterialId, new SelectList(ViewBag.ListaMateriales, "MaterialId", "Descripcion"), new { @class = "inline-element select2" })</td>*@
+    <div class="col-xs-4" style="padding-right:10px;">@Html.TextBoxFor(x => x.Materiales[index].Titulo, new { @placeholder = "Titulo", @style = "padding-left:12px;width:100%;height:34px;border:1px solid #d2d6de;" })</div>
+    <div class="col-xs-4">@Html.DropDownListFor(x => x.Materiales[index].TipoMaterialId, ListaTipos, new { @class = "form-control", @style = "border:1px solid #d2d6de;" })</div>
+    <div class="col-xs-3">
+        @Html.TextBoxFor(x => x.Materiales[index].DuracionSegundos, new { @style = "padding-left:12px;height:34px; border:1px solid #d2d6de;width:100%;" })
+        @Html.HiddenFor(x => x.Materiales[index].MaterialId)
+        @Html.HiddenFor(x => x.Materiales[index].CampaniaId)
+        @Html.HiddenFor(x => x.Materiales[index].Delete)
+    </div>
+    <div class="col-xs-1">
+        <a href="javascript:void(0);" onclick="javascript:DeleteRenglon(@index)">
+            <i class="material-icons">clear</i>
+        </a>
+    </div>
+
+</div>

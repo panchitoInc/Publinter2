@@ -27,6 +27,7 @@ namespace DataModule
         }
 
         public DbSet<Anunciante> Anunciante { get; set; }
+        public DbSet<Campania> Campania { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Contacto> Contacto { get; set; }
         public DbSet<Dia> Dia { get; set; }

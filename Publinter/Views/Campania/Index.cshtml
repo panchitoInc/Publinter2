@@ -1,0 +1,60 @@
+﻿@model IList<DataModule.EntitiesResult.Get_all_campania>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script>
+    $(document).ready(function(){
+        InitTable("#ListadoClientesTable");
+    });
+
+</script>
+
+<link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<div class="box">
+    <div class="box-header row">
+        <div class="col-xs-6 box-header" style="padding-left:26px;">
+            <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Listado de campania</font></font></h3>
+        </div>
+        <div class="col-xs-6">
+            <a href="../../Campania/Create" type="button" class="btn btn-block btn-success pull-right" style="width: 124px;">Nueva campaña</a>
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="col-sm-12">
+                <table id="ListadoClientesTable" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cliente</th>
+                            <th>Anunciamte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var i in Model)
+                            {
+                                <tr>
+                                    <td><a href="../../Campania/Edit/@i.CampaniaId">@i.Nombre</a></td>
+                                    <td class="">@i.ClienteNombre</td>
+                                    <td>@i.AnuncianteNombre</td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<script src="~/Content/Admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>

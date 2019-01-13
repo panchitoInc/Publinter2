@@ -132,7 +132,18 @@
                         <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o"></i> Nueva</a></li>
                     </ul>
                 </li>
-
+                <li class="treeview">
+                    <a href="#">
+                        <span>Campaña</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Campania")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Campania")"><i class="fa fa-circle-o"></i> Nueva</a></li>
+                    </ul>
+                </li>
                 <li class="treeview">
                     <a href="#">
                         <span>Materiales</span>
@@ -182,6 +193,18 @@
                     <ul class="treeview-menu">
                         <li><a href="@Url.Action("Index", "Usuario")"><i class="fa fa-circle-o"></i> Listado</a></li>
                         <li><a href="@Url.Action("Create", "Usuario")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="javascript:void(0);">
+                        <span>Clientes</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Cliente")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Cliente")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
 

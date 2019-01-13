@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModule\PublinterContext.cs" />
+    <Compile Include="EntitiesResult\Get_all_campania.cs" />
     <Compile Include="EntitiesResult\Get_All_Cliente.cs" />
     <Compile Include="EntitiesResult\Get_Anunciante_Data.cs" />
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />

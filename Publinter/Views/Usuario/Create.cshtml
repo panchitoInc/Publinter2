@@ -46,21 +46,21 @@
 
         <div class="row" style="height:49px;">
             <div class=col-xs-6>
-                @Html.TextBoxFor(x => x.Contacto.Email, new { @class = "form-control", @placeholder = "Email" })
+                @Html.TextBoxFor(x => x.Contactos[0].Email, new { @class = "form-control", @placeholder = "Email" })
             </div>
             <div class=col-xs-6>
-                @Html.TextBoxFor(x => x.Contacto.Telefono, new { @class = "form-control", @placeholder = "Telefono" })
+                @Html.TextBoxFor(x => x.Contactos[0].Telefono, new { @class = "form-control", @placeholder = "Telefono" })
             </div>
         </div>
         <div class="row" style="height:49px;">
             <div class=col-xs-6>
-                @Html.TextBoxFor(x => x.Contacto.Direccion, new { @class = "form-control", @placeholder = "Direccion" })
+                @Html.TextBoxFor(x => x.Contactos[0].Direccion, new { @class = "form-control", @placeholder = "Direccion" })
             </div>
             <div class=col-xs-3>
-                @Html.TextBoxFor(x => x.Contacto.Departamento, new { @class = "form-control", @placeholder = "Departamento" })
+                @Html.TextBoxFor(x => x.Contactos[0].Departamento, new { @class = "form-control", @placeholder = "Departamento" })
             </div>
             <div class=col-xs-3>
-                @Html.TextBoxFor(x => x.Contacto.Ciudad, new { @class = "form-control", @placeholder = "Ciudad" })
+                @Html.TextBoxFor(x => x.Contactos[0].Ciudad, new { @class = "form-control", @placeholder = "Ciudad" })
             </div>
         </div>
         <div class="row" style="height:49px;">

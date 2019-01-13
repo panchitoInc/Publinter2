@@ -5,6 +5,7 @@ using Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 
 namespace AccesoDatos
 {
@@ -63,7 +64,28 @@ namespace AccesoDatos
                 Lista = context.Usuario
                     .Include("Rol").ToList();
             }
+            if (!this.Context.RolId.Equals(1))
+            {
+                Lista.Where(x => x.RolId != 1);
+            }
             return Lista.ToList();
+        }
+
+        public Usuario Get(int id)
+        {
+            Usuario usu;
+            using (var context = new PublinterContext())
+            {
+                usu = context.Usuario
+                    .Include(x => x.Contactos)
+                    .Include(x => x.Rol)
+                    .FirstOrDefault(x => x.UsuarioId.Equals(id));
+            }
+                return usu;
+        }
+        public bool Update(Usuario usu)
+        {
+            return true;
         }
     }
 }

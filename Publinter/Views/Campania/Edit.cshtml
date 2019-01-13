@@ -1,0 +1,169 @@
+﻿@model Publinter.Models.CampaniaModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .select2-selection__arrow {
+        display: none;
+    }
+
+    span.select2 {
+        min-width: 100% !important;
+    }
+
+    span.select2-selection {
+        display: block !important;
+        width: 100% !important;
+        height: 34px !important;
+        padding: 6px 12px !important;
+        font-size: 14px !important;
+        line-height: 1.42857143 !important;
+        color: #555 !important;
+        background-color: #fff !important;
+        background-image: none !important;
+        border: 1px solid #ccc !important;
+        border-radius: 0 !important;
+    }
+
+    div.row.wrap_labels, div.row.wrap_labels div {
+        height: 30px;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ClienteId").select2(
+            {
+                language: "es",
+                allowClear: true,
+                placeholder:"Cliente"
+            }
+            );
+        $("#AnuncianteId").select2(
+            {
+                language: "es",
+                placeholder: "Anunciante",
+                allowClear: true,
+                value:''
+            }
+            );
+        $("#Nombre").focus();
+    });
+
+
+    function AddMaterialRenglon() {
+
+        AjaxPost("../../Campania/AddMaterialRenglon", GetCurrentModel("CampaniaEditForm"), AddMaterialRenglonSuccess, 0);
+
+    }
+    function AddMaterialRenglonSuccess(data, index) {
+        $("#container-material-renglones").append(data.html);
+        goToByScroll("mtRenglon_" + data.id);
+    }
+
+    function EditCampania() {
+    //    var formulario = GetCurrentModel("CampaniaCreateForm");
+        //    AjaxPost("../Campania/Create", data, CreateCampaniaSuccess, 0);
+        $("#CampaniaEditForm").submit();
+    }
+
+    function CreateCampaniaSuccess(data, index) {
+
+
+    }
+
+    function DeleteRenglon(index) {
+        $("#mtRenglon_" + index).fadeOut(200);
+        $("#Materiales_"+ index +"__Delete").val(true);
+    }
+</script>
+<link href="~/Content/Admin/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<div class="register-box-body">
+    <p style="font-size: 22px;padding-bottom: 7px;margin-bottom:10px;">Editar campaña</p>
+
+    @using (Html.BeginForm("Edit", "Campania", FormMethod.Post, new { @id = "CampaniaEditForm" }))
+    {
+
+        <div class="row wrap_labels" style="margin-top:20px;height:30px;">
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    <label>Nombre</label>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    <lable>Cliente</lable>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    <Label>Anunciante</Label>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="height:30px;">
+
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.ClienteId, new SelectList(Model.ListaClientes, "ClienteId", "Nombre",Model.ClienteId), new { @class = "inline-element select2" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.AnuncianteId, new SelectList(Model.ListaDeAnunciante, "AnuncianteId", "Nombre"), new { @class = "select2 inline-element" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Materiales</label>
+            </div>
+        </div>
+        <div id="container-material-renglones" class="col-xs-12" style="margin-bottom:15px;padding-left:0px;height:230px;overflow-y:scroll;">
+
+            @Html.Partial("~/Views/Campania/Create/_create_renglones_material.cshtml", Model)
+
+        </div>
+        <div class="col-xs-12" style="margin-bottom:15px;">
+            <a href="javascript:void(0);" title="Agregar material" onclick="AddMaterialRenglon();">
+                <i class="material-icons" style="font-size:33px;">
+                    add_box
+                </i>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-xs-8 col-md-10">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4 col-md-2">
+                <button type="button" class="btn btn-primary btn-block btn-flat" onclick="EditCampania();">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+
+        @Html.HiddenFor(x => x.CampaniaId)
+        @Html.HiddenFor(x => x.ClienteId)
+        @Html.HiddenFor(x => x.AnuncianteId)
+        @Html.HiddenFor(x => x.Cliente.Nombre)
+        @Html.HiddenFor(x => x.Anunciante.Nombre)
+    }
+</div><!-- /.register-box -->
+<!-- jQuery 3 -->
+<script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="~/Content/Admin/plugins/iCheck/icheck.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>
+<script src="~/Scripts/Publinter/Validar.js"></script>
+<script src="~/Content/Admin/bower_components/select2/dist/js/select2.min.js"></script>
+

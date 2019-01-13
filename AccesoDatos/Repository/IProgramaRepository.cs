@@ -10,5 +10,6 @@ namespace AccesoDatos.Repository
     public interface IProgramaRepository
     {
         List<Get_Programa_Data> GetProgramas();
+        List<Get_Programa_Data> GetProgramasByMedio(int medioId);
     }
 }

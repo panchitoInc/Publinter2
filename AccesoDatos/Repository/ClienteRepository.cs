@@ -26,7 +26,6 @@ namespace AccesoDatos.Repository
             {
                 CliBuscado = context.Cliente
                                             .Include("Contactos")
-                                            .Include("Materiales")
                                             .FirstOrDefault(x => x.ClienteId.Equals(id));
             }
             return CliBuscado;
@@ -37,8 +36,8 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                var _usuId = new SqlParameter("@UsarioId", this.Context.Id);
-                clientes = context.Database.SqlQuery<Get_Cliente_Data>("GET_CLIENTES @UsarioId", _usuId).ToList();
+                //var _usuId = new SqlParameter("@UsarioId", this.Context.Id);
+                clientes = context.Database.SqlQuery<Get_Cliente_Data>("GET_ALL_CLIENTES ").ToList();
             }
 
             return clientes;
@@ -122,7 +121,8 @@ namespace AccesoDatos.Repository
                             context.SaveChanges();
                         }
                     }
-
+                    context.Entry(cliBd).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
                 }
                 return true;
             }catch (Exception e)

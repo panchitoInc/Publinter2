@@ -1,0 +1,123 @@
+﻿@model DataModule.Entities.Usuario
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var ListaRoles = new List<SelectListItem>()
+{
+new SelectListItem() {Text="Administracion", Value="2"},
+new SelectListItem() {Text="Auxiliar", Value="3"},
+new SelectListItem() {Text="Vendedor", Value="4"}
+};
+    
+}
+
+
+
+<div class="register-box-body">
+
+    <div class=" register-box-body">
+        <p class="login-box-msg" style="font-size: 25px;padding-bottom: 7px;">Registrar nuevo usuario</p>
+
+        @using (Html.BeginForm("Create", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data", @id = "UsuarioCreateForm" }))
+        {
+            <div class="row">
+                <div class="col-xs-12 pull-left" style="margin-bottom: 2px;font-size: 16px;">
+                    <font style="vertical-align: inherit;">Datos del usuario</font>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control", @placeholder = "Apellido" })
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" style="height:49px;">
+                <div class=col-xs-6>
+                    @Html.TextBoxFor(x => x.Contactos.FirstOrDefault().Email, new { @class = "form-control", @placeholder = "Email" })
+                </div>
+                <div class=col-xs-6>
+                    @Html.TextBoxFor(x => x.Contactos.FirstOrDefault().Telefono, new { @class = "form-control", @placeholder = "Telefono" })
+                </div>
+            </div>
+            <div class="row" style="height:49px;">
+                <div class=col-xs-6>
+                    @Html.TextBoxFor(x => x.Contactos.FirstOrDefault().Direccion, new { @class = "form-control", @placeholder = "Direccion" })
+                </div>
+                <div class=col-xs-3>
+                    @Html.TextBoxFor(x => x.Contactos.FirstOrDefault().Departamento, new { @class = "form-control", @placeholder = "Departamento" })
+                </div>
+                <div class=col-xs-3>
+                    @Html.TextBoxFor(x => x.Contactos.FirstOrDefault().Ciudad, new { @class = "form-control", @placeholder = "Ciudad" })
+                </div>
+            </div>
+            <div class="row" style="height:49px;">
+                <div class=col-xs-6>
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(x => x.NombreUsuario, new { @class = "form-control", @placeholder = "Nombre de usuario" })
+                        
+                    </div>
+                </div>
+                <div class=col-xs-6>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(x => x.Password, new { @class = "form-control", @placeholder = "Password", disabled="disabled" })
+                        
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class=col-xs-6>
+                    <div class="form-group has-feedback">
+                        @Html.DropDownListFor(x => x.Rol.RolId, ListaRoles, new { @class = "form-control", @placeholder = "Rol" })
+                        
+                    </div>
+
+                </div>
+                <div class="col-xs-6">
+
+                </div>
+            </div>
+
+
+
+            @*<div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Retype password">
+                    <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                </div>*@
+            <div class="row">
+                <div class="col-xs-8">
+                    <span id="Mensaje" style="display:none;"></span>
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-primary btn-block btn-flat" onclick="CrearUsuario();">Guardar</button>
+                </div>
+                <!-- /.col -->
+            </div>
+        }
+    </div>
+    <!-- /.form-box -->
+</div><!-- /.register-box -->
+<!-- jQuery 3 -->
+<script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+
+<script src="~/Content/Admin/plugins/iCheck/icheck.min.js"></script>
+
+<script src="~/Scripts/Utils.js"></script>

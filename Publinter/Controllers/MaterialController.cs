@@ -72,7 +72,7 @@ namespace Publinter.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 var tipos = materialApplicationService.GetTipos();
                 ViewBag.TiposMaterial = tipos.Select(x => new SelectListItem() { Value = x.TipoMaterialId.ToString(), Text = x.Descripcion });

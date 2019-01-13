@@ -22,11 +22,12 @@ namespace AccesoDatos.Repository
             {
                 using (var context = new PublinterContext())
                 {
-                    Anunciante anunciante = context.Anunciante.Include("Materiales").FirstOrDefault(x => x.AnuncianteId.Equals(mat.AnuncianteId));
-                    anunciante.Materiales.Add(mat);
+                    Campania campania = context.Campania.Include("Materiales").FirstOrDefault(x => x.CampaniaId.Equals(mat.CampaniaId));
+
+                    campania.Materiales.Add(mat);
 
                     context.Entry(mat).State = System.Data.Entity.EntityState.Added;
-                    context.Entry(anunciante).State = System.Data.Entity.EntityState.Modified;
+                    context.Entry(campania).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
 
                     return mat.MaterialId;

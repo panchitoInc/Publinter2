@@ -5,11 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
+<script type="text/javascript">
     $(document).ready(function(){
         InitTable("#ListadoClientesTable");
     });
-     
+
 </script>
 
 <link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -24,27 +24,25 @@
                 <table id="ListadoClientesTable" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr>
-                            <th>Razon social</th>
-                            <th>Rut</th>
+                            <th>Nombre</th>
                             <th>Email</th>
                             <th>Telefono</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if(Model != null)
+                        @if (Model != null)
                         {
                             foreach (var i in Model)
                             {
                                 <tr>
-                                    <td><a href="../../Cliente/Edit/@i.ClienteId">@i.RazonSocial</a></td>
-                                    <td>@i.RUT</td>
+                                    <td><a href="../../Cliente/Edit/@i.ClienteId">@i.Nombre</a></td>
                                     <td>@i.Email</td>
                                     <td>@i.Telefono</td>
 
                                 </tr>
                             }
                         }
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -53,3 +51,4 @@
     <!-- /.box-body -->
 </div>
 <script src="~/Content/Admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>

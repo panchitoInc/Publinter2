@@ -33,5 +33,6 @@ namespace DataModule.Entities
 
         [ForeignKey("TipoMedioId")]
         public virtual TipoMedio TipoMedio { get; set; }
+        public decimal PorcentajeDescuento { get; set; }
     }
 }

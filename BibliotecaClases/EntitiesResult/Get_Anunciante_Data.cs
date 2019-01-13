@@ -11,5 +11,9 @@ namespace DataModule.EntitiesResult
         public int AnuncianteId { get; set; }
 
         public string Nombre { get; set; }
+        public string RazonSocial { get; set; }
+        public string RUT { get; set; }
+        public string Email { get; set; }
+        public string Telefono { get; set; }
     }
 }

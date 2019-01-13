@@ -1,0 +1,11 @@
+﻿@model Publinter.Models.CampaniaModel
+
+
+    @for (var index = 0;index < Model.Materiales.Count;index++)
+    {
+        ViewData["indexMaterial"] = index;
+        @Html.Partial("~/Views/Campania/Create/_create_renglon_material.cshtml")
+
+    }
+
+

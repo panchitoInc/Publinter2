@@ -13,7 +13,7 @@
     })
 </script>
 
-<div class="register-box-body col-lg-8 col-md-10" style="">
+<div class="register-box-body col-xs-12" style="">
     <p style="font-size: 22px;padding-bottom: 7px;margin-bottom:10px;">Nuevo material</p>
 
     @using (Html.BeginForm("Create", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MaterialCreateForm" }))
@@ -32,12 +32,12 @@
         </div>
 
         <div style="height:49px;">
-            <div class="col-xs-6" style="padding-left:0px">
+            @*<div class="col-xs-6" style="padding-left:0px">
                 <div class="form-group has-feedback">
                     @Html.DropDownListFor(x => x.ClienteId, ListaClientes, new { @class = "form-control" })
                 </div>
-            </div>
-            <div class="col-xs-6" style="padding-right:0px">
+            </div>*@
+            <div class="col-xs-6" style="padding-left:0;">
                 <div class="form-group has-feedback">
                     @Html.TextBoxFor(x => x.DuracionSegundos, new { @class = "form-control", @type = "number", @min = "0", @placeholder = "Duracion (segundos)" })
                 </div>

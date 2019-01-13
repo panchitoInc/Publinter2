@@ -28,14 +28,14 @@ namespace DataModule.Entities
         public string Apellido { get; set; }
         
 
-        /// <summary>
-        /// Contacto Navigation
-        /// </summary>
-        public int? ContactoId { get; set; }
+        ///// <summary>
+        ///// Contacto Navigation
+        ///// </summary>
+        //public int? ContactoId { get; set; }
 
-        [ForeignKey("ContactoId")]
-        public Contacto Contacto { get; set; }
+        //[ForeignKey("ContactoId")]
+        //public Contacto Contacto { get; set; }
+        public virtual List<Contacto> Contactos { get; set; }
 
-      
     }
 }

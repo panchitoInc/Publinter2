@@ -6,12 +6,15 @@ using Mvc;
 using System.Web.Mvc;
 using System;
 using System.Collections.Generic;
+using DataModule.EntitiesResult;
 
 namespace Publinter.Controllers
 {
     public class MedioController : PublinteController {
 
         IMedioApplicationServices _medioApplicationService;
+        IProgramaApplicationService _programaAplicacionService;
+
 
         private IMedioApplicationServices medioApplicationService
         {
@@ -23,6 +26,18 @@ namespace Publinter.Controllers
                 }
                 return this._medioApplicationService;
             }
+        }
+
+        private IProgramaApplicationService programaAplicacionService
+        {
+            get
+            {
+                if (this._programaAplicacionService == null)
+                {
+                    this._programaAplicacionService = new ProgramaApplicationService(CurrentUser);
+                }
+                return this._programaAplicacionService;
+            }  
         }
 
         // GET: Medio
@@ -105,18 +120,18 @@ namespace Publinter.Controllers
             
             return View(model);
         }
-
+        [HttpPost]
         public JsonResult GetProgramas(int medioId)
         {
             Medio m = medioApplicationService.Get(medioId);
-
+            var programas = programaAplicacionService.GetProgramasByMedio(medioId);
             string html = "";
 
-            if (m.Programas != null && m.Programas.Count > 0)
+            if (programas != null && programas.Count > 0)
             {
-                foreach (Programa p in m.Programas)
+                foreach (Get_Programa_Data p in programas)
                 {
-                    html += "<option value='" + p.ProgramaId + "' data-precio='" + p.PrecioSegundo + "'>" + p.Nombre + "</option>";
+                    html += "<option value='" + p.ProgramaId + "' data-precio='" + p.Precio + "'>" + p.Nombre + "</option>";
                 }
             }
             else

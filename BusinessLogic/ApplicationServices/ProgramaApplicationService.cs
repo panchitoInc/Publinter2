@@ -22,5 +22,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return programaRepository.GetProgramas();
         }
+
+        public List<Get_Programa_Data> GetProgramasByMedio(int medioId)
+        {
+            return programaRepository.GetProgramasByMedio(medioId);
+        }
     }
 }

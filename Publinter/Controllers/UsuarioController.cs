@@ -51,5 +51,17 @@ namespace Publinter.Controllers
 
             return Json(id , JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var usu = usuarioApplicationService.Get(id);
+            return View(usu);
+        }
+        [HttpPost]
+        public ActionResult Edit(Usuario usu)
+        {
+            var bandera = usuarioApplicationService.Update(usu);
+            return View();
+        }
     }
 }

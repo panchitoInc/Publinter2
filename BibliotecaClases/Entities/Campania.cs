@@ -10,18 +10,20 @@ namespace DataModule.Entities
 {
     public class Campania
     {
+
+        public Campania()
+        {
+            this.Materiales = new List<Material>();
+        }
+
         [Key, Column("CampaniaId"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CampaniaId { get; set; }
 
         public string Nombre { get; set; }
 
-        /// <summary>
-        /// Cliente Navigation
-        /// </summary>
-        public int MedioId { get; set; }
-
-        [ForeignKey("MedioId")]
-        public Medio Medio { get; set; }
+       
+        //[ForeignKey("MedioId")]
+        //public Medio Medio { get; set; }
 
         /// <summary>
         /// Anunciante Navigation

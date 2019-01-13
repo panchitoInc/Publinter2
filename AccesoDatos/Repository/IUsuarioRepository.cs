@@ -30,5 +30,9 @@ namespace AccesoDatos.Repository
         /// </summary>
         /// <returns></returns>
         List<Usuario> GetAll();
+
+        Usuario Get(int id);
+
+        bool Update(Usuario usu);
     }
 }

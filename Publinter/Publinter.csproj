@@ -237,6 +237,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnuncianteController.cs" />
+    <Compile Include="Controllers\CampaniaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
@@ -250,6 +251,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Add_Linea_Model.cs" />
+    <Compile Include="Models\CampaniaModel.cs" />
     <Compile Include="Models\DataTableDataOrden.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Orden_Create_Model.cs" />
@@ -2939,10 +2941,19 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\component.css" />
+    <Content Include="Content\demo.css" />
     <Content Include="Content\Images\fondoLogin.png" />
     <Content Include="Content\Images\Logo-Publinter-dark-2017-final.png" />
     <Content Include="Content\Images\Logo-Publinter-light-2017.png" />
+    <Content Include="Content\JS\jsPdf\jspdf-autotable.js" />
+    <Content Include="Content\JS\jsPdf\jspdf.debug.js" />
+    <Content Include="Content\JS\jsPdf\jspdf.min.js" />
     <Content Include="Content\JS\Orden.Datatable.ServerSide.js" />
+    <Content Include="Content\JS\ProgressButton\classie.js" />
+    <Content Include="Content\JS\ProgressButton\modernizr.custom.js" />
+    <Content Include="Content\JS\ProgressButton\uiProgressButton.js" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\Publinter\_layout.css" />
     <Content Include="Content\Utils.js" />
     <Content Include="favicon.ico" />
@@ -3478,14 +3489,21 @@
     <Content Include="Views\Cliente\Contacto\contacto_renglones.cshtml" />
     <Content Include="Views\Cliente\Edit.cshtml" />
     <Content Include="Views\Orden\Index.cshtml" />
+    <Content Include="Views\Anunciante\Create.cshtml" />
+    <Content Include="Views\Anunciante\Edit.cshtml" />
     <Content Include="Views\Anunciante\Index.cshtml" />
     <Content Include="Views\Anunciante\Contacto\contacto_renglon.cshtml" />
     <Content Include="Views\Anunciante\Contacto\contacto_renglones.cshtml" />
-    <Content Include="Views\Anunciante\Create.cshtml" />
-    <Content Include="Views\Anunciante\Edit.cshtml" />
+    <Content Include="Views\Campania\Index.cshtml" />
+    <Content Include="Views\Campania\Create.cshtml" />
+    <Content Include="Views\Campania\Create\_create_renglones_material.cshtml" />
+    <Content Include="Views\Campania\Create\_create_renglon_material.cshtml" />
+    <Content Include="Views\Campania\Edit.cshtml" />
+    <Content Include="Views\Usuario\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Pdf\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

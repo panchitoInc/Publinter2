@@ -18,7 +18,7 @@ namespace Publinter.Models
             this.ListaMateriales = new List<Material>();
             this.ListaClientes = new List<Get_Cliente_Data>();
             this.ListaAnunciantes = new List<Get_Anunciante_Data>();
-            this.ListaCampanias = new List<Campania>();
+            this.ListaCampanias = new List<Get_all_campania>();
 
             this.Lineas = new List<LineaOrden>();
 
@@ -73,6 +73,7 @@ namespace Publinter.Models
         public Anunciante Anunciante { get; set; }
 
         public int CampaniaId { get; set; }
+        public int MedioId { get; set; }
 
         public Campania Campania { get; set; }
 
@@ -86,7 +87,7 @@ namespace Publinter.Models
 
         public List<Get_Cliente_Data> ListaClientes { get; set; }
 
-        public List<Campania> ListaCampanias { get; set; }
+        public List<Get_all_campania> ListaCampanias { get; set; }
 
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 
