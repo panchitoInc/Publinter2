@@ -81,6 +81,12 @@ namespace Publinter.Models
 
         public decimal TotalOrden { get; set; }
 
+        /// <summary>
+        /// Para agregar una linea interna se pone aqui a que nro de linea se le agrega
+        /// </summary>
+        public int IndexLineaParaAgregar { get; set; }
+        public int IndexLineaInternaParaAgregar { get; set; }
+
         public List<Medio> ListaMedios { get; set; }
 
         public List<Get_Anunciante_Data> ListaAnunciantes { get; set; }

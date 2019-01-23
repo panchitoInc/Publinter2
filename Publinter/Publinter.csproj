@@ -3500,6 +3500,7 @@
     <Content Include="Views\Campania\Create\_create_renglon_material.cshtml" />
     <Content Include="Views\Campania\Edit.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Orden\AddLineaInterna.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

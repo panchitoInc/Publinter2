@@ -255,8 +255,14 @@ namespace Publinter.Controllers
 
             Mes mesActual = new Mes();
 
-            mesActual.MesAnio = DateTime.Now.Year;
-            mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
+            mesActual.MesAnio = model.Lineas[cantLineas - 1].LineasInternasOrden[0].Mes.MesAnio;
+            mesActual.MesNumero = model.Lineas[cantLineas - 1].LineasInternasOrden[0].Mes.MesNumero + 1;
+            if (mesActual.MesNumero > 12)
+            {
+                mesActual.MesNumero = 1;
+                mesActual.MesAnio++;
+            }
+
             mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
 
             mesActual.Dias = new List<Dia>();
@@ -353,6 +359,31 @@ namespace Publinter.Controllers
             bool value = true;
 
             return Json(new { value, html, index }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AgregarLineaInterna(Orden_Create_Model model)
+        {
+            model.IndexLineaInternaParaAgregar = model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Count;
+
+            LineaInternaOrden nueva = new LineaInternaOrden();
+            nueva.Mes = model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden[model.IndexLineaInternaParaAgregar - 1].Mes;
+
+            nueva.Mes.MesId = 0;
+            foreach (Dia d in nueva.Mes.Dias)
+            {
+                d.NroEmisiones = 0;
+            }
+
+            model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Add(nueva);
+
+            model.ListaMateriales = materialApplicationService.GetAll().ToList();
+            model.ListaProgramas = programaApplicationService.GetProgramas();
+
+            string html = RenderPartialViewToString("AddLineaInterna", model);
+
+            bool value = true;
+
+            return Json(new { value, html }, JsonRequestBehavior.AllowGet);
         }
 
         private string GetMesNombre(int mes)

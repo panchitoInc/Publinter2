@@ -56,6 +56,7 @@
     <Compile Include="EntitiesResult\Get_All_Cliente.cs" />
     <Compile Include="EntitiesResult\Get_Anunciante_Data.cs" />
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />
+    <Compile Include="EntitiesResult\Get_Material_Data.cs" />
     <Compile Include="EntitiesResult\Get_orden_index.cs" />
     <Compile Include="EntitiesResult\Get_Programa_Data.cs" />
     <Compile Include="Entities\Anunciante.cs" />

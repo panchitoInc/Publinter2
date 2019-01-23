@@ -26,6 +26,7 @@
 
         @Html.HiddenFor(x => x.NroOrden)
         @Html.HiddenFor(x => x.UsuarioId)
+        @Html.HiddenFor(x => x.IndexLineaParaAgregar)
     </div>
 
     <div class="col-sm-6">
@@ -35,11 +36,11 @@
     <div id="datosEncabezado" class="col-sm-12">
         <div class="col-sm-4">
             <label class="inline-element" style="width:75px">Campaña: </label>
-            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:150px" })
+            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:150px", @onchange = "FiltrarMateriales()" })
         </div>
         <div class="col-sm-4">
             <label class="inline-element" style="width:75px">Medio: </label>
-            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @onchange = "FiltrarProgramas()", @class = "inline-element", @style = "width:150px" })
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:150px", @onchange = "FiltrarProgramas()" })
         </div>
 
         <div class="col-sm-4">

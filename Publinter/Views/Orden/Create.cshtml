@@ -79,6 +79,12 @@
         text-align: center;
         border: none;
     }
+
+    .div_add_linea {
+        position: absolute;
+        left: 6px;
+        top: 48px;
+    }
 </style>
 
 <script>
@@ -92,11 +98,12 @@
 
             }
         });
-       // FiltrarProgramas();
+
+        //FiltrarProgramas();
         //FiltrarMateriales();
 
-        SetPrograma(0);
-        SetMaterial(0);
+        SetPrograma(0, 0);
+        SetMaterial(0, 0);
 
         $("#Emision").val(formattedDate($("#Emision").val()));
 
@@ -122,8 +129,12 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(0,0);
+                SetMaterial(0,0);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -140,8 +151,12 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(data.index, 0);
+                SetMaterial(data.index, 0);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -158,30 +173,67 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                for(e = 0; e < data.indexInterno; e++)
+                {
+                    SetPrograma(data.index, e);
+                    SetMaterial(data.index, e);
+                }     
+                
                 CalcularTotalLinea(data.index);
             }
         });
     }
 
-    function SetPrograma(index)
+    function AgregarLineaInterna(indexLinea)
     {
-        var progId = $("#Programa_" + index).val();
-        $("#Lineas_" + index + "__ProgramaId").val(progId);
+        $("#IndexLineaParaAgregar").val(indexLinea);
+
+        var form = $("#formOrden");
+        $(".btnLineas").attr("disabled","disabled")
+
+        $.ajax({
+            url: '@Url.Action("AgregarLineaInterna", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                $('#table_Linea_' + indexLinea + " tbody").append(data.html);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(indexLinea, data.indexLineaInterna);
+                SetMaterial(indexLinea, data.indexLineaInterna);
+                //CalcularTotalLineaInterna(data.index); //hacer
+            }
+        });
     }
 
-    function SetMaterial(index)
+    function SetPrograma(index, index_interno)
     {
-        var matId = $("#Material_" + index).val();
-        $("#Lineas_" + index + "__MaterialId").val(matId);
+        var progId = $("#Programa_" + index + "_" + index_interno).val();
+        $("#Lineas_" + index + "__LineasInternasOrden_" + index_interno + "__ProgramaId").val(progId);
+
+        CalcularTotalLinea(index);
+    }
+
+    function SetMaterial(index, index_interno)
+    {
+        var matId = $("#Material_" + index + "_" + index_interno).val();
+        $("#Lineas_" + index + "__LineasInternasOrden_" + index_interno + "__MaterialId").val(matId);
+
+        CalcularTotalLinea(index);
     }
 
     function CalcularTotalLinea(index)
     {
         var totalLinea = 0;
 
-        for(var e = 0; e < $(".LineaInterna").length; e++)
+        for(var e = 0; e < $(".LineaInterna_" + index).length; e++)
         {
             var precio = parseFloat($("#Programa_" + index + "_" + e + " option:selected").data("precio"));
             var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion"));
@@ -190,20 +242,21 @@
 
             for(var i = 0; i < nroDias; i++)
             {
-                var emisionesDia = parseInt($("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
+                var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
 
                 var totalDia = emisionesDia * precio * duracion;
-                $("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+                $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
 
                 emisiones += emisionesDia;
             }
 
-            var totalLineaInterna = precio * emisiones;
+            var totalLineaInterna = precio * emisiones * duracion;
 
-            $("#Lineas_" + index + "__LineaInterna_" + e + "__TotalLinea").val(totalLineaInterna);
-            $("#totalMes_" + index + "_" + e).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLineaInterna, 2)));
+            $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
 
             totalLinea += totalLineaInterna;
+
+            $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
         }
 
         $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
@@ -242,13 +295,13 @@
 
     function FiltrarMateriales()
     {
-        var clienteId = $("#ClienteId").val();
+        var campaniaId = $("#CampaniaId").val();
 
         $.ajax({
-            url: '@Url.Action("GetMateriales", "Cliente")',
+            url: '@Url.Action("GetMateriales", "Campania")',
             type: 'POST',
             dataType: 'json',
-            data: { "clienteId" : clienteId },
+            data: { "campaniaId": campaniaId },
             success: function (data) {
                 $(".Material").html(data.html);
             }

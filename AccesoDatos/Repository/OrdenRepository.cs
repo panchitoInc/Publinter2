@@ -43,7 +43,7 @@ namespace AccesoDatos.Repository
                     return nueva.OrdenId;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return -1;
             }

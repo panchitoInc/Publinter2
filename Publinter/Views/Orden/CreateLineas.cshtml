@@ -4,7 +4,14 @@
     @for (var i = 0; i < Model.Lineas.Count; i++)
     {
         <div id="ordenl" class="col-sm-12 lineaOrden">
-            <table id="tableOrden">
+            <div class="div_add_linea">
+                <a class="inline-element btnLineas" href="javascript:AgregarLineaInterna(@i)" title="Agregar línea">
+                    <i class="material-icons iconLineas" style="width:0px;position:relative;right:20px">
+                        add
+                    </i>
+                </a>
+            </div>
+            <table id="table_Linea_@i">
                 <thead>
                     <tr>
                         <th colspan="2"></th>
@@ -14,10 +21,10 @@
                             <span id="totalMes_@i" class="pull-right">$ 0.00</span>
 
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].ProgramaId)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.MesId)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.MesNombre)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.MesNumero)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.MesAnio)
+                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesId)
+                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesNombre)
+                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesNumero)
+                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesAnio)
                             @Html.HiddenFor(x => x.Lineas[i].TotalLinea)
                         </th>
                     </tr>
@@ -26,129 +33,112 @@
                     <tr>
                         <td rowspan="2" class="tdBlack">Ubicación</td>
                         <td rowspan="2" class="tdBlack">Materiales</td>
-                        @foreach (var dia in Model.Lineas[i].LineasInternasOrden[i].Mes.Dias)
+                        @foreach (var dia in Model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
                         {
-                           
                            <td class="dato">@dia.DiaNombre[0]</td>
                         }
 
-                        @if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
+                        @if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
                         {
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
                             {
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
                             }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
                             {
-                                <td class="dato"></td>
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
                             }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
                             {
-                                <td class="dato"></td>
-                                <td class="dato"></td>
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
                             }
                         }
                     </tr>
                     <tr>
-                        @foreach (var dia in Model.Lineas[i].LineasInternasOrden[i].Mes.Dias)
+                        @foreach (var dia in Model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
                         {
-                            @*if (dia.DiaNombre != "Sábado" && dia.DiaNombre != "Domingo")
-                            {
-                                <td class="dato">@dia.DiaNumero</td>
-                            }
-                            else
-                            {*@
-                                <td class="dato">@dia.DiaNumero</td>
-                            @*}*@
+                            <td class="dato">@dia.DiaNumero</td>
                         }
 
-                        @if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
+                        @if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
                         {
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
                             {
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
                             }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
                             {
-                                <td class="dato"></td>
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
                             }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
+                            if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
                             {
-                                <td class="dato"></td>
-                                <td class="dato"></td>
-                                <td class="dato"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
+                                <td class="dato hidden"></td>
                             }
                         }
                     </tr>
-                    <tr>
-                        <td rowspan="2">
-                            <select id="Programa_@i" class="Programa" onchange="SetPrograma(@i)" style="border:none;width: 100px">
-                                @foreach (var p in Model.ListaProgramas)
+                    
+                    @for (int e = 0; e < Model.Lineas[i].LineasInternasOrden.Count; e++)
+                    {
+                        <tr class="LineaInterna_@i">                    
+                            <td rowspan="2">
+                                <select id="Programa_@(i)_@(e)" class="Programa" onchange="SetPrograma(@i, @e)" style="border:none;width: 100px">
+                                    @foreach (var p in Model.ListaProgramas)
+                                    {
+                                        <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
+                                    }
+                                </select>
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].ProgramaId)
+                            </td>
+                            <td rowspan="2">
+                                <select id="Material_@(i)_@(e)" class="Material" onchange="SetMaterial(@i, @e)" style="border:none;width: 100px">
+                                    @foreach (var m in Model.ListaMateriales)
+                                    {
+                                        <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>
+                                    }
+                                </select>
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].MaterialId)
+                            </td>
+
+                            @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count; d++)
+                            {
+                                <td rowspan="2" class="dato dia_@(i)_@(e)">
+                                    @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + i + ")" })
+
+                                    @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaId)
+                                    @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaNombre)
+                                    @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaNumero)
+                                    @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].TotalDia)
+                                </td>
+                            }
+
+                            @if (Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count < 31)
+                            {
+                                if (Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count == 30)
                                 {
-                                    <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
+                                    <td rowspan="2" class="dato hidden"></td>
                                 }
-                            </select>
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].ProgramaId)
-                        </td>
-                        <td rowspan="2">
-                            <select id="Material_@i" class="Material" onchange="SetMaterial(@i)" style="border:none;width: 100px">
-                                @foreach (var m in Model.ListaMateriales)
+                                if (Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count == 29)
                                 {
-                                    <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
                                 }
-                            </select>
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].MaterialId)
-                        </td>
-
-                        @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count; d++)
-                        {
-                            
-                        <td rowspan="2" class="dato dia_@i">
-                            @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + i + ")" })
-
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaId)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaNombre)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaNumero)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].TotalDia)
-                        </td>
-                            @*}
-                            else
-                            {
-                        <td rowspan="2" class="dato noHabil">
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaId)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].NroEmisiones)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaNombre)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].DiaNumero)
-                            @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].TotalDia)
-                        </td>
-                            }*@
-                        }
-
-                        @if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
-                        {
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
-                            {
-                                <td rowspan="2" class="dato"></td>
+                                if (Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count == 28)
+                                {
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                }
                             }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
-                            {
-                                <td rowspan="2" class="dato"></td>
-                                <td rowspan="2" class="dato"></td>
-                            }
-                            if (Model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
-                            {
-                                <td rowspan="2" class="dato"></td>
-                                <td rowspan="2" class="dato"></td>
-                                <td rowspan="2" class="dato"></td>
-                            }
-                        }
-                    </tr>
-                    <tr>
-
-                    </tr>
+                        </tr>
+                        <tr></tr>
+                    }
+                    
                 </tbody>
             </table>
         </div>

@@ -40,5 +40,10 @@ namespace BusinessLogic.ApplicationServices
             return campaniarepository.Update(model);
 
         }
+
+        public List<Get_Material_Data> GetMaterialesByCampania(int campaniaId)
+        {
+            return campaniarepository.GetMaterialesByCampania(campaniaId);
+        }
     }
 }

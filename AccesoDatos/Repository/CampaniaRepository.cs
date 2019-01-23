@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using System;
+using System.Data.SqlClient;
 
 namespace AccesoDatos.Repository
 {
@@ -134,9 +135,18 @@ namespace AccesoDatos.Repository
                     existingInBd.DuracionSegundos = matActual.DuracionSegundos;
                     existingInBd.Titulo = matActual.Titulo;
                 }
-
             }
+        }
 
+        public List<Get_Material_Data> GetMaterialesByCampania(int campaniaId)
+        {
+            List<Get_Material_Data> materiales;
+            using (var context = new PublinterContext())
+            {
+                var _cId = new SqlParameter("@CampaniaId", campaniaId);
+                materiales = context.Database.SqlQuery<Get_Material_Data>("GET_MATERIALES_BY_CAMPANIA @CampaniaId", _cId).ToList();
+            }
+            return materiales;
         }
     }
 }

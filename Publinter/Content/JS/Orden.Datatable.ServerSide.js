@@ -44,7 +44,7 @@
         "columns": [//datos con que se carga en las columnas y configuración
                {"data": "EmisionString", "orderable": true, "sType": 'date' },
                { "data": "Descripcion", "orderable": true, "class": "text-align-left" },
-               { "data": "Cliente", "orderable": true, "class": "text-align-left Cliente" },
+               { "data": "Campania", "orderable": true, "class": "text-align-left Cliente" },
                {
                    "data": "Total", "orderable": true, "class": "text-align-right",
                    "render": function (data, type, row)
