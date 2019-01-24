@@ -27,17 +27,28 @@
         position: relative;
         top:15px;
     }
-
+    /*prueba defs pdf*/
+    .btns-footer{
+        padding-top:60px;
+    }
 </style>
+<div class="col-xs-12">
 
-<div class="col-sm-12">
+    <div id="datosFooter" class="col-sm-12">
+        <label class="inline-element lblTotal">INVERSIÓN TOTAL: $</label>
+        <label id="totalOrden" class="inline-element lblTotal">0.00</label>
+        @Html.HiddenFor(x => x.TotalOrden)
+    </div>
+
+</div>
+<div class="col-sm-12 btns-footer">
     <div class="pull-left col-sm-6" style="padding:0px">
-        <a class="inline-element btnLineas" href="javascript:AgregarSiguienteMes()" title="Agregar siguiente mes">
+        <a class="inline-element" href="javascript:AgregarSiguienteMes()" title="Agregar siguiente mes">
             <i class="material-icons iconLineas">
                 add_box
             </i>
         </a>
-        <a class="inline-element btnLineas" href="javascript:CopiarUltimoMes()" title="Copiar último mes">
+        <a class="inline-element" href="javascript:CopiarUltimoMes()" title="Copiar último mes">
             <i class="material-icons iconLineas" style="    font-size: 25px !important;position: relative;bottom: 1px;">
                 file_copy
             </i>
@@ -48,12 +59,4 @@
     </div>
 </div>
 
-<div class="col-sm-12">
 
-    <div id="datosFooter" class="col-sm-12">
-        <label class="inline-element lblTotal">INVERSIÓN TOTAL: $</label>
-        <label id="totalOrden" class="inline-element lblTotal">0.00</label>
-        @Html.HiddenFor(x => x.TotalOrden)
-    </div>
-
-</div>

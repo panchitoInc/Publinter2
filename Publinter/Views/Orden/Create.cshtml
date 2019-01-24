@@ -109,6 +109,13 @@
                 format: 'D/M/YYYY'
             }
         });
+
+         doc = new jsPDF();
+         specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
     })
 
     function AgregarPrimeraLinea()
@@ -326,11 +333,13 @@
 
     //funcion para exportar el form a pdf.
     function ExportPdf() {
-        var doc = new jsPDF('p', 'pt');
-        var elem = document.getElementById("basic-table");
-        var res = doc.autoTableHtmlToJson(elem);
-        doc.autoTable(res.columns, res.data);
-        doc.save("table.pdf");
+        //var doc = new jsPDF('p', 'pt');
+        //var elem = document.getElementById("basic-table");
+        //var res = doc.autoTableHtmlToJson(elem);
+        //doc.autoTable(res.columns, res.data);
+        //doc.save("table.pdf");
+
+        /**/
         //var doc = new jsPDF();
         //var specialElementHandlers = {
         //    '#editor': function (element, renderer) {
@@ -349,112 +358,73 @@
         var object = { "html": "" };
 
 
+       *@
         $.ajax({
             type: "POST",
             traditional: true,
-            data: object,
-            url: '@Url.Action("pdfCrete", "Orden")',
+           // data: object,
+            url: '@Url.Action("ExportPdf", "Orden")',
             success: function (e) {
                 ExportPdfSuccess(e, index);
             }
-        });*@
+        });
     }
 
     function ExportPdfSuccess(data, index) { }
-
-    function demoFromHTML1() {
-
-
-        var faker = window.faker;
-
-        var examples = {};
-
-        // Basic - shows what a default table looks like
-        examples.basic = function () {
-            var doc = new jsPDF('p', 'pt');
-            var elem = document.getElementById("tableOrden");
-            var res = doc.autoTableHtmlToJson(elem);
-            doc.autoTable(res.columns, res.data);
-            doc.save("table.pdf");
-          //  var doc = new jsPDF();
-
-          //  // From HTML
-          //  doc.autoTable({ html: '.table' });
-
-          //  // From Javascript
-          //  let finalY = doc.previousAutoTable.finalY;
-          //  doc.text("From javascript arrays", 14, finalY + 15);
-            
-          //  doc.text("From HTML with CSS", 14, finalY + 15);
- 
-          //doc.save("taple.pdf")
-        };
-
-       
-
-    }
+   
     function demoFromHTML() {
-        var pdf = new jsPDF('p', 'pt', 'letter');
-        // source can be HTML-formatted string, or a reference
-        // to an actual DOM element from which the text will be scraped.
-        source = $('#tableOrden')[0];
+        const filename  = 'ThisIsYourPDFFilename.pdf';
 
-        // we support special element handlers. Register them with jQuery-style 
-        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-        // There is no support for any other type of selectors 
-        // (class, of compound) at this time.
-        specialElementHandlers = {
-            // element with id of "bypass" - jQuery style selector
-            '#bypassme': function (element, renderer) {
-                // true = "handled elsewhere, bypass text extraction"
-                return true
-            }
-        };
-        margins = {
-            top: 80,
-            bottom: 60,
-            left: 10,
-            width: 700
-        };
-        // all coords and widths are in jsPDF instance's declared units
-        // 'inches' in this case
-        pdf.fromHTML(
-        source, // HTML string or DOM elem ref.
-        margins.left, // x coord
-        margins.top, { // y coord
-            'width': margins.width, // max width of content on PDF
-            'elementHandlers': specialElementHandlers
-        },
+        //doc.fromHTML($('#wrap_orden').html(), 15, 15, {
+        //    'width': 170,
+        //    'elementHandlers': specialElementHandlers
+        //});
+        //doc.save('sample-file.pdf');
+        html2canvas(document.querySelector('#wrap_orden')).then(canvas => {
+            
+            let pdf = new jsPDF('l', 'mm', 'a4');
+            var a = canvas.toDataURL('image/png');
+            pdf.addImage(a, 'PNG', 0, 0, 211, 100);
+            pdf.save(filename);
+            
+        });
 
-        function (dispose) {
-            // dispose: object with X, Y of the last line add to the PDF 
-            //          this allow the insertion of new lines after html
-            pdf.save('Test.pdf');
-        }, margins);
+   
     }
+    $(function () {
+        $("#btnSubmit").click(function () {
+            $("input[name='GridHtml']").val($("#Lineas").html());
+          //  $("input[name='GridHtml']").val("");
+            //<table><thead><tr><th>1</th><th>2</th><th>3</th></tr></thead><tbody><tr><td>b</td><td>b</td><td>b</td></tr></tbody></table>
+        });
+    });
 </script>
 
 <div class=" register-box-body col-sm-12">
-
+    
     @using (Html.BeginForm("Create", "Orden", FormMethod.Post, new { @id = "formOrden" }))
     {
-        <div id="divEncabezado">
-            @Html.Partial("CreateEncabezado", Model)
+        <div id="wrap_orden">
+            <div id="divEncabezado">
+                @Html.Partial("~/Views/Orden/CreateEncabezado.cshtml", Model)
+            </div>
+            <div id="divLineas">
+                @Html.Partial("~/Views/Orden/CreateLineas.cshtml", Model)
+            </div>
+            <div id="divFooter">
+                @Html.Partial("~/Views/Orden/CreateFooter.cshtml", Model)
+            </div>
         </div>
-
-        <div id="divLineas">
-            @Html.Partial("CreateLineas", Model)
-        </div>
-
-        <div id="divFooter">
-            @Html.Partial("CreateFooter", Model)
-        </div>
-
         <div>
-            <input id="btnExportPdf" type="button" value="Exportar documento" onclick="javascript: demoFromHTML();" style="width:150px;height:27px" />
+            @*<input id="btnExportPdf" type="button" value="Exportar documento"  style="width:150px;height:27px" />*@
+            @Html.ActionLink("Same as above but prompts to download as a file", "IndexWithAccessToDocumentAndWriterDownloadFile", "Pdf")<br />
         </div>
     }
-
+    @using (Html.BeginForm("createPdf", "Orden", FormMethod.Post))
+    {
+        <input type="hidden" name="GridHtml" />
+        <input type="submit" id="btnSubmit" value="Export" />
+    }
 </div>
 
 <div id="mensajeExito">
@@ -480,6 +450,56 @@
         </div>
     </div>
 </div>
+<div id="bypassme"></div>
+
+
 <script src="~/Scripts/Utils.js"></script>
 <script src="~/Content/JS/jsPdf/jspdf.min.js"></script>
 <script src="~/Content/JS/jsPdf/jspdf-autotable.js"></script>
+<script src="~/Scripts/html2canvas.js"></script>
+
+
+<script>
+    
+    function HTMLtoPDF() {
+        debugger;
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        // source can be HTML-formatted string, or a reference
+        // to an actual DOM element from which the text will be scraped.
+        source = document.getElementById("ordenl");
+
+        // we support special element handlers. Register them with jQuery-style 
+        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+        // There is no support for any other type of selectors 
+        // (class, of compound) at this time.
+        specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '#bypassme': function (element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        // all coords and widths are in jsPDF instance's declared units
+        // 'inches' in this case
+        pdf.fromHTML(
+        source, // HTML string or DOM elem ref.
+        margins.left, // x coord
+        margins.top, { // y coord
+            'width': margins.width, // max width of content on PDF
+            'elementHandlers': specialElementHandlers
+        },
+
+        function (dispose) {
+            // dispose: object with X, Y of the last line add to the PDF 
+            //          this allow the insertion of new lines after html
+            pdf.save('Test.pdf');
+        }, margins);
+    }
+    
+</script>

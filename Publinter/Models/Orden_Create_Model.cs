@@ -74,7 +74,7 @@ namespace Publinter.Models
 
         public int CampaniaId { get; set; }
         public int MedioId { get; set; }
-
+        public Medio Medio { get; set; }
         public Campania Campania { get; set; }
 
         public List<LineaOrden> Lineas { get; set; }
