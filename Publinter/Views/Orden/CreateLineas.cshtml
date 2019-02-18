@@ -3,15 +3,8 @@
 <div id="Lineas">
     @for (var i = 0; i < Model.Lineas.Count; i++)
     {
-        <div id="ordenl" class="col-sm-12 lineaOrden">
-            <div class="div_add_linea">
-                <a class="inline-element btnLineas" href="javascript:AgregarLineaInterna(@i)" title="Agregar línea">
-                    <i class="material-icons iconLineas" style="width:0px;position:relative;right:20px">
-                        add
-                    </i>
-                </a>
-            </div>
-            <table id="table_Linea_@i">
+        <div class="col-sm-12 lineaOrden">
+            <table>
                 <thead>
                     <tr>
                         <th colspan="2" style="text-align: left;">

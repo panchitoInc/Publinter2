@@ -74,7 +74,7 @@ namespace Publinter.Models
 
         public int CampaniaId { get; set; }
         public int MedioId { get; set; }
-
+        public Medio Medio { get; set; }
         public Campania Campania { get; set; }
 
         public List<LineaOrden> Lineas { get; set; }
@@ -98,21 +98,25 @@ namespace Publinter.Models
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 
         public List<Material> ListaMateriales { get; set; }
+        /// <summary>
+        /// 0 guardar
+        /// 1 Descargar y guardar
+        /// 2 Enviar y guardar
+        /// </summary>
+        public int GuardarEnviarDescargar { get; set; }
 
         public Orden ToOrden()
         {
-            Orden orden = new Orden();
-
-            orden.Emision = this.Emision;
-            orden.NroOrden = this.NroOrden;
-
-            orden.CampaniaId = this.CampaniaId;
-
-            orden.LineasOrden = this.Lineas;
-
-            orden.Total = this.TotalOrden;
-
-            orden.UsuarioId = this.UsuarioId;
+            Orden orden = new Orden
+            {
+                Emision = this.Emision,
+                NroOrden = this.NroOrden,
+                CampaniaId = this.CampaniaId,
+                LineasOrden = this.Lineas,
+                Total = this.TotalOrden,
+                UsuarioId = this.UsuarioId,
+                MedioId = this.MedioId
+            };
 
             orden.MedioId = this.MedioId;
 

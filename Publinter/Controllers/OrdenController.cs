@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Web;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using BusinessLogic.ApplicationServices;
 using DataModule.Entities;
-using DataModule.EntitiesResult;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.draw;
+using iTextSharp.tool.xml;
 using Mvc;
 using Publinter.Models;
 
@@ -14,7 +21,7 @@ namespace Publinter.Controllers
 {
     public class OrdenController : PublinteController
     {
-        IOrdenApplicationService _ordenApplicationService; 
+        IOrdenApplicationService _ordenApplicationService;
         IMedioApplicationServices _medioApplicationService;
         IMaterialApplicationService _materialApplicationService;
         IClienteApplicationService _clienteApplicationService;
@@ -96,19 +103,23 @@ namespace Publinter.Controllers
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
-            var PrimerCampania = model.ListaCampanias.FirstOrDefault();
-            var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
-            model.ListaMateriales = CampaniaConDependencias.Materiales;
+            if(model.ListaCampanias.Count > 0)
+            {
+                var PrimerCampania = model.ListaCampanias.FirstOrDefault();
+                var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
+                model.ListaMateriales = CampaniaConDependencias.Materiales;
+
+            }
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
-            
-            
+
+
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
-
+           
             return View(model);
-        } 
+        }
 
         [HttpPost]
         public JsonResult Create(Orden_Create_Model model)
@@ -120,6 +131,14 @@ namespace Publinter.Controllers
                 Orden nueva = model.ToOrden();
                 ordenApplicationService.CrearOrden(nueva);
 
+                if(model.GuardarEnviarDescargar == 1)
+                {
+                    createPdf(model);
+                }
+                else if(model.GuardarEnviarDescargar == 2)
+                {
+                    SendEmailWithPdf(model);
+                }
                 value = true;
 
                 return Json(new { value }, JsonRequestBehavior.AllowGet);
@@ -292,8 +311,12 @@ namespace Publinter.Controllers
 
             viewModel.Lineas.Add(nueva);
 
-            viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
-            viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+            //viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
+            ///viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+
+            var CampaniaConDependencias = campaniaAplicationService.Get(model.CampaniaId);
+            viewModel.ListaMateriales = CampaniaConDependencias.Materiales;
+            viewModel.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.MedioId);
 
             string html = RenderPartialViewToString("AddLinea", viewModel);
             int index = viewModel.Lineas.Count - 1;
@@ -356,7 +379,7 @@ namespace Publinter.Controllers
 
             viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
             viewModel.ListaProgramas = programaApplicationService.GetProgramas();
-            
+
             string html = RenderPartialViewToString("AddLinea", viewModel);
             int index = viewModel.Lineas.Count - 1;
             bool value = true;
@@ -389,6 +412,68 @@ namespace Publinter.Controllers
             return Json(new { value, html }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
+        public FileResult createPdf(Orden_Create_Model model)
+        {
+            MemoryStream workStream = this.CreateDocumentPdf(model);
+            return File(workStream, "application/pdf");
+        }
+        private MemoryStream CreateDocumentPdf(Orden_Create_Model model)
+        {
+            model.Campania = campaniaAplicationService.Get(model.CampaniaId);
+            model.Medio = medioApplicationService.Get(model.MedioId);
+            MemoryStream workStream = new MemoryStream();
+            Document document = new Document();
+            document.SetPageSize(iTextSharp.text.PageSize.A4.Rotate());
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            document.Open();
+            // setting image 
+            string imagePath = "C:/Trabajos/Publinter2/Publinter/Content/Images/Logo-Publinter-dark-2017-final.png";
+            iTextSharp.text.Image tif = iTextSharp.text.Image.GetInstance(imagePath);
+            tif.ScalePercent(24f);
+            tif.SetAbsolutePosition(document.PageSize.Width - 36f - 140f,
+            document.PageSize.Height - 75f);
+            document.Add(tif);
+            // fin imagenes
+            //Titulo Orden
+            iTextSharp.text.Font titleFont = FontFactory.GetFont("Garamond", 20);
+            iTextSharp.text.Font regularFont = FontFactory.GetFont("Arial", 14);
+
+            Paragraph OrdenNumero = new Paragraph("Órden Nro. " + model.NroOrden.ToString(), titleFont);
+            OrdenNumero.Alignment = Element.ALIGN_LEFT;
+            document.Add(OrdenNumero);
+            //fin titulo orden
+            //Linea separadora titulo
+            Paragraph pLineaSeparadora = new Paragraph(new Chunk(new LineSeparator(0.01F, 100.0F, BaseColor.LIGHT_GRAY, Element.ALIGN_LEFT, 1)));
+            //   pLineaSeparadora.ExtraParagraphSpace =30;
+            document.Add(pLineaSeparadora);
+            //
+
+            CreateTableMedioCampaniaEmision(document, model);
+
+            document.Add(pLineaSeparadora);
+            //Table
+            CreateTable(document, model);
+            //Agrego linea footer
+
+            document.Add(pLineaSeparadora);
+            //Linea separadora footer
+            Paragraph InversionTotal = new Paragraph("INVERSIÓN TOTAL: $" + model.TotalOrden.ToString());
+            InversionTotal.Alignment = Element.ALIGN_CENTER;
+            document.Add(InversionTotal);
+            document.Close();
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Flush();
+            workStream.Position = 0;
+            Response.Buffer = true;
+            Response.AddHeader("Content-Disposition", "attachment; filename= " + Server.HtmlEncode("Orden" + model.NroOrden.ToString() + ".pdf"));
+            Response.ContentType = "APPLICATION/pdf";
+            Response.BinaryWrite(byteInfo);
+            return workStream;
+        }
         private string GetMesNombre(int mes)
         {
             string retorno = "";
@@ -467,54 +552,244 @@ namespace Publinter.Controllers
             return retorno;
         }
 
-        //[HttpPost]
-        //public ActionResult CreatePdfDocument(string html)
-        //{
-        //    using (PdfDocument document = new PdfDocument())
-        //    {
-        //        //Add a page to the document
-        //        PdfPage page = document.Pages.Add();
+        private Document  CreateTable(Document document, Orden_Create_Model model)
+        {
+            try
+            {
+                //fuente
+                var FontWhite = FontFactory.GetFont("Helvetica", 10, new BaseColor(Color.White));
+                var FontGris = FontFactory.GetFont("Helvetica", 18, new BaseColor(Color.Gray));
+                //
+                float[] widths = new float[] { 80f, 80f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f };
+                for (var i = 0; i < model.Lineas.Count; i++)
+                {
+                    // Ante de crear tabla iserto un parrafo para darle margen
+                    Paragraph PmargenTop = new Paragraph("");
+                    PmargenTop.PaddingTop = 30;
+                    document.Add(PmargenTop);
+                    PdfPTable table = new PdfPTable(33);
+                    table.WidthPercentage = 100; //table width to 100per
 
-        //        //Create PDF graphics for the page
-        //        PdfGraphics graphics = page.Graphics;
+                    table.SetWidths(widths);
+                    // thead 2 primeras
+                    PdfPCell ColSpan2 = new PdfPCell(new Phrase());
+                    ColSpan2.Colspan = 2;
+                    ColSpan2.BorderColor = BaseColor.WHITE;
+                    table.AddCell(ColSpan2);
+                    // thead titulo mes
+                    Phrase ph1 = new Phrase();
+                    ph1.Add(new Chunk(Environment.NewLine));
+                    PdfPCell colSpan33 = new PdfPCell(new Phrase(model.Lineas[i].LineasInternasOrden[0].Mes.MesNombre, FontGris));
+                    colSpan33.Colspan = 33;
+                    colSpan33.Border = 0;
+                    colSpan33.BorderWidth = 0;
+                    colSpan33.BorderColor = new BaseColor(Color.LightGray);
+                    colSpan33.BackgroundColor = new BaseColor(Color.LightGray);
+                    colSpan33.HorizontalAlignment = Element.ALIGN_CENTER;
+                    colSpan33.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    colSpan33.PaddingBottom = 10;
+                    table.DefaultCell.BorderWidth = 0;
+                    table.AddCell(colSpan33);
+                    PdfPCell RowSpan2 = new PdfPCell(new Phrase("Ubicación", FontWhite));
+                    RowSpan2.Rowspan = 2;
+                    RowSpan2.PaddingTop = 8;
+                    RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                    RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                    RowSpan2.BackgroundColor = new BaseColor(Color.Black);
+                    table.AddCell(RowSpan2);
+                    RowSpan2.Phrase = new Phrase("Materiales", FontWhite);
+                    RowSpan2.PaddingTop = 10;
+                    table.AddCell(RowSpan2);
+                    //
+                    PdfPCell simpleCel = new PdfPCell();
+                    simpleCel.UseVariableBorders = true;
+                    simpleCel.BorderColor = BaseColor.BLACK;
+                    simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
+                    simpleCel.PaddingBottom = 5;
+                    foreach (var dia in model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
+                    {
+                        simpleCel.Phrase = new Phrase(dia.DiaNombre[0].ToString());//primer letra del dia.
+                        simpleCel.Phrase.Font.Size = 10;
+                        table.AddCell(simpleCel);
+                    }
+                    //Completo el mes segun los dias
+                    if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
+                        simpleCel = new PdfPCell(new Phrase(""));
+                    {
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
+                        {
 
-        //        //Set the standard font
-        //        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                            table.AddCell(simpleCel);
+                        }
+                        else if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                    }
+                    //Completa con los numeros de dias
+                    foreach (var dia in model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
+                    {
+                        simpleCel.Phrase = new Phrase(dia.DiaNumero.ToString());
+                        table.AddCell(simpleCel);
+                    }
+                    //Completo el mes segun los dias
+                    if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
+                    {
+                        simpleCel = new PdfPCell(new Phrase(""));
 
-        //        //Draw the text
-        //        graphics.DrawString(html, font, PdfBrushes.Black, new PointF(0, 0));
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
+                        {
+                            table.AddCell(simpleCel);
+                        }
+                        else if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                    }
+                    foreach (var lineaInterna in model.Lineas[i].LineasInternasOrden)
+                    {
+                        //linea de inversione
+                        RowSpan2 = new PdfPCell(new Phrase(model.Medio.Programas.FirstOrDefault(x => x.ProgramaId.Equals(lineaInterna.ProgramaId)).Nombre));
+                        RowSpan2.Rowspan = 2;
+                        RowSpan2.PaddingTop = 3;
+                        RowSpan2.Phrase.Font.Size = 10;
+                        RowSpan2.PaddingBottom = 3;
+                        RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                        RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                        RowSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);
+                        table.AddCell(RowSpan2);
 
-        //        // Open the document in browser after saving it
-        //        document.Save("Output.pdf", HttpContext.ApplicationInstance.Response, HttpReadType.Save);
-        //    }
-        //    return View();
-        //}
+                        RowSpan2.Phrase = new Phrase(model.Campania.Materiales.FirstOrDefault(x => x.MaterialId.Equals(lineaInterna.MaterialId)).Titulo);
+                        RowSpan2.Phrase.Font.Size = 10;
+                        table.AddCell(RowSpan2);
+                        //
+                        simpleCel = new PdfPCell();
+                        simpleCel.UseVariableBorders = true;
+                        simpleCel.BorderColor = BaseColor.BLACK;
 
-        //public ActionResult pdfCrete()
-        //{
+                        simpleCel.PaddingTop = 6;
+                        for (var d = 0; d < lineaInterna.Mes.Dias.Count; d++)
+                        {
+                            simpleCel.Phrase = new Phrase(lineaInterna.Mes.Dias[d].NroEmisiones.ToString());
+                            simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
+                            simpleCel.VerticalAlignment = Element.ALIGN_CENTER;
+                            table.AddCell(simpleCel);
+                        }
+                        if (lineaInterna.Mes.Dias.Count < 31)
+                        {
+                            simpleCel = new PdfPCell(new Phrase(""));
+                            if (lineaInterna.Mes.Dias.Count == 30)
+                            {
+                                table.AddCell(simpleCel);
+                            }
+                            else if (lineaInterna.Mes.Dias.Count == 29)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                            if (lineaInterna.Mes.Dias.Count == 28)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                        }
+                    }
 
-        //    Doc theDoc = new Doc();
-        //    theDoc.Rect.Inset(72, 144);
-        //    theDoc.HtmlOptions.Engine = EngineType.Chrome;
-        //    theDoc.HtmlOptions.UseScript = true; // enable JavaScript
-        //    theDoc.HtmlOptions.Media = MediaType.Print; // Or Screen for a more screen oriented output
-        //    theDoc.HtmlOptions.InitialWidth = 800; // In case we have a responsive site which is non-specific on good widths
-        //                                           //theDoc.HtmlOptions.RepaintDelay = 500; // Only required if you have AJAX or animated content such as graphs
-        //                                           //theDoc.HtmlOptions.IgnoreCertificateErrors = false; // Disabled for ease of debugging
-        //                                           //theDoc.HtmlOptions.FireShield.Policy = XHtmlFireShield.Enforcement.Deny; // Disabled for ease of debugging
+                    //table.SpacingAfter = 5;
+                    table.SpacingBefore = 8;
+                    document.Add(table);
+                }
+            }
+            catch (Exception e)
+            {
+                return document;
+            }
+            
+            
 
+            return document;
+        }
+        private Document CreateTableMedioCampaniaEmision(Document document, Orden_Create_Model model)
+        {
+          
+            Phrase CampaniaPh = new Phrase("Campaña: " + model.Campania.Nombre);
+            Phrase MedioPh = new Phrase("Medio: " + model.Medio.Nombre );
+            Phrase EmisionPh = new Phrase("Emisión: " + model.Emision.ToString("dd/MM/yyyy"));
+            PdfPTable TableMedioCampaniaEmision = new PdfPTable(3);
+            TableMedioCampaniaEmision.WidthPercentage = 100;
+            PdfPCell unacell = new PdfPCell(CampaniaPh);
+            unacell.BorderWidth = 0;
+            unacell.HorizontalAlignment = Element.ALIGN_LEFT;
+            TableMedioCampaniaEmision.AddCell(unacell);
+            unacell = new PdfPCell(MedioPh);
+            unacell.BorderWidth = 0;
+            unacell.HorizontalAlignment = Element.ALIGN_CENTER;
+            TableMedioCampaniaEmision.AddCell(unacell);
+            unacell = new PdfPCell(EmisionPh);
+            unacell.BorderWidth = 0;
+            unacell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            TableMedioCampaniaEmision.AddCell(unacell);
+            TableMedioCampaniaEmision.SpacingBefore = 10;
 
-        //    theDoc.Page = theDoc.AddPage();
-        //    int theID;
-        //    theID = theDoc.AddImageUrl("http://www.yahoo.com/");
-        //    for (int i = 1; i <= theDoc.PageCount; i++)
-        //    {
-        //        theDoc.PageNumber = i;
-        //        theDoc.Flatten();
-        //    }
-        //    theDoc.Save(Server.MapPath("pagedhtml.pdf"));
-        //    theDoc.Clear();
-        //    return View();
-        //}
+            document.Add(TableMedioCampaniaEmision);
+            return document;
+        }
+        [HttpGet]
+        public ActionResult DescargarPdf(int ordenId)
+        {
+            Orden orden = ordenApplicationService.Get(ordenId);
+            Orden_Create_Model model = new Orden_Create_Model();
+            model.CampaniaId = orden.CampaniaId;
+            model.Emision = orden.Emision;
+            model.Lineas = orden.LineasOrden;
+            model.MedioId = orden.MedioId;
+            return createPdf(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SendEmailWithPdf(Orden_Create_Model model)
+        {
+            
+                var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                var message = new MailMessage();
+                message.To.Add(new MailAddress("analiacortimorales@gmail.com"));  // replace with valid value 
+                message.From = new MailAddress("hernanfaggiani@gmail.com");  // replace with valid value
+                message.Subject = "Prueba";
+                message.Body = string.Format(body, "Hernan","hernanfaggiani@gmail.com", "mensaje de prueba");
+                message.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient())
+                {
+                    var credential = new NetworkCredential
+                    {
+                        UserName = "hernanfaggiani@gmail.com",  // replace with valid value
+                        Password = "2442003manumanu"  // replace with valid value
+                    };
+                    smtp.Credentials = credential;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    await smtp.SendMailAsync(message);
+                    return RedirectToAction("Create");
+                }
+            
+        }
+
     }
 }

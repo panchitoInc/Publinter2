@@ -14,11 +14,82 @@
 
 <script>
     $(document).ready(function () {
-
         var url = "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))/Orden/AjaxGetDataOrdenIndex";
-        OrdenTableIndexServerSide(url);
-
+        InitDatatableOrdenIndex(url);
     })
+
+    function InitDatatableOrdenIndex(url) {
+        
+        var complete = $('#OrdenIndexTabla').DataTable(
+                   {
+                       "serverSide": true,
+                       "destroy": true,
+                       "processing": true,
+                       "ajax":
+                       {
+                           url: url,
+                           method: "POST"
+                       },
+                       "columns": [
+                           {
+                               "data": "Emision",
+                               "render": function (data, type, row) {
+                                   return data.toLocaleString();
+                            }
+
+                           },
+                           
+                           { "data": "Descripcion" },
+                          { "data": "Campania" },
+                          { "data": "Total" },
+                          {
+                              "data": "Acciones",
+                              className: "text-align-right",
+                              "render": function (data, type, row) {
+                                  return '<div class="dropdown"><a class="dropdown-toggle text-align-right" data-toggle="dropdown" href="#" aria-expanded="false">' +
+                                              'Acciones <span class="caret"></span>' +
+                                            '</a>' +
+                                            '<ul class="dropdown-menu">' +
+                                              '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="../Orden/DescargarPdf?ordenId=' + row.OrdenId + '">Descargar Pdf</a></li>' +
+                                            '</ul>'+
+                                            '</div>';
+                              }
+                          },
+                          { "data": "OrdenId", className: "hidden" }
+                            ],
+                       "language": {
+                           "sProcessing": "Procesando...",
+                           "sLengthMenu": "Mostrar _MENU_ registros",
+                           "sZeroRecords": "No se encontraron resultados",
+                           "sEmptyTable": "Ningún dato disponible en esta tabla",
+                           "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                           "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                           "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                           "sInfoPostFix": "",
+                           "sSearch": "Buscar:",
+                           "sUrl": "",
+                           "sInfoThousands": ",",
+                           "sLoadingRecords": "Cargando...",
+                           "oPaginate": {
+                               "sFirst": " Primero",
+                               "sLast": "Último ",
+                               "sNext": "Siguiente",
+                               "sPrevious": "Anterior"
+                           },
+
+                           "oAria": {
+                               "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                           }
+                       }
+                   }
+
+               );
+    }
+
+    function InitDatatableOrdenIndexsuccess(data,index){
+
+}
 </script>
 
 <link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -54,3 +125,4 @@
 </div>
 
 <script src="~/Content/Admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>
