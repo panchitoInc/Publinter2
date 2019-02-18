@@ -6,8 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace AccesoDatos.Repository
 {
@@ -43,7 +42,7 @@ namespace AccesoDatos.Repository
                     return nueva.OrdenId;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return -1;
             }
@@ -66,6 +65,25 @@ namespace AccesoDatos.Repository
             }
 
             return ListaOrdenes;
+        }
+
+        public Orden Get(int ordenId)
+        {
+            Orden ordenBusacada;
+            using (var context = new PublinterContext())
+            {
+                ordenBusacada = context.Orden
+                    //.Include(x => x.Campania)
+                    //.Include(x => x.Campania.Anunciante)
+                    .Include(x => x.LineasOrden)
+                    .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden))
+                    .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.Mes)))
+                    .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.Mes).Select(dias => dias.Dias)))
+                    .Include(x =>x.Usuario)
+                    //.Include(x => x.Medio)
+                    .FirstOrDefault(x => x.OrdenId.Equals(ordenId));
+            }
+            return ordenBusacada;
         }
     }
 }

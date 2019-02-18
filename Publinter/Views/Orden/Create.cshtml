@@ -79,6 +79,12 @@
         text-align: center;
         border: none;
     }
+
+    .div_add_linea {
+        position: absolute;
+        left: 6px;
+        top: 48px;
+    }
 </style>
 
 <script>
@@ -92,11 +98,12 @@
 
             }
         });
-       // FiltrarProgramas();
+
+        //FiltrarProgramas();
         //FiltrarMateriales();
 
-        SetPrograma(0);
-        SetMaterial(0);
+        SetPrograma(0, 0);
+        SetMaterial(0, 0);
 
         $("#Emision").val(formattedDate($("#Emision").val()));
 
@@ -129,8 +136,12 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(0,0);
+                SetMaterial(0,0);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -147,8 +158,12 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(data.index, 0);
+                SetMaterial(data.index, 0);
                 CalcularTotalLinea(data.index);
             }
         });
@@ -165,30 +180,67 @@
             data: form.serialize(),
             success: function (data) {
                 $('#divLineas').append(data.html);
-                //SetPrograma(data.index);
-                //SetMaterial(data.index);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                for(e = 0; e < data.indexInterno; e++)
+                {
+                    SetPrograma(data.index, e);
+                    SetMaterial(data.index, e);
+                }     
+                
                 CalcularTotalLinea(data.index);
             }
         });
     }
 
-    function SetPrograma(index)
+    function AgregarLineaInterna(indexLinea)
     {
-        var progId = $("#Programa_" + index).val();
-        $("#Lineas_" + index + "__ProgramaId").val(progId);
+        $("#IndexLineaParaAgregar").val(indexLinea);
+
+        var form = $("#formOrden");
+        $(".btnLineas").attr("disabled","disabled")
+
+        $.ajax({
+            url: '@Url.Action("AgregarLineaInterna", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                $('#table_Linea_' + indexLinea + " tbody").append(data.html);
+
+                //FiltrarProgramas();
+                //FiltrarMateriales();
+
+                SetPrograma(indexLinea, data.indexLineaInterna);
+                SetMaterial(indexLinea, data.indexLineaInterna);
+                //CalcularTotalLineaInterna(data.index); //hacer
+            }
+        });
     }
 
-    function SetMaterial(index)
+    function SetPrograma(index, index_interno)
     {
-        var matId = $("#Material_" + index).val();
-        $("#Lineas_" + index + "__MaterialId").val(matId);
+        var progId = $("#Programa_" + index + "_" + index_interno).val();
+        $("#Lineas_" + index + "__LineasInternasOrden_" + index_interno + "__ProgramaId").val(progId);
+
+        CalcularTotalLinea(index);
+    }
+
+    function SetMaterial(index, index_interno)
+    {
+        var matId = $("#Material_" + index + "_" + index_interno).val();
+        $("#Lineas_" + index + "__LineasInternasOrden_" + index_interno + "__MaterialId").val(matId);
+
+        CalcularTotalLinea(index);
     }
 
     function CalcularTotalLinea(index)
     {
         var totalLinea = 0;
 
-        for(var e = 0; e < $(".LineaInterna").length; e++)
+        for(var e = 0; e < $(".LineaInterna_" + index).length; e++)
         {
             var precio = parseFloat($("#Programa_" + index + "_" + e + " option:selected").data("precio"));
             var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion"));
@@ -197,20 +249,21 @@
 
             for(var i = 0; i < nroDias; i++)
             {
-                var emisionesDia = parseInt($("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
+                var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
 
                 var totalDia = emisionesDia * precio * duracion;
-                $("#Lineas_" + index + "__LineaInterna_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+                $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
 
                 emisiones += emisionesDia;
             }
 
-            var totalLineaInterna = precio * emisiones;
+            var totalLineaInterna = precio * emisiones * duracion;
 
-            $("#Lineas_" + index + "__LineaInterna_" + e + "__TotalLinea").val(totalLineaInterna);
-            $("#totalMes_" + index + "_" + e).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLineaInterna, 2)));
+            $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
 
             totalLinea += totalLineaInterna;
+
+            $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
         }
 
         $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
@@ -249,13 +302,13 @@
 
     function FiltrarMateriales()
     {
-        var clienteId = $("#ClienteId").val();
+        var campaniaId = $("#CampaniaId").val();
 
         $.ajax({
-            url: '@Url.Action("GetMateriales", "Cliente")',
+            url: '@Url.Action("GetMateriales", "Campania")',
             type: 'POST',
             dataType: 'json',
-            data: { "clienteId" : clienteId },
+            data: { "campaniaId": campaniaId },
             success: function (data) {
                 $(".Material").html(data.html);
             }
@@ -313,11 +366,12 @@
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
-                if(data.value)
+                if(data)
                 {
                     LimpiarDatos();
-                    $("#txtMensajeExito").text(data.descripcion);
+                    //$("#txtMensajeExito").text(data.descripcion);
                     $("#txtMensajeExito").attr("href", "IndexDetalle");
+                    $("#btnExportPdf").removeAttr("disabled");
                     openMensajeExito();
                 }
                 else
@@ -332,76 +386,15 @@
 
 
     //funcion para exportar el form a pdf.
-    function ExportPdf() {
-        //var doc = new jsPDF('p', 'pt');
-        //var elem = document.getElementById("basic-table");
-        //var res = doc.autoTableHtmlToJson(elem);
-        //doc.autoTable(res.columns, res.data);
-        //doc.save("table.pdf");
-
-        /**/
-        //var doc = new jsPDF();
-        //var specialElementHandlers = {
-        //    '#editor': function (element, renderer) {
-        //        return true;
-        //    }
-        //};
-        //doc.fromHTML($('#Lineas').html(), 15, 15, {
-        //    'width': 170,
-        //    'elementHandlers': specialElementHandlers
-        //});
-        //doc.save('sample-file.pdf');
-
-
-        // This code is collected but useful, click below to jsfiddle link.
-        @*var formHtml = $("#formOrden").html();
-        var object = { "html": "" };
-
-
-       *@
-        $.ajax({
-            type: "POST",
-            traditional: true,
-           // data: object,
-            url: '@Url.Action("ExportPdf", "Orden")',
-            success: function (e) {
-                ExportPdfSuccess(e, index);
-            }
-        });
+    function ExportPdf(val) {
+        $("#GuardarEnviarDescargar").val(val);
+        $("#formOrden").submit();
     }
 
-    function ExportPdfSuccess(data, index) { }
-   
-    function demoFromHTML() {
-        const filename  = 'ThisIsYourPDFFilename.pdf';
-
-        //doc.fromHTML($('#wrap_orden').html(), 15, 15, {
-        //    'width': 170,
-        //    'elementHandlers': specialElementHandlers
-        //});
-        //doc.save('sample-file.pdf');
-        html2canvas(document.querySelector('#wrap_orden')).then(canvas => {
-            
-            let pdf = new jsPDF('l', 'mm', 'a4');
-            var a = canvas.toDataURL('image/png');
-            pdf.addImage(a, 'PNG', 0, 0, 211, 100);
-            pdf.save(filename);
-            
-        });
-
-   
-    }
-    $(function () {
-        $("#btnSubmit").click(function () {
-            $("input[name='GridHtml']").val($("#Lineas").html());
-          //  $("input[name='GridHtml']").val("");
-            //<table><thead><tr><th>1</th><th>2</th><th>3</th></tr></thead><tbody><tr><td>b</td><td>b</td><td>b</td></tr></tbody></table>
-        });
-    });
 </script>
 
 <div class=" register-box-body col-sm-12">
-    
+
     @using (Html.BeginForm("Create", "Orden", FormMethod.Post, new { @id = "formOrden" }))
     {
         <div id="wrap_orden">
@@ -415,16 +408,9 @@
                 @Html.Partial("~/Views/Orden/CreateFooter.cshtml", Model)
             </div>
         </div>
-        <div>
-            @*<input id="btnExportPdf" type="button" value="Exportar documento"  style="width:150px;height:27px" />*@
-            @Html.ActionLink("Same as above but prompts to download as a file", "IndexWithAccessToDocumentAndWriterDownloadFile", "Pdf")<br />
-        </div>
+        @Html.HiddenFor(x => x.GuardarEnviarDescargar)
     }
-    @using (Html.BeginForm("createPdf", "Orden", FormMethod.Post))
-    {
-        <input type="hidden" name="GridHtml" />
-        <input type="submit" id="btnSubmit" value="Export" />
-    }
+
 </div>
 
 <div id="mensajeExito">
@@ -450,8 +436,6 @@
         </div>
     </div>
 </div>
-<div id="bypassme"></div>
-
 
 <script src="~/Scripts/Utils.js"></script>
 <script src="~/Content/JS/jsPdf/jspdf.min.js"></script>
@@ -459,47 +443,3 @@
 <script src="~/Scripts/html2canvas.js"></script>
 
 
-<script>
-    
-    function HTMLtoPDF() {
-        debugger;
-        var pdf = new jsPDF('p', 'pt', 'letter');
-        // source can be HTML-formatted string, or a reference
-        // to an actual DOM element from which the text will be scraped.
-        source = document.getElementById("ordenl");
-
-        // we support special element handlers. Register them with jQuery-style 
-        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-        // There is no support for any other type of selectors 
-        // (class, of compound) at this time.
-        specialElementHandlers = {
-            // element with id of "bypass" - jQuery style selector
-            '#bypassme': function (element, renderer) {
-                // true = "handled elsewhere, bypass text extraction"
-                return true
-            }
-        };
-        margins = {
-            top: 80,
-            bottom: 60,
-            left: 40,
-            width: 522
-        };
-        // all coords and widths are in jsPDF instance's declared units
-        // 'inches' in this case
-        pdf.fromHTML(
-        source, // HTML string or DOM elem ref.
-        margins.left, // x coord
-        margins.top, { // y coord
-            'width': margins.width, // max width of content on PDF
-            'elementHandlers': specialElementHandlers
-        },
-
-        function (dispose) {
-            // dispose: object with X, Y of the last line add to the PDF 
-            //          this allow the insertion of new lines after html
-            pdf.save('Test.pdf');
-        }, margins);
-    }
-    
-</script>

@@ -12,7 +12,7 @@ namespace DataModule.EntitiesResult
 
         public string Descripcion { get; set; }
 
-        public string Cliente { get; set; }
+        public string Campania { get; set; }
 
         public decimal Total { get; set; }
 

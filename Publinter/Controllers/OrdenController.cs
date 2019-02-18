@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using BusinessLogic.ApplicationServices;
 using DataModule.Entities;
@@ -100,9 +103,13 @@ namespace Publinter.Controllers
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
-            var PrimerCampania = model.ListaCampanias.FirstOrDefault();
-            var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
-            model.ListaMateriales = CampaniaConDependencias.Materiales;
+            if(model.ListaCampanias.Count > 0)
+            {
+                var PrimerCampania = model.ListaCampanias.FirstOrDefault();
+                var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
+                model.ListaMateriales = CampaniaConDependencias.Materiales;
+
+            }
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
@@ -110,7 +117,7 @@ namespace Publinter.Controllers
 
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
-
+           
             return View(model);
         }
 
@@ -124,6 +131,14 @@ namespace Publinter.Controllers
                 Orden nueva = model.ToOrden();
                 ordenApplicationService.CrearOrden(nueva);
 
+                if(model.GuardarEnviarDescargar == 1)
+                {
+                    createPdf(model);
+                }
+                else if(model.GuardarEnviarDescargar == 2)
+                {
+                    SendEmailWithPdf(model);
+                }
                 value = true;
 
                 return Json(new { value }, JsonRequestBehavior.AllowGet);
@@ -259,8 +274,14 @@ namespace Publinter.Controllers
 
             Mes mesActual = new Mes();
 
-            mesActual.MesAnio = DateTime.Now.Year;
-            mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
+            mesActual.MesAnio = model.Lineas[cantLineas - 1].LineasInternasOrden[0].Mes.MesAnio;
+            mesActual.MesNumero = model.Lineas[cantLineas - 1].LineasInternasOrden[0].Mes.MesNumero + 1;
+            if (mesActual.MesNumero > 12)
+            {
+                mesActual.MesNumero = 1;
+                mesActual.MesAnio++;
+            }
+
             mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
 
             mesActual.Dias = new List<Dia>();
@@ -288,8 +309,12 @@ namespace Publinter.Controllers
 
             viewModel.Lineas.Add(nueva);
 
-            viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
-            viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+            //viewModel.ListaMateriales = materialApplicationService.GetAll().ToList();
+            ///viewModel.ListaProgramas = programaApplicationService.GetProgramas();
+
+            var CampaniaConDependencias = campaniaAplicationService.Get(model.CampaniaId);
+            viewModel.ListaMateriales = CampaniaConDependencias.Materiales;
+            viewModel.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.MedioId);
 
             string html = RenderPartialViewToString("AddLinea", viewModel);
             int index = viewModel.Lineas.Count - 1;
@@ -358,31 +383,43 @@ namespace Publinter.Controllers
 
             return Json(new { value, html, index }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public JsonResult AgregarLineaInterna(Orden_Create_Model model)
+        {
+            model.IndexLineaInternaParaAgregar = model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Count;
+
+            LineaInternaOrden nueva = new LineaInternaOrden();
+            nueva.Mes = model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden[model.IndexLineaInternaParaAgregar - 1].Mes;
+
+            nueva.Mes.MesId = 0;
+            foreach (Dia d in nueva.Mes.Dias)
+            {
+                d.NroEmisiones = 0;
+            }
+
+            model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Add(nueva);
+
+            model.ListaMateriales = materialApplicationService.GetAll().ToList();
+            model.ListaProgramas = programaApplicationService.GetProgramas();
+
+            string html = RenderPartialViewToString("AddLineaInterna", model);
+
+            bool value = true;
+
+            return Json(new { value, html }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         [ValidateInput(false)]
-        public FileResult createPdf(string GridHtml)
+        public FileResult createPdf(Orden_Create_Model model)
         {
-
-            Orden_Create_Model model = new Orden_Create_Model();
-            model.ListaCampanias = campaniaAplicationService.GetAll();
-            var PrimerCampania = model.ListaCampanias.FirstOrDefault();
-            var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
-            model.ListaMateriales = CampaniaConDependencias.Materiales;
-            model.ListaMedios = medioApplicationService.GetAll();
-            model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
-            model.ListaClientes = clienteApplicationService.GetClientes();
-            model.Lineas[0].LineasInternasOrden[0].Programa = new Programa();
-            model.Lineas[0].LineasInternasOrden[0].Programa.Nombre = "Cocinando con Knorr";
-            model.Lineas[0].LineasInternasOrden[0].Material = new Material();
-            model.Lineas[0].LineasInternasOrden[0].Material.Descripcion = "Material 40sqg";
-            model.Medio = new Medio();
-            model.Medio.Nombre = "Canal 10";
-            model.Emision = DateTime.Now;
-            model.Campania = new Campania();
-            model.Campania.Nombre = "Todos por uno";
-            model.NroOrden = ordenApplicationService.GetNroOrden();
+            MemoryStream workStream = this.CreateDocumentPdf(model);
+            return File(workStream, "application/pdf");
+        }
+        private MemoryStream CreateDocumentPdf(Orden_Create_Model model)
+        {
+            model.Campania = campaniaAplicationService.Get(model.CampaniaId);
+            model.Medio = medioApplicationService.Get(model.MedioId);
             MemoryStream workStream = new MemoryStream();
             Document document = new Document();
             document.SetPageSize(iTextSharp.text.PageSize.A4.Rotate());
@@ -406,8 +443,8 @@ namespace Publinter.Controllers
             document.Add(OrdenNumero);
             //fin titulo orden
             //Linea separadora titulo
-            Paragraph pLineaSeparadora = new Paragraph(new Chunk(new LineSeparator(0.0F, 100.0F, BaseColor.LIGHT_GRAY, Element.ALIGN_LEFT, 1)));
-         //   pLineaSeparadora.ExtraParagraphSpace =30;
+            Paragraph pLineaSeparadora = new Paragraph(new Chunk(new LineSeparator(0.01F, 100.0F, BaseColor.LIGHT_GRAY, Element.ALIGN_LEFT, 1)));
+            //   pLineaSeparadora.ExtraParagraphSpace =30;
             document.Add(pLineaSeparadora);
             //
 
@@ -415,26 +452,24 @@ namespace Publinter.Controllers
 
             document.Add(pLineaSeparadora);
             //Table
-            CreateTable(document,model);
+            CreateTable(document, model);
             //Agrego linea footer
-            
+
             document.Add(pLineaSeparadora);
             //Linea separadora footer
             Paragraph InversionTotal = new Paragraph("INVERSIÓN TOTAL: $" + model.TotalOrden.ToString());
             InversionTotal.Alignment = Element.ALIGN_CENTER;
             document.Add(InversionTotal);
-            ////Fecha
-            //document.Add(new Paragraph("Fecha: " + DateTime.Now.ToString()));
             document.Close();
-
             byte[] byteInfo = workStream.ToArray();
             workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Flush();
             workStream.Position = 0;
             Response.Buffer = true;
-            Response.AddHeader("Content-Disposition", "attachment; filename= " + Server.HtmlEncode("abc.pdf"));
+            Response.AddHeader("Content-Disposition", "attachment; filename= " + Server.HtmlEncode("Orden" + model.NroOrden.ToString() + ".pdf"));
             Response.ContentType = "APPLICATION/pdf";
             Response.BinaryWrite(byteInfo);
-            return new FileStreamResult(workStream, "application/pdf");
+            return workStream;
         }
         private string GetMesNombre(int mes)
         {
@@ -516,167 +551,172 @@ namespace Publinter.Controllers
 
         private Document  CreateTable(Document document, Orden_Create_Model model)
         {
-            //fuente
-            var FontWhite = FontFactory.GetFont("Helvetica", 10, new BaseColor(Color.White));
-            var FontGris = FontFactory.GetFont("Helvetica", 18, new BaseColor(Color.Gray));
-            //
-            for (var i = 0; i < model.Lineas.Count; i++)
+            try
             {
-                // Ante de crear tabla iserto un parrafo para darle margen
-                Paragraph PmargenTop = new Paragraph("");
-                PmargenTop.PaddingTop = 30;
-                document.Add(PmargenTop);
-                PdfPTable table = new PdfPTable(33);
-                table.WidthPercentage = 100; //table width to 100per
-               
+                //fuente
+                var FontWhite = FontFactory.GetFont("Helvetica", 10, new BaseColor(Color.White));
+                var FontGris = FontFactory.GetFont("Helvetica", 18, new BaseColor(Color.Gray));
+                //
                 float[] widths = new float[] { 80f, 80f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f, 22.6f };
-                table.SetWidths(widths);
-                // thead 2 primeras
-                PdfPCell ColSpan2 = new PdfPCell(new Phrase());
-                ColSpan2.Colspan = 2;
-                ColSpan2.BorderColor = BaseColor.WHITE;
-                table.AddCell(ColSpan2);
-                // thead titulo mes
-                Phrase ph1 = new Phrase();
-                ph1.Add(new Chunk(Environment.NewLine));
-                PdfPCell colSpan33= new PdfPCell(new Phrase(model.Lineas[i].LineasInternasOrden[0].Mes.MesNombre, FontGris));
-                colSpan33.Colspan = 33;
-                colSpan33.Border = 0;
-                colSpan33.BorderWidth = 0;
-                colSpan33.BorderColor = new BaseColor(Color.LightGray);
-                colSpan33.BackgroundColor = new BaseColor(Color.LightGray);
-                colSpan33.HorizontalAlignment = Element.ALIGN_CENTER;
-                colSpan33.VerticalAlignment = Element.ALIGN_MIDDLE;
-                colSpan33.PaddingBottom = 10;
-                table.DefaultCell.BorderWidth = 0;
-                table.AddCell(colSpan33);
-                PdfPCell RowSpan2 = new PdfPCell(new Phrase("Ubicación", FontWhite));
-                RowSpan2.Rowspan = 2;
-                RowSpan2.PaddingTop = 8;
-                RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
-                RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
-                RowSpan2.BackgroundColor = new BaseColor(Color.Black);
-                table.AddCell(RowSpan2);
-                RowSpan2.Phrase = new Phrase("Materiales", FontWhite);
-                RowSpan2.PaddingTop = 10;
-                table.AddCell(RowSpan2);
-                //
-                PdfPCell simpleCel = new PdfPCell();
-                simpleCel.UseVariableBorders = true;
-                simpleCel.BorderColor = BaseColor.BLACK;
-                simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
-                foreach (var dia in model.Lineas[i].LineasInternasOrden[i].Mes.Dias)
+                for (var i = 0; i < model.Lineas.Count; i++)
                 {
-                    simpleCel.Phrase = new Phrase(dia.DiaNombre[0].ToString());
+                    // Ante de crear tabla iserto un parrafo para darle margen
+                    Paragraph PmargenTop = new Paragraph("");
+                    PmargenTop.PaddingTop = 30;
+                    document.Add(PmargenTop);
+                    PdfPTable table = new PdfPTable(33);
+                    table.WidthPercentage = 100; //table width to 100per
+
+                    table.SetWidths(widths);
+                    // thead 2 primeras
+                    PdfPCell ColSpan2 = new PdfPCell(new Phrase());
+                    ColSpan2.Colspan = 2;
+                    ColSpan2.BorderColor = BaseColor.WHITE;
+                    table.AddCell(ColSpan2);
+                    // thead titulo mes
+                    Phrase ph1 = new Phrase();
+                    ph1.Add(new Chunk(Environment.NewLine));
+                    PdfPCell colSpan33 = new PdfPCell(new Phrase(model.Lineas[i].LineasInternasOrden[0].Mes.MesNombre, FontGris));
+                    colSpan33.Colspan = 33;
+                    colSpan33.Border = 0;
+                    colSpan33.BorderWidth = 0;
+                    colSpan33.BorderColor = new BaseColor(Color.LightGray);
+                    colSpan33.BackgroundColor = new BaseColor(Color.LightGray);
+                    colSpan33.HorizontalAlignment = Element.ALIGN_CENTER;
+                    colSpan33.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    colSpan33.PaddingBottom = 10;
+                    table.DefaultCell.BorderWidth = 0;
+                    table.AddCell(colSpan33);
+                    PdfPCell RowSpan2 = new PdfPCell(new Phrase("Ubicación", FontWhite));
+                    RowSpan2.Rowspan = 2;
+                    RowSpan2.PaddingTop = 8;
+                    RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                    RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                    RowSpan2.BackgroundColor = new BaseColor(Color.Black);
+                    table.AddCell(RowSpan2);
+                    RowSpan2.Phrase = new Phrase("Materiales", FontWhite);
+                    RowSpan2.PaddingTop = 10;
+                    table.AddCell(RowSpan2);
+                    //
+                    PdfPCell simpleCel = new PdfPCell();
+                    simpleCel.UseVariableBorders = true;
+                    simpleCel.BorderColor = BaseColor.BLACK;
                     simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
-                    simpleCel.Phrase.Font.Size = 10;
-                    table.AddCell(simpleCel);
-                }
-                //Completo el mes segun los dias
-                if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
-                    simpleCel = new PdfPCell(new Phrase(""));
-                {
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
+                    simpleCel.PaddingBottom = 5;
+                    foreach (var dia in model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
                     {
+                        simpleCel.Phrase = new Phrase(dia.DiaNombre[0].ToString());//primer letra del dia.
+                        simpleCel.Phrase.Font.Size = 10;
+                        table.AddCell(simpleCel);
+                    }
+                    //Completo el mes segun los dias
+                    if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
+                        simpleCel = new PdfPCell(new Phrase(""));
+                    {
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
+                        {
 
+                            table.AddCell(simpleCel);
+                        }
+                        else if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                    }
+                    //Completa con los numeros de dias
+                    foreach (var dia in model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
+                    {
+                        simpleCel.Phrase = new Phrase(dia.DiaNumero.ToString());
                         table.AddCell(simpleCel);
                     }
-                    else if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
+                    //Completo el mes segun los dias
+                    if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
                     {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
-                    {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
-                }
-                //Completa con los numeros de dias
-               
-                foreach (var dia in model.Lineas[i].LineasInternasOrden[i].Mes.Dias)
-                {
-                    simpleCel.Phrase = new Phrase(dia.DiaNumero.ToString());
-                    simpleCel.Phrase.Font.Size = 10;
-                    simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
-                    table.AddCell(simpleCel);
-                }
-                //Completo el mes segun los dias
-                if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
-                    simpleCel = new PdfPCell(new Phrase(""));
-                {
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
-                    {
+                        simpleCel = new PdfPCell(new Phrase(""));
 
-                        table.AddCell(simpleCel);
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 30)
+                        {
+                            table.AddCell(simpleCel);
+                        }
+                        else if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 29)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
+                        if (model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count == 28)
+                        {
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                            table.AddCell(simpleCel);
+                        }
                     }
-                    else if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
+                    foreach (var lineaInterna in model.Lineas[i].LineasInternasOrden)
                     {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
-                    {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
-                }
+                        //linea de inversione
+                        RowSpan2 = new PdfPCell(new Phrase(model.Medio.Programas.FirstOrDefault(x => x.ProgramaId.Equals(lineaInterna.ProgramaId)).Nombre));
+                        RowSpan2.Rowspan = 2;
+                        RowSpan2.PaddingTop = 3;
+                        RowSpan2.Phrase.Font.Size = 10;
+                        RowSpan2.PaddingBottom = 3;
+                        RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                        RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                        RowSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);
+                        table.AddCell(RowSpan2);
 
-                //linea de inversione
-                RowSpan2 = new PdfPCell(new Phrase(model.Lineas[i].LineasInternasOrden[i].Programa.Nombre));
-                RowSpan2.Rowspan = 2;
-                RowSpan2.PaddingTop = 3;
-                RowSpan2.Phrase.Font.Size = 10;
-                RowSpan2.PaddingBottom = 3;
-               
-                RowSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
-                RowSpan2.VerticalAlignment = Element.ALIGN_CENTER;
-                RowSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);            
-                table.AddCell(RowSpan2);
-                RowSpan2.Phrase = new Phrase(model.Lineas[i].LineasInternasOrden[i].Material.Descripcion);
-                RowSpan2.Phrase.Font.Size = 10;
-                table.AddCell(RowSpan2);
-                //
-                simpleCel = new PdfPCell();
-                simpleCel.UseVariableBorders = true;
-                simpleCel.BorderColor = BaseColor.BLACK;
-                
-                simpleCel.PaddingTop = 6;
-                for (var d = 0; d < model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count; d++)
-                {
-                    simpleCel.Phrase = new Phrase(model.Lineas[i].LineasInternasOrden[i].Mes.Dias[d].NroEmisiones.ToString());
-                    simpleCel.Phrase.Font.Size = 10;
+                        RowSpan2.Phrase = new Phrase(model.Campania.Materiales.FirstOrDefault(x => x.MaterialId.Equals(lineaInterna.MaterialId)).Titulo);
+                        RowSpan2.Phrase.Font.Size = 10;
+                        table.AddCell(RowSpan2);
+                        //
+                        simpleCel = new PdfPCell();
+                        simpleCel.UseVariableBorders = true;
+                        simpleCel.BorderColor = BaseColor.BLACK;
 
-                    simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
-                    table.AddCell(simpleCel);
-                    
-                }
-                if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count < 31)
-                    simpleCel = new PdfPCell(new Phrase(""));
-                {
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 30)
-                    {
+                        simpleCel.PaddingTop = 6;
+                        for (var d = 0; d < lineaInterna.Mes.Dias.Count; d++)
+                        {
+                            simpleCel.Phrase = new Phrase(lineaInterna.Mes.Dias[d].NroEmisiones.ToString());
+                            simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
+                            simpleCel.VerticalAlignment = Element.ALIGN_CENTER;
+                            table.AddCell(simpleCel);
+                        }
+                        if (lineaInterna.Mes.Dias.Count < 31)
+                        {
+                            simpleCel = new PdfPCell(new Phrase(""));
+                            if (lineaInterna.Mes.Dias.Count == 30)
+                            {
+                                table.AddCell(simpleCel);
+                            }
+                            else if (lineaInterna.Mes.Dias.Count == 29)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                            if (lineaInterna.Mes.Dias.Count == 28)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                        }
+                    }
 
-                        table.AddCell(simpleCel);
-                    }
-                    else if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 29)
-                    {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
-                    if (model.Lineas[i].LineasInternasOrden[i].Mes.Dias.Count == 28)
-                    {
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                        table.AddCell(simpleCel);
-                    }
+                    //table.SpacingAfter = 5;
+                    table.SpacingBefore = 8;
+                    document.Add(table);
                 }
-                //table.SpacingAfter = 5;
-                table.SpacingBefore = 8;
-                document.Add(table);
             }
+            catch (Exception e)
+            {
+                return document;
+            }
+            
             
 
             return document;
@@ -685,7 +725,7 @@ namespace Publinter.Controllers
         {
           
             Phrase CampaniaPh = new Phrase("Campaña: " + model.Campania.Nombre);
-            Phrase MedioPh = new Phrase("Medio: " + model.Medio.Nombre);
+            Phrase MedioPh = new Phrase("Medio: " + model.Medio.Nombre );
             Phrase EmisionPh = new Phrase("Emisión: " + model.Emision.ToString("dd/MM/yyyy"));
             PdfPTable TableMedioCampaniaEmision = new PdfPTable(3);
             TableMedioCampaniaEmision.WidthPercentage = 100;
@@ -706,7 +746,47 @@ namespace Publinter.Controllers
             document.Add(TableMedioCampaniaEmision);
             return document;
         }
+        [HttpGet]
+        public ActionResult DescargarPdf(int ordenId)
+        {
+            Orden orden = ordenApplicationService.Get(ordenId);
+            Orden_Create_Model model = new Orden_Create_Model();
+            model.CampaniaId = orden.CampaniaId;
+            model.Emision = orden.Emision;
+            model.Lineas = orden.LineasOrden;
+            model.MedioId = orden.MedioId;
+            return createPdf(model);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SendEmailWithPdf(Orden_Create_Model model)
+        {
+            
+                var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                var message = new MailMessage();
+                message.To.Add(new MailAddress("analiacortimorales@gmail.com"));  // replace with valid value 
+                message.From = new MailAddress("hernanfaggiani@gmail.com");  // replace with valid value
+                message.Subject = "Prueba";
+                message.Body = string.Format(body, "Hernan","hernanfaggiani@gmail.com", "mensaje de prueba");
+                message.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient())
+                {
+                    var credential = new NetworkCredential
+                    {
+                        UserName = "hernanfaggiani@gmail.com",  // replace with valid value
+                        Password = "2442003manumanu"  // replace with valid value
+                    };
+                    smtp.Credentials = credential;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    await smtp.SendMailAsync(message);
+                    return RedirectToAction("Create");
+                }
+            
+        }
 
     }
 }

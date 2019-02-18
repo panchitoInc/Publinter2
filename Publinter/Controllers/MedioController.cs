@@ -120,6 +120,7 @@ namespace Publinter.Controllers
             
             return View(model);
         }
+
         [HttpPost]
         public JsonResult GetProgramas(int medioId)
         {

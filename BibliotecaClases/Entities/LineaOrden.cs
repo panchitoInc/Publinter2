@@ -14,5 +14,10 @@ namespace DataModule.Entities
         public virtual List<LineaInternaOrden> LineasInternasOrden { get; set; }
 
         public decimal TotalLinea { get; set; }
+
+        public LineaOrden()
+        {
+            this.LineasInternasOrden = new List<LineaInternaOrden>();
+        }
     }
 }

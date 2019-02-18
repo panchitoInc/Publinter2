@@ -81,6 +81,12 @@ namespace Publinter.Models
 
         public decimal TotalOrden { get; set; }
 
+        /// <summary>
+        /// Para agregar una linea interna se pone aqui a que nro de linea se le agrega
+        /// </summary>
+        public int IndexLineaParaAgregar { get; set; }
+        public int IndexLineaInternaParaAgregar { get; set; }
+
         public List<Medio> ListaMedios { get; set; }
 
         public List<Get_Anunciante_Data> ListaAnunciantes { get; set; }
@@ -92,21 +98,25 @@ namespace Publinter.Models
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 
         public List<Material> ListaMateriales { get; set; }
+        /// <summary>
+        /// 0 guardar
+        /// 1 Descargar y guardar
+        /// 2 Enviar y guardar
+        /// </summary>
+        public int GuardarEnviarDescargar { get; set; }
 
         public Orden ToOrden()
         {
-            Orden orden = new Orden();
-
-            orden.Emision = this.Emision;
-            orden.NroOrden = this.NroOrden;
-
-            orden.CampaniaId = this.CampaniaId;
-
-            orden.LineasOrden = this.Lineas;
-
-            orden.Total = this.TotalOrden;
-
-            orden.UsuarioId = this.UsuarioId;
+            Orden orden = new Orden
+            {
+                Emision = this.Emision,
+                NroOrden = this.NroOrden,
+                CampaniaId = this.CampaniaId,
+                LineasOrden = this.Lineas,
+                Total = this.TotalOrden,
+                UsuarioId = this.UsuarioId,
+                MedioId = this.MedioId
+            };
 
             return orden;
         }

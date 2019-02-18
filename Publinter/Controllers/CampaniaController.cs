@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.ApplicationServices;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using Publinter.Models;
 using System;
@@ -17,7 +18,7 @@ namespace Publinter.Controllers
         IAnuncianteApplicationService _anuncianteApplicationService;
         IMaterialApplicationService _materialApplicationService;
 
-        private ICampaniaApplicationService campaniaAplicationService
+        private ICampaniaApplicationService campaniaApplicationService
         {
             get
             {
@@ -65,7 +66,7 @@ namespace Publinter.Controllers
         // GET: Campania
         public ActionResult Index()
         {
-            var lista = campaniaAplicationService.GetAll();
+            var lista = campaniaApplicationService.GetAll();
             return View(lista);
         }
 
@@ -84,18 +85,18 @@ namespace Publinter.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Create(Campania model)
         {
             try {
                 model.Materiales = model.Materiales.Where(x => x.Titulo != null && x.Titulo != "").ToList();
-                campaniaAplicationService.Add(model);
+                campaniaApplicationService.Add(model);
                 return Json(true, JsonRequestBehavior.AllowGet);
             } catch (Exception e) {
 
                 return Json(false,e.Message, JsonRequestBehavior.AllowGet);
             }
-            
         }
 
         public JsonResult AddMaterialRenglon(Campania model)
@@ -114,7 +115,7 @@ namespace Publinter.Controllers
         {
             try
             {
-                Campania camp = campaniaAplicationService.Get(id);
+                Campania camp = campaniaApplicationService.Get(id);
                 CampaniaModel model = new CampaniaModel();
                 model.CampaniaId = camp.CampaniaId;
                 model.Nombre = camp.Nombre;
@@ -136,10 +137,11 @@ namespace Publinter.Controllers
             }
             
         }
+
         [HttpPost]
         public ActionResult Edit(Campania model)
         {
-            campaniaAplicationService.Edit(model);
+            campaniaApplicationService.Edit(model);
             CampaniaModel modelEditado = new CampaniaModel();
             modelEditado.CampaniaId = model.CampaniaId;
             modelEditado.Nombre = model.Nombre;
@@ -154,6 +156,28 @@ namespace Publinter.Controllers
             var tipos = materialApplicationService.GetTipos();
             ViewBag.TiposMaterial = tipos.Select(x => new SelectListItem() { Value = x.TipoMaterialId.ToString(), Text = x.Descripcion });
             return View(modelEditado);
+        }
+
+
+        [HttpPost]
+        public JsonResult GetMateriales(int campaniaId)
+        {
+            var materiales = campaniaApplicationService.GetMaterialesByCampania(campaniaId);
+            string html = "";
+
+            if (materiales != null && materiales.Count > 0)
+            {
+                foreach (Get_Material_Data m in materiales)
+                {
+                    html += "<option value='" + m.MaterialId + "' data-duracion='" + m.Duracion + "'>" + m.Nombre + "</option>";
+                }
+            }
+            else
+            {
+                html += "<option value='0' data-duracion='0'>No hay materiales</option>";
+            }
+
+            return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
 
     }

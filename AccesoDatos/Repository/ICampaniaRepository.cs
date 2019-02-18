@@ -14,5 +14,6 @@ namespace AccesoDatos.Repository
         Campania Get(int id);
         int Add(Campania model);
         bool Update(Campania model);
+        List<Get_Material_Data> GetMaterialesByCampania(int campaniaId);
     }
 }

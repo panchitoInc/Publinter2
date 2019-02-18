@@ -246,6 +246,7 @@
     <Compile Include="Controllers\AnuncianteController.cs" />
     <Compile Include="Controllers\CampaniaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
@@ -258,12 +259,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Add_Linea_Model.cs" />
-    <Compile Include="Models\BasketItem.cs" />
     <Compile Include="Models\CampaniaModel.cs" />
     <Compile Include="Models\DataTableDataOrden.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Orden_Create_Model.cs" />
-    <Compile Include="Models\PdfModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -3512,16 +3511,12 @@
     <Content Include="Views\Campania\Create\_create_renglon_material.cshtml" />
     <Content Include="Views\Campania\Edit.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
-    <Content Include="Views\Orden\PdfCreate.cshtml" />
-    <Content Include="Views\Pdf\Index.cshtml" />
-    <Content Include="Views\Pdf\IndexWithAccessToDocumentAndWriter.cshtml" />
-    <Content Include="Views\Pdf\IndexWithAccessToDocumentAndWriterDownloadFile.cshtml" />
-    <Content Include="Views\Pdf\SaveToAppData.cshtml" />
-    <Content Include="Views\Orden\OrdenToPdf.cshtml" />
+    <Content Include="Views\Orden\AddLineaInterna.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Pdfs\" />
+    <Folder Include="Views\Mail\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
