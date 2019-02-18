@@ -33,5 +33,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return ordenRepository.GetIndex(start, length, sortColumn, sortDirection, search);
         }
+
+        public Orden Get(int ordenId)
+        {
+            return ordenRepository.Get(ordenId);
+        }
     }
 }

@@ -20,11 +20,7 @@ namespace DataModule.Entities
         public int CampaniaId { get; set; }
 
         public string Nombre { get; set; }
-
-       
-        //[ForeignKey("MedioId")]
-        //public Medio Medio { get; set; }
-
+        
         /// <summary>
         /// Anunciante Navigation
         /// </summary>
@@ -42,5 +38,12 @@ namespace DataModule.Entities
         public Cliente Cliente { get; set; }
 
         public List<Material> Materiales { get; set; }
+
+        //public int MedioId { get; set; }
+
+        //[ForeignKey("MedioId")]
+        //public Medio Medio { get; set; }
+
+        
     }
 }

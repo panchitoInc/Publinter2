@@ -35,5 +35,10 @@ namespace DataModule.Entities
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }
 
+
+        public int MedioId { get; set; }
+
+        [ForeignKey("MedioId")]
+        public Medio Medio { get; set; }
     }
 }
