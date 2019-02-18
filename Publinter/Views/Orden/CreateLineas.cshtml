@@ -14,8 +14,11 @@
             <table id="table_Linea_@i">
                 <thead>
                     <tr>
-                        <th colspan="2"></th>
-                        <th colspan="31" style="background-color:lightgrey">
+                        <th colspan="2" style="text-align: left;">
+                            @Html.CheckBoxFor(x => x.Lineas[i].Bonificada, new { @onchange = "SetBonificada(" + i + ")", @style = "position:relative;top:2px" })
+                            <span style="font-size:13px">Bonificada</span>
+                        </th>
+                        <th colspan="31" style="background-color:lightgrey;font-size:16px">
                             @Model.Lineas[i].LineasInternasOrden[0].Mes.MesNombre
 
                             <span id="totalMes_@i" class="pull-right">$ 0.00</span>
@@ -26,6 +29,7 @@
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesNumero)
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesAnio)
                             @Html.HiddenFor(x => x.Lineas[i].TotalLinea)
+                            @Html.HiddenFor(x => x.Lineas[i].Bonificada)
                         </th>
                     </tr>
                 </thead>
@@ -108,7 +112,7 @@
                             @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count; d++)
                             {
                                 <td rowspan="2" class="dato dia_@(i)_@(e)">
-                                    @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + i + ")" })
+                                    @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + i, @onchange = "CalcularTotalLinea(" + i + ")" })
 
                                     @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaId)
                                     @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaNombre)

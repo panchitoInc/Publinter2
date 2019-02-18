@@ -189,6 +189,7 @@ namespace Publinter.Controllers
 
             LineaOrden nueva = new LineaOrden();
             nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+            nueva.Bonificada = false;
 
             LineaInternaOrden primera = new LineaInternaOrden();
 
@@ -250,6 +251,7 @@ namespace Publinter.Controllers
             LineaOrden nueva = new LineaOrden();
 
             nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+            nueva.Bonificada = false;
 
             LineaInternaOrden primera = new LineaInternaOrden();
 
@@ -316,6 +318,7 @@ namespace Publinter.Controllers
             int cantLineasInternas = model.Lineas[cantLineas - 1].LineasInternasOrden.Count;
 
             LineaOrden nueva = new LineaOrden();
+            nueva.Bonificada = false;
 
             for (int i = 0; i < cantLineasInternas; i++)
             {

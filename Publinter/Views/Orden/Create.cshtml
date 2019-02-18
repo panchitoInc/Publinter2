@@ -99,9 +99,6 @@
             }
         });
 
-        //FiltrarProgramas();
-        //FiltrarMateriales();
-
         SetPrograma(0, 0);
         SetMaterial(0, 0);
 
@@ -233,32 +230,36 @@
     {
         var totalLinea = 0;
 
-        for(var e = 0; e < $(".LineaInterna_" + index).length; e++)
+        var bonificada = $("#Lineas_" + index + "__Bonificada").is(':checked');
+        
+        if(!bonificada)
         {
-            var precio = parseFloat($("#Programa_" + index + "_" + e + " option:selected").data("precio"));
-            var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion"));
-            var nroDias = $(".dia_" + index + "_" + e).length;
-            var emisiones = 0;
-
-            for(var i = 0; i < nroDias; i++)
+            for(var e = 0; e < $(".LineaInterna_" + index).length; e++)
             {
-                var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
+                var precio = parseFloat($("#Programa_" + index + "_" + e + " option:selected").data("precio"));
+                var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion"));
+                var nroDias = $(".dia_" + index + "_" + e).length;
+                var emisiones = 0;
 
-                var totalDia = emisionesDia * precio * duracion;
-                $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+                for(var i = 0; i < nroDias; i++)
+                {
+                    var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
 
-                emisiones += emisionesDia;
+                    var totalDia = emisionesDia * precio * duracion;
+                    $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+
+                    emisiones += emisionesDia;
+                }
+
+                var totalLineaInterna = precio * emisiones * duracion;
+
+                $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
+
+                totalLinea += totalLineaInterna;
             }
-
-            var totalLineaInterna = precio * emisiones * duracion;
-
-            $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
-
-            totalLinea += totalLineaInterna;
-
-            $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
         }
 
+        $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
         $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
 
         CalcularTotalOrden();
@@ -374,6 +375,18 @@
                 $("#btnGuardar").removeAttr("disabled");
             }
         });
+    }
+
+    function SetBonificada(index)
+    {
+        var value = $("#Lineas_" + index + "__Bonificada").is(':checked');
+
+        if(value)
+            $(".dias_" + index).css("background-color", "#daffda");
+        else
+            $(".dias_" + index).css("background-color", "white");
+
+        CalcularTotalLinea(index);
     }
 
 
@@ -502,10 +515,7 @@
         <div id="divFooter">
             @Html.Partial("CreateFooter", Model)
         </div>
-
-        <div>
-            <input id="btnExportPdf" type="button" value="Exportar documento" onclick="javascript: demoFromHTML();" style="width:150px;height:27px" />
-        </div>
+        
     }
 
 </div>

@@ -11,7 +11,10 @@
     <table id="table_Linea_@Model.IndexLinea">
         <thead>
             <tr>
-                <th colspan="2"></th>
+                <th colspan="2" style="text-align: left;">
+                    @Html.CheckBoxFor(x => x.Lineas[Model.IndexLinea].Bonificada, new { @onchange = "SetBonificada(" + Model.IndexLinea + ")", @style = "position:relative;top:2px" })
+                    <span>Bonificada</span>
+                </th>
                 <th colspan="31" style="background-color:lightgrey">
                     @Model.Lineas[Model.IndexLinea].LineasInternasOrden[0].Mes.MesNombre
 
@@ -106,7 +109,7 @@
                     @for (var d = 0; d < Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias.Count; d++)
                     {
                         <td rowspan="2" class="dato dia_@(Model.IndexLinea)_@e">
-                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + Model.IndexLinea + ")" })
+                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + Model.IndexLinea, @onchange = "CalcularTotalLinea(" + Model.IndexLinea + ")" })
 
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].DiaId)
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].DiaNombre)

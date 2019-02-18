@@ -24,7 +24,7 @@
     @for (var d = 0; d < Model.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias.Count; d++)
     {
     <td rowspan="2" class="dato dia_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)">
-        @Html.TextBoxFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones", @onchange = "CalcularTotalLinea(" + Model.IndexLineaParaAgregar + ")" })
+        @Html.TextBoxFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + Model.IndexLineaParaAgregar, @onchange = "CalcularTotalLinea(" + Model.IndexLineaParaAgregar + ")" })
 
         @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias[d].DiaId)
         @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias[d].DiaNombre)

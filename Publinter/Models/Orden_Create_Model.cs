@@ -114,6 +114,8 @@ namespace Publinter.Models
 
             orden.UsuarioId = this.UsuarioId;
 
+            orden.MedioId = this.MedioId;
+
             return orden;
         }
 

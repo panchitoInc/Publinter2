@@ -15,6 +15,8 @@ namespace DataModule.Entities
 
         public decimal TotalLinea { get; set; }
 
+        public bool Bonificada { get; set; }
+
         public LineaOrden()
         {
             this.LineasInternasOrden = new List<LineaInternaOrden>();

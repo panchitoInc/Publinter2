@@ -42,20 +42,22 @@
             "type": "POST"
         },
         "columns": [//datos con que se carga en las columnas y configuración
-               {"data": "EmisionString", "orderable": true, "sType": 'date' },
-               { "data": "Descripcion", "orderable": true, "class": "text-align-left" },
-               { "data": "Campania", "orderable": true, "class": "text-align-left Cliente" },
-               {
-                   "data": "Total", "orderable": true, "class": "text-align-right",
-                   "render": function (data, type, row)
-                   { return "$ " + floatToStringDecimals(data, 2) }
-               },
-               {
-			       "data": null, "orderable": false, "class": "text-align-right no-sort Acciones",
-			       "render": function (data, type, row)
-			       { return "" }
-               },
-			   { "data": "OrdenId", "class": "hidden" }
+           { "data": "EmisionString", "orderable": true, "sType": 'date' },
+           { "data": "Descripcion", "orderable": true, "class": "text-align-left" },
+           { "data": "Medio", "orderable": true, "class": "text-align-left Medio" },
+           { "data": "Anunciante", "orderable": true, "class": "text-align-left Anunciante" },
+           { "data": "Campania", "orderable": true, "class": "text-align-left Cliente" },
+           {
+               "data": "Total", "orderable": true, "class": "text-align-right",
+               "render": function (data, type, row)
+               { return "$ " + floatToStringDecimals(data, 2) }
+           },
+           {
+		       "data": null, "orderable": false, "class": "text-align-right no-sort Acciones",
+		       "render": function (data, type, row)
+		       { return "" }
+           },
+		   { "data": "OrdenId", "class": "hidden" }
         ],
         "drawCallback": function (settings) {
             //despues de dibujar tabla
