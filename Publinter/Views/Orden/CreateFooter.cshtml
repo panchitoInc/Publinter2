@@ -27,28 +27,12 @@
         position: relative;
         top:15px;
     }
-
+    /*prueba defs pdf*/
+    .btns-footer{
+        padding-top:60px;
+    }
 </style>
-
-<div class="col-sm-12">
-    <div class="pull-left col-sm-6" style="padding:0px">
-        <a class="inline-element btnLineas" href="javascript:AgregarSiguienteMes()" title="Agregar siguiente mes">
-            <i class="material-icons iconLineas">
-                add_box
-            </i>
-        </a>
-        <a class="inline-element btnLineas" href="javascript:CopiarUltimoMes()" title="Copiar último mes">
-            <i class="material-icons iconLineas" style="    font-size: 25px !important;position: relative;bottom: 1px;">
-                file_copy
-            </i>
-        </a>
-    </div>
-    <div class="pull-right col-sm-6" style="padding:0px">
-        <input type="button" id="btnGuardar" class="btn btn-success pull-right" value="Guardar" onclick="GuardarOrden()" style="position: relative;top: 20px;" />
-    </div>
-</div>
-
-<div class="col-sm-12">
+<div class="col-xs-12">
 
     <div id="datosFooter" class="col-sm-12">
         <label class="inline-element lblTotal">INVERSIÓN TOTAL: $</label>
@@ -57,3 +41,32 @@
     </div>
 
 </div>
+<div class="col-xs-12 btns-footer">
+    <div class="pull-left col-xs-6" style="padding:0px">
+        <a class="inline-element" href="javascript:AgregarSiguienteMes()" title="Agregar siguiente mes">
+            <i class="material-icons iconLineas">
+                add_box
+            </i>
+        </a>
+        <a class="inline-element" href="javascript:CopiarUltimoMes();" title="Copiar último mes">
+            <i class="material-icons iconLineas" style="    font-size: 25px !important;position: relative;bottom: 1px;">
+                file_copy
+            </i>
+        </a>
+    </div>
+    <div class="pull-right col-xs-6" style="padding:0px">
+        <div class="btn-group pull-right">
+            <input type="button" id="btnGuardar" class="btn-primary btn btn-success" value="Guardar" onclick="GuardarOrden()"/>
+            <button type="button" class="btn btn-primary dropdown-toggle btn-success" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a id="btnExportPdf" href="javascript: ExportPdf(1);">Guardar y descargar pdf</a></li>
+                <li><a href="javascript: ExportPdf(2);">Guardar y enviar</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

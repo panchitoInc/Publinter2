@@ -66,6 +66,7 @@
     <Compile Include="Entities\Dia.cs" />
     <Compile Include="Entities\LineaInternaOrden.cs" />
     <Compile Include="Entities\LineaOrden.cs" />
+    <Compile Include="Entities\Mail.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Medio.cs" />
     <Compile Include="Entities\Mes.cs" />
