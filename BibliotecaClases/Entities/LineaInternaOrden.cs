@@ -38,5 +38,8 @@ namespace DataModule.Entities
         public Mes Mes { get; set; }
 
         public decimal TotalLineaInterna { get; set; }
+
+        [NotMapped]
+        public bool Deleted { get; set; }
     }
 }

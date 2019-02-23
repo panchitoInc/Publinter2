@@ -24,6 +24,10 @@ namespace DataModule.EntitiesResult
 
         public DateTime Emision { get; set; }
 
+        public bool Anulada { get; set; }
+
+        public int? AnuladaPor { get; set; }
+
         public int TotalRows { get; set; }
 
         public string EmisionString

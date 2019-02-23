@@ -38,5 +38,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return ordenRepository.Get(ordenId);
         }
+
+        public List<Get_Orden_Select> GetOrdenesSelect(int campaniaId, int medioId)
+        {
+            return ordenRepository.GetOrdenesSelect(campaniaId, medioId);
+        }
     }
 }

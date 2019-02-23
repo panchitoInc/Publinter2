@@ -1,8 +1,8 @@
 ﻿@model Publinter.Models.Orden_Create_Model
 
-<tr class="LineaInterna_@Model.IndexLineaParaAgregar">
+<tr class="LineaInterna_@Model.IndexLineaParaAgregar LineaInterna_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)">
     <td rowspan="2">
-        <select id="Programa_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)" class="Programa" onchange="SetPrograma(@Model.IndexLineaParaAgregar, @Model.IndexLineaInternaParaAgregar)" style="border:none;width: 100px">
+        <select id="Programa_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)" class="Programa Nuevo" onchange="SetPrograma(@Model.IndexLineaParaAgregar, @Model.IndexLineaInternaParaAgregar)" style="border:none;width: 100px">
             @foreach (var p in Model.ListaProgramas)
             {
                 <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
@@ -12,13 +12,15 @@
         @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].ProgramaId)
     </td>
     <td rowspan="2">
-        <select id="Material_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)" class="Material" onchange="SetMaterial(@Model.IndexLineaParaAgregar, @Model.IndexLineaInternaParaAgregar)" style="border:none;width: 100px">
+        <select id="Material_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)" class="Material Nuevo" onchange="SetMaterial(@Model.IndexLineaParaAgregar, @Model.IndexLineaInternaParaAgregar)" style="border:none;width: 100px">
             @foreach (var m in Model.ListaMateriales)
             {
                 <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>
             }
         </select>
         @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].MaterialId)
+        @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Deleted)
+        @Html.HiddenFor(x => x.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].TotalLineaInterna)
     </td>
 
     @for (var d = 0; d < Model.Lineas[Model.IndexLineaParaAgregar].LineasInternasOrden[Model.IndexLineaInternaParaAgregar].Mes.Dias.Count; d++)
@@ -52,4 +54,12 @@
         }
     }
 </tr>
-<tr></tr>
+<tr class="LineaInterna_@(Model.IndexLineaParaAgregar)_@(Model.IndexLineaInternaParaAgregar)">
+    <td style="border:0px">
+        <a class="inline-element btnLineas" href="javascript:DeleteLineaInterna(@Model.IndexLineaParaAgregar, @Model.IndexLineaInternaParaAgregar)" title="Eliminar línea interna">
+            <i class="material-icons iconLineas" style="position: absolute;bottom: 19px;left: 3px;font-size: 20px;">
+                close
+            </i>
+        </a>
+    </td>
+</tr>

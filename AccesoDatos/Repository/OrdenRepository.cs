@@ -39,6 +39,17 @@ namespace AccesoDatos.Repository
                 {
                     context.Orden.Add(nueva);
                     context.SaveChanges();
+
+                    if (nueva.AnulaA.HasValue)
+                    {
+                        Orden anulada = context.Orden.FirstOrDefault(x => x.OrdenId.Equals(nueva.AnulaA.Value));
+                        anulada.Anulada = true;
+                        anulada.AnuladaPor = nueva.OrdenId;
+                        context.Entry(anulada).State = System.Data.Entity.EntityState.Modified;
+                    }
+
+                    context.SaveChanges();
+
                     return nueva.OrdenId;
                 }
             }
@@ -73,7 +84,7 @@ namespace AccesoDatos.Repository
             using (var context = new PublinterContext())
             {
                 ordenBusacada = context.Orden
-                    //.Include(x => x.Campania)
+                    .Include(x => x.Campania)
                     //.Include(x => x.Campania.Anunciante)
                     .Include(x => x.LineasOrden)
                     .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden))
@@ -84,6 +95,21 @@ namespace AccesoDatos.Repository
                     .FirstOrDefault(x => x.OrdenId.Equals(ordenId));
             }
             return ordenBusacada;
+        }
+
+        public List<Get_Orden_Select> GetOrdenesSelect(int campaniaId, int medioId)
+        {
+            List<Get_Orden_Select> ListaOrdenes = new List<Get_Orden_Select>();
+
+            using (var context = new PublinterContext())
+            {
+                var _campid = new SqlParameter("@CAMPANIAID", campaniaId);
+                var _medioid = new SqlParameter("@MEDIOID", medioId);
+
+                ListaOrdenes = context.Database.SqlQuery<Get_Orden_Select>("GET_ORDENES_SELECT @CAMPANIAID, @MEDIOID", _campid, _medioid).ToList();
+            }
+
+            return ListaOrdenes;
         }
     }
 }

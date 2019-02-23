@@ -13,7 +13,7 @@ namespace Publinter.Models
     {
         public Orden_Create_Model()
         {
-            this.Emision = DateTime.Now;
+            this.Emision = DateTime.Now.Date;
             this.ListaProgramas = new List<Get_Programa_Data>();
             this.ListaMateriales = new List<Material>();
             this.ListaClientes = new List<Get_Cliente_Data>();
@@ -73,18 +73,24 @@ namespace Publinter.Models
         public Anunciante Anunciante { get; set; }
 
         public int CampaniaId { get; set; }
+
         public int MedioId { get; set; }
+
         public Medio Medio { get; set; }
+
         public Campania Campania { get; set; }
 
         public List<LineaOrden> Lineas { get; set; }
 
         public decimal TotalOrden { get; set; }
 
+        public int OrdenAnulada { get; set; }
+
         /// <summary>
         /// Para agregar una linea interna se pone aqui a que nro de linea se le agrega
         /// </summary>
         public int IndexLineaParaAgregar { get; set; }
+
         public int IndexLineaInternaParaAgregar { get; set; }
 
         public List<Medio> ListaMedios { get; set; }
@@ -98,6 +104,7 @@ namespace Publinter.Models
         public List<Get_Programa_Data> ListaProgramas { get; set; }
 
         public List<Material> ListaMateriales { get; set; }
+
         /// <summary>
         /// 0 guardar
         /// 1 Descargar y guardar
@@ -112,13 +119,23 @@ namespace Publinter.Models
                 Emision = this.Emision,
                 NroOrden = this.NroOrden,
                 CampaniaId = this.CampaniaId,
-                LineasOrden = this.Lineas,
                 Total = this.TotalOrden,
                 UsuarioId = this.UsuarioId,
-                MedioId = this.MedioId
+                MedioId = this.MedioId,
             };
 
             orden.MedioId = this.MedioId;
+            
+            foreach (LineaOrden l in this.Lineas)
+            {
+                l.LineasInternasOrden = l.LineasInternasOrden.Where(x => !x.Deleted).ToList();
+            }
+
+            orden.LineasOrden = this.Lineas;
+
+            if (this.OrdenAnulada != 0) {
+                orden.AnulaA = this.OrdenAnulada;
+            }
 
             return orden;
         }

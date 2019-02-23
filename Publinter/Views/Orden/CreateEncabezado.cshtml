@@ -34,18 +34,25 @@
     </div>
 
     <div id="datosEncabezado" class="col-sm-12">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Campaña: </label>
-            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:150px", @onchange = "FiltrarMateriales()" })
+            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Medio: </label>
-            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:150px", @onchange = "FiltrarProgramas()" })
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarProgramas();GetOrdenesSelect()" })
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Emisión: </label>
-            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "padding-left:4px;" })
+            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "width:130px;height:21.33px;padding-left:4px;" })
+        </div>
+        <div class="col-sm-3">
+            <label class="inline-element" style="width:75px">Anula a: </label>
+            <select id="SelectOrdenAnulaA" class="inline-element pull-right" onchange="SetOrdenAnulaA()" style="padding-left:4px;">
+                <option value="0">Seleccione orden</option>
+            </select>
+            @Html.HiddenFor(x => x.OrdenAnulada)
         </div>
     </div>
     

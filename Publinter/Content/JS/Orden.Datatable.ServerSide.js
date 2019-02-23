@@ -43,19 +43,44 @@
         },
         "columns": [//datos con que se carga en las columnas y configuración
            { "data": "EmisionString", "orderable": true, "sType": 'date' },
-           { "data": "Descripcion", "orderable": true, "class": "text-align-left" },
+            {
+                "data": "Descripcion", "orderable": true, "class": "text-align-left",
+                "render": function (data, type, row) {
+                    return (row.Anulada) ? '<span class="pull-left" style="color:red">' + data + '</span>' + ' <span class="pull-right" style="color:red">Anulada</span>' : data;
+                }
+            },
            { "data": "Medio", "orderable": true, "class": "text-align-left Medio" },
            { "data": "Anunciante", "orderable": true, "class": "text-align-left Anunciante" },
            { "data": "Campania", "orderable": true, "class": "text-align-left Cliente" },
            {
                "data": "Total", "orderable": true, "class": "text-align-right",
                "render": function (data, type, row)
-               { return "$ " + floatToStringDecimals(data, 2) }
+               {
+                   var retorno = "";
+                   if (!row.Anulada) {
+                       retorno += "$ " + floatToStringDecimals(data, 2);
+                   }
+                   return retorno;
+               }
            },
            {
-		       "data": null, "orderable": false, "class": "text-align-right no-sort Acciones",
-		       "render": function (data, type, row)
-		       { return "" }
+               "data": "Acciones",
+               className: "text-align-right",
+               "render": function (data, type, row) {
+
+                   var retorno = "";
+                   if (!row.Anulada) {
+                       retorno = '<div class="dropdown"><a class="dropdown-toggle text-align-right" data-toggle="dropdown" href="#" aria-expanded="false">' +
+                                 'Acciones <span class="caret"></span>' +
+                                 '</a>' +
+                                 '<ul class="dropdown-menu">' +
+                                 '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="../Orden/DescargarPdf?ordenId=' + row.OrdenId + '">Descargar Pdf</a></li>' +
+                                 '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="javascript:CopiarOrden(' + row.OrdenId + ')">Copiar</a></li>' +
+                                 '</ul>' +
+                                 '</div>';
+                   }
+                   return retorno;
+               }
            },
 		   { "data": "OrdenId", "class": "hidden" }
         ],

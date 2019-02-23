@@ -3,8 +3,15 @@
 <div id="Lineas">
     @for (var i = 0; i < Model.Lineas.Count; i++)
     {
-        <div class="col-sm-12 lineaOrden">
-            <table>
+        <div class="col-sm-12 lineaOrden" style="margin-top: 15px">
+            <div class="div_add_linea">
+                <a class="inline-element btnLineas" href="javascript:AgregarLineaInterna(@i)" title="Agregar línea">
+                    <i class="material-icons iconLineas" style="width:0px;position:relative;right:20px">
+                        add
+                    </i>
+                </a>
+            </div>
+            <table id="table_Linea_@i">
                 <thead>
                     <tr>
                         <th colspan="2" style="text-align: left;">
@@ -100,6 +107,7 @@
                                     }
                                 </select>
                                 @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].MaterialId)
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].TotalLineaInterna)
                             </td>
 
                             @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count; d++)

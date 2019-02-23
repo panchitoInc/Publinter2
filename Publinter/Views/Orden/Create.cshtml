@@ -91,7 +91,6 @@
 
     $(document).ready(function () {
 
-
         $("input.txtEmisiones").keypress(function (e) {
 
             if (e.wich) {
@@ -99,8 +98,16 @@
             }
         });
 
-        SetPrograma(0, 0);
-        SetMaterial(0, 0);
+        $("#CampaniaId").trigger("change");
+
+        var cantLineas = $(".lineaOrden").length;
+        for (var i = 0; i < cantLineas; i++) {
+            var cantLineasInternas = $(".LineaInterna_" + i).length;
+            for (var e = 0; e < cantLineasInternas; e++) {
+                SetPrograma(i, e);
+                SetMaterial(i, e);
+            }
+        }
 
         $("#Emision").val(formattedDate($("#Emision").val()));
 
@@ -114,13 +121,13 @@
             }
         });
 
-         doc = new jsPDF();
-         specialElementHandlers = {
+        doc = new jsPDF();
+        specialElementHandlers = {
             '#editor': function (element, renderer) {
                 return true;
             }
         };
-    })
+    });
 
     function AgregarPrimeraLinea()
     {
@@ -207,14 +214,47 @@
             success: function (data) {
                 $('#table_Linea_' + indexLinea + " tbody").append(data.html);
 
-                //FiltrarProgramas();
-                //FiltrarMateriales();
+                FiltrarNuevosProgramas();
+                FiltrarNuevosMateriales();
 
                 SetPrograma(indexLinea, data.indexLineaInterna);
                 SetMaterial(indexLinea, data.indexLineaInterna);
                 //CalcularTotalLineaInterna(data.index); //hacer
             }
         });
+    }
+
+    function DeleteLineaInterna(index_linea, index_interna)
+    {
+        $("#Lineas_" + index_linea + "__LineasInternasOrden_" + index_interna + "__Deleted").val("True");
+
+        $(".LineaInterna_" + index_linea + "_" + index_interna).hide();
+        $(".LineaInterna_" + index_linea + "_" + index_interna).addClass("deleted");
+
+        CalcularTotalOrden();
+    }
+
+    function GetOrdenesSelect()
+    {
+        var medioId = $("#MedioId").val();
+        var campaniaId = $("#CampaniaId").val();
+
+        $.ajax({
+            url: '@Url.Action("GetOrdenesSelect", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: { campaniaId: campaniaId, medioId: medioId },
+            success: function (data) {
+                $("#SelectOrdenAnulaA").html(data);
+                $("#SelectOrdenAnulaA").trigger('change');
+            }
+        });
+    }
+
+    function SetOrdenAnulaA()
+    {
+        var ordenAnulada = $("#SelectOrdenAnulaA").val();
+        $("#OrdenAnulada").val(ordenAnulada);
     }
 
     function SetPrograma(index, index_interno)
@@ -247,22 +287,26 @@
                 var duracion = parseInt($("#Material_" + index + "_" + e + " option:selected").data("duracion"));
                 var nroDias = $(".dia_" + index + "_" + e).length;
                 var emisiones = 0;
+                var deleted = $(".LineaInterna_" + index + "_" + e).hasClass("deleted");
 
-                for(var i = 0; i < nroDias; i++)
+                if (!deleted)
                 {
-                    var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
+                    for (var i = 0; i < nroDias; i++)
+                    {
+                        var emisionesDia = parseInt($("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__NroEmisiones").val());
 
-                    var totalDia = emisionesDia * precio * duracion;
-                    $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
+                        var totalDia = emisionesDia * precio * duracion;
+                        $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__Mes_Dias_" + i + "__TotalDia").val(totalDia);
 
-                    emisiones += emisionesDia;
+                        emisiones += emisionesDia;
+                    }
+
+                    var totalLineaInterna = precio * emisiones * duracion;
+
+                    $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
+
+                    totalLinea += totalLineaInterna;
                 }
-
-                var totalLineaInterna = precio * emisiones * duracion;
-
-                $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
-
-                totalLinea += totalLineaInterna;
             }
         }
 
@@ -301,6 +345,22 @@
         });
     }
 
+    function FiltrarNuevosProgramas()
+    {
+        var medioId = parseInt($("#MedioId").val());
+
+        $.ajax({
+            url: '@Url.Action("GetProgramas", "Medio")',
+            type: 'POST',
+            dataType: 'json',
+            data: { "medioId" : medioId },
+            success: function (data) {
+                $(".Programa.Nuevo").html(data.html);
+                $(".Programa.Nuevo").removeClass("Nuevo");
+            }
+        });
+    }
+
     function FiltrarMateriales()
     {
         var campaniaId = $("#CampaniaId").val();
@@ -312,6 +372,22 @@
             data: { "campaniaId": campaniaId },
             success: function (data) {
                 $(".Material").html(data.html);
+            }
+        });
+    }
+
+    function FiltrarNuevosMateriales()
+    {
+        var campaniaId = $("#CampaniaId").val();
+
+        $.ajax({
+            url: '@Url.Action("GetMateriales", "Campania")',
+            type: 'POST',
+            dataType: 'json',
+            data: { "campaniaId": campaniaId },
+            success: function (data) {
+                $(".Material.Nuevo").html(data.html);
+                $(".Material.Nuevo").removeClass("Nuevo");
             }
         });
     }
@@ -328,7 +404,8 @@
         setTimeout(function () { $("#mensajeErrorBack").fadeOut(); $("#errorMsgDivBack").fadeOut(); }, 10000)
     }
 
-    function ShowMsgErrorComp() {
+    function ShowMsgErrorComp()
+    {
         $("#errorMsgDiv").slideDown();
     }
 
@@ -343,6 +420,7 @@
     {
         ReiniciarLineas();
         AddNumero();
+        $("#SelectOrdenAnulaA").val("0");
     }
 
     function ReiniciarLineas()
@@ -399,7 +477,8 @@
 
 
     //funcion para exportar el form a pdf.
-    function ExportPdf(val) {
+    function ExportPdf(val)
+    {
         $("#GuardarEnviarDescargar").val(val);
         $("#formOrden").submit();
     }

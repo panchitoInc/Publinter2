@@ -15,6 +15,9 @@ namespace AccesoDatos.Repository
         int CrearOrden(Orden nueva);
 
         IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, string search);
+
         Orden Get(int ordenId);
+
+        List<Get_Orden_Select> GetOrdenesSelect(int campaniaId, int medioId);
     }
 }

@@ -43,5 +43,10 @@ namespace DataModule.Entities
         [ForeignKey("MedioId")]
         public Medio Medio { get; set; }
 
+        public bool Anulada { get; set; }
+
+        public int? AnulaA { get; set; }
+
+        public int? AnuladaPor { get; set; }
     }
 }

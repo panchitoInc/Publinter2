@@ -58,6 +58,7 @@
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />
     <Compile Include="EntitiesResult\Get_Material_Data.cs" />
     <Compile Include="EntitiesResult\Get_orden_index.cs" />
+    <Compile Include="EntitiesResult\Get_Orden_Select.cs" />
     <Compile Include="EntitiesResult\Get_Programa_Data.cs" />
     <Compile Include="Entities\Anunciante.cs" />
     <Compile Include="Entities\Campania.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Entities\Dia.cs" />
     <Compile Include="Entities\LineaInternaOrden.cs" />
     <Compile Include="Entities\LineaOrden.cs" />
-    <Compile Include="Entities\Mail.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Medio.cs" />
     <Compile Include="Entities\Mes.cs" />

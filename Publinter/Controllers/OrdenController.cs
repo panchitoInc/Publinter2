@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using BusinessLogic.ApplicationServices;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
@@ -121,6 +122,72 @@ namespace Publinter.Controllers
             return View(model);
         }
 
+        public ActionResult CopiarOrden(int ordenId)
+        {
+            Orden_Create_Model model = new Orden_Create_Model();
+            model.ListaCampanias = campaniaAplicationService.GetAll();
+            if (model.ListaCampanias.Count > 0)
+            {
+                var PrimerCampania = model.ListaCampanias.FirstOrDefault();
+                var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
+                model.ListaMateriales = CampaniaConDependencias.Materiales;
+
+            }
+            model.ListaMedios = medioApplicationService.GetAll();
+            model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
+            model.ListaClientes = clienteApplicationService.GetClientes();
+
+            model.NroOrden = ordenApplicationService.GetNroOrden();
+            model.UsuarioId = CurrentUser.Id;
+
+            Orden aCopiar = ordenApplicationService.Get(ordenId);
+
+            model.CampaniaId = aCopiar.CampaniaId;
+            model.AnuncianteId = aCopiar.Campania.AnuncianteId;
+            model.MedioId = aCopiar.MedioId;
+
+            model.Lineas = new List<LineaOrden>();
+
+            foreach (LineaOrden lo in aCopiar.LineasOrden)
+            {
+                LineaOrden nueva = new LineaOrden();
+                nueva.Bonificada = lo.Bonificada;
+                nueva.TotalLinea = lo.TotalLinea;
+                nueva.LineasInternasOrden = new List<LineaInternaOrden>();
+
+                foreach (LineaInternaOrden lio in lo.LineasInternasOrden)
+                {
+                    LineaInternaOrden nueva_interna = new LineaInternaOrden();
+                    nueva_interna.MaterialId = lio.MaterialId;
+                    nueva_interna.Mes = new Mes();
+                    nueva_interna.Mes.MesNombre = lio.Mes.MesNombre;
+                    nueva_interna.Mes.MesNumero = lio.Mes.MesNumero;
+                    nueva_interna.Mes.MesAnio = lio.Mes.MesAnio;
+
+                    nueva_interna.Mes.Dias = new List<Dia>();
+
+                    foreach (Dia d in lio.Mes.Dias)
+                    {
+                        Dia nuevo = new Dia();
+                        nuevo.DiaNombre = d.DiaNombre;
+                        nuevo.DiaNumero = d.DiaNumero;
+                        nuevo.TotalDia = d.TotalDia;
+                        nuevo.NroEmisiones = d.NroEmisiones;
+
+                        nueva_interna.Mes.Dias.Add(d);
+                    }
+
+                    nueva.LineasInternasOrden.Add(nueva_interna);
+                }
+
+                model.Lineas.Add(nueva);
+            }
+
+            model.TotalOrden = aCopiar.Total;
+
+            return View("Create", model);
+        }
+
         [HttpPost]
         public JsonResult Create(Orden_Create_Model model)
         {
@@ -196,6 +263,20 @@ namespace Publinter.Controllers
             dataTableData.recordsFiltered = TOTAL_ROWS;
 
             return Json(dataTableData, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOrdenesSelect(int campaniaId, int medioId)
+        {
+            List<Get_Orden_Select> ordenes = ordenApplicationService.GetOrdenesSelect(campaniaId, medioId);
+
+            var html = "<option value='0'>Seleccione orden</orden>";
+
+            foreach (Get_Orden_Select item in ordenes)
+            {
+                html += "<option value='" + item.OrdenId + "'>" + item.Descripcion + "</option>";
+            }
+
+            return Json(html, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AgregarPrimeraLinea(Orden_Create_Model model)
@@ -409,7 +490,9 @@ namespace Publinter.Controllers
 
             bool value = true;
 
-            return Json(new { value, html }, JsonRequestBehavior.AllowGet);
+            int indexLineaInterna = model.IndexLineaInternaParaAgregar;
+
+            return Json(new { value, html, indexLineaInterna }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -430,7 +513,7 @@ namespace Publinter.Controllers
 
             document.Open();
             // setting image 
-            string imagePath = "C:/Trabajos/Publinter2/Publinter/Content/Images/Logo-Publinter-dark-2017-final.png";
+            string imagePath = "C:/Users/germa/Desktop/Publinter2/Publinter2/Publinter/Content/Images/Logo-Publinter-dark-2017-final.png";
             iTextSharp.text.Image tif = iTextSharp.text.Image.GetInstance(imagePath);
             tif.ScalePercent(24f);
             tif.SetAbsolutePosition(document.PageSize.Width - 36f - 140f,
