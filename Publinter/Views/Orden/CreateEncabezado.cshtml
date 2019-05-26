@@ -20,6 +20,17 @@
     .anulaOrden_wrap .select2-selection {
         border: 1px solid #ccc;
     }
+
+    .select2-selection {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        height: 23px !important;
+    }
+
+    .select2-container {
+        width: 190px !important;
+        float: right !important;
+    }
 </style>
 
 <div class="col-sm-12">
@@ -39,12 +50,12 @@
     <div id="datosEncabezado" class="col-sm-12">
         <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Campaña: </label>
-            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style ="width: 161px;height: 28px;padding-left: 4px;border-radius: 3px;border: 1px solid #ccc;", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
+            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
         </div>
         <div class="col-sm-3">
-            
+
             <label class="inline-element" style="width:75px">Medio: </label>
-            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarProgramas();GetOrdenesSelect();SetPorcentajeBonificado()" })
+            @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarProgramas();GetOrdenesSelect();GetOrdenesDeCompraSelect();SetPorcentajeBonificado()" })
         </div>
         <div id="datosMedios" style="display:none">
             @foreach (var medio in Model.ListaMedios)
@@ -59,11 +70,25 @@
         </div>
         <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Emisión: </label>
-            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "width: 161px;height: 28px;padding-left: 4px;border-radius: 3px;border: 1px solid #ccc;padding-left:4px;" })
+            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "width: 110px;text-align:right" })
         </div>
-                <option value="0">Seleccione orden</option>
+        <div class="col-sm-4 anulaOrden_wrap" style="margin-top:20px;padding-right: 20px;width: 303px;">
+            <label class="inline-element" style="width:58px">Anula a: </label>
+            <select id="SelectOrdenAnulaA" class="inline-element pull-right" onchange="SetOrdenAnulaA()" style="width: 161px">
+                <option value="0">Ninguna</option>
             </select>
             @Html.HiddenFor(x => x.OrdenAnulada)
+        </div>
+        <div class="col-sm-4 anulaOrden_wrap" style="margin-top: 20px;padding-right: 20px;width: 355px;">
+            <label class="inline-element" style="width:110px">Orden de compra: </label>
+            <select id="SelectOrdenDeCompra" class="inline-element pull-right" onchange="SetOrdenDeCompra()" style="width: 161px">
+                <option value="0">Ninguna</option>
+            </select>
+            
+            @Html.HiddenFor(x => x.OrdenDeCompraId)
+        </div>
+        <div class="inline-element pull-right" style="margin-top: 20px;">
+            <label id="Saldo_OrdenDeCompra" class="inline-element" style="color:grey"></label>
         </div>
     </div>
    

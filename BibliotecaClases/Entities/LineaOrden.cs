@@ -17,6 +17,9 @@ namespace DataModule.Entities
 
         public bool Bonificada { get; set; }
 
+        [NotMapped]
+        public decimal TotalLineaSegundos { get; set; }
+
         public LineaOrden()
         {
             this.LineasInternasOrden = new List<LineaInternaOrden>();

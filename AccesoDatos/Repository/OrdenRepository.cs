@@ -40,6 +40,13 @@ namespace AccesoDatos.Repository
                     context.Orden.Add(nueva);
                     context.SaveChanges();
 
+                    if (nueva.OrdenDeCompraId.HasValue && nueva.OrdenDeCompraId.Value != 0)
+                    {
+                        OrdenDeCompra compra = context.OrdenDeCompra.FirstOrDefault(x => x.OrdenDeCompraId.Equals(nueva.OrdenDeCompraId.Value));
+                        compra.Saldo -= nueva.TotalSegundos;
+                        context.Entry(compra).State = System.Data.Entity.EntityState.Modified;
+                    }
+
                     if (nueva.AnulaA.HasValue)
                     {
                         Orden anulada = context.Orden.FirstOrDefault(x => x.OrdenId.Equals(nueva.AnulaA.Value));

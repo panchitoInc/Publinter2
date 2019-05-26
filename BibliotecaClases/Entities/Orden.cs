@@ -64,5 +64,7 @@ namespace DataModule.Entities
         public OrdenDeCompra OrdenDeCompra { get; set; }
 
         public decimal? PorcentajeBonificado { get; set; }
+
+        public decimal TotalSegundos { get; set; }
     }
 }

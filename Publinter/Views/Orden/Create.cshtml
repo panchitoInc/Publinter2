@@ -104,13 +104,15 @@
             }
         });
         $("#CampaniaId").trigger("change");
+        $("#MedioId").trigger("change");
+
         $("#SelectOrdenAnulaA").select2(
-            {
-                language: "es"//,
-                //allowClear: true,
-                //placeholder: "Cliente"
-            }
-            );
+            { language: "es" }
+        );
+        $("#SelectOrdenDeCompra").select2(
+            { language: "es" }
+        );
+
         var cantLineas = $(".lineaOrden").length;
         for (var i = 0; i < cantLineas; i++) {
             var cantLineasInternas = $(".LineaInterna_" + i).length;
@@ -274,10 +276,43 @@
         });
     }
 
+    function GetOrdenesDeCompraSelect()
+    {
+        var medioId = $("#MedioId").val();
+
+        $.ajax({
+            url: '@Url.Action("GetOrdenesDeCompraSelect", "Orden")',
+            type: 'POST',
+            dataType: 'json',
+            data: { medioId: medioId },
+            success: function (data) {
+                $("#SelectOrdenDeCompra").html(data);
+                $("#SelectOrdenDeCompra").trigger('change');
+            }
+        });
+    }
+
     function SetOrdenAnulaA()
     {
         var ordenAnulada = $("#SelectOrdenAnulaA").val();
         $("#OrdenAnulada").val(ordenAnulada);
+    }
+
+    function SetOrdenDeCompra()
+    {
+        var ordenDeCompra = $("#SelectOrdenDeCompra").val();
+        $("#OrdenDeCompraId").val(ordenDeCompra);
+
+        if(ordenDeCompra != "0")
+        {
+            var saldo = $("#SelectOrdenDeCompra option:selected").data("saldo");
+
+            $("#Saldo_OrdenDeCompra").text("Saldo actual: " + parseFloat(saldo) + " segundos.")
+        }
+        else
+        {
+            $("#Saldo_OrdenDeCompra").text("");
+        }
     }
 
     function SetPrograma(index, index_interno)
@@ -299,6 +334,7 @@
     function CalcularTotalLinea(index)
     {
         var totalLinea = 0;
+        var totalLinea_segundos = 0;
 
         var bonificada = $("#Lineas_" + index + "__Bonificada").is(':checked');
         
@@ -328,11 +364,17 @@
 
                     $("#Lineas_" + index + "__LineasInternasOrden_" + e + "__TotalLineaInterna").val(totalLineaInterna);
 
+                    //Total en segundos
+                    totalLinea_segundos += duracion * emisiones;
+
+                    //Total en pesos
                     totalLinea += totalLineaInterna;
                 }
             }
         }
 
+        $("#Lineas_" + index + "__TotalLineaSegundos").val(totalLinea_segundos);
+        
         $("#totalMes_" + index).text("$ " + numberThousandSeparator(floatToStringDecimals(totalLinea, 2)));
         $("#Lineas_" + index + "__TotalLinea").val(totalLinea);
 
@@ -343,11 +385,16 @@
     {
         var cantLineas = $(".lineaOrden").length;
         var totalOrden = 0;
+        var totalOrden_segundos = 0;
 
         for(var i = 0; i < cantLineas; i++)
         {
             totalOrden += parseFloat($("#Lineas_" + i + "__TotalLinea").val());
+            totalOrden_segundos += parseFloat($("#Lineas_" + i + "__TotalLineaSegundos").val());
         }
+
+        $("#totalOrdenSegundos").text(" (" + numberThousandSeparator(floatToStringDecimals(totalOrden_segundos, 2)) + " segundos.)");
+        $("#TotalOrdenSegundos").val(totalOrden_segundos);
 
         $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals(totalOrden, 2)));
         $("#TotalOrden").val(totalOrden);
@@ -468,7 +515,7 @@
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
-                if(data)
+                if(data.value)
                 {
                     LimpiarDatos();
                     //$("#txtMensajeExito").text(data.descripcion);
@@ -531,12 +578,18 @@
         $("#totalOrden").hide();
         $("#TotalOrden").fadeIn().focus();
     }
-    function TotalOrdenOnChange() {
-        $(".totalMes").text("-");
+    
+    function TotalOrdenOnChange() 
+    {
+        var total = $("#TotalOrden").val();
+
+        if(parseFloat(total) != 0)
+        {
+            $(".totalMes").text("-");
+            $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals($("#TotalOrden").val(), 2))).show();
+        }
+
         $("#TotalOrden").hide();
-        $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals($("#TotalOrden").val(), 2))).show();
-        
-        
     }
 
     function SetPorcentajeBonificado()

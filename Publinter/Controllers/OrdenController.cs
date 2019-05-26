@@ -29,6 +29,7 @@ namespace Publinter.Controllers
         IClienteApplicationService _clienteApplicationService;
         IProgramaApplicationService _programaApplicationService;
         ICampaniaApplicationService _campaniaAplicationService;
+        IOrdenDeCompraApplicationService _ordenDeCompraApplicationService;
 
         private ICampaniaApplicationService campaniaAplicationService
         {
@@ -101,27 +102,18 @@ namespace Publinter.Controllers
             }
         }
 
-        //public ActionResult Create()
-        //{
-        //    Orden_Create_Model model = new Orden_Create_Model();
-        //    model.ListaCampanias = campaniaAplicationService.GetAll();
-        //    if(model.ListaCampanias.Count > 0)
-        //    {
-        //        var PrimerCampania = model.ListaCampanias.FirstOrDefault();
-        //        var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
-        //        model.ListaMateriales = CampaniaConDependencias.Materiales;
+        private IOrdenDeCompraApplicationService ordenDeCompraApplicationService
+        {
+            get
+            {
+                if (this._ordenDeCompraApplicationService == null)
+                {
+                    this._ordenDeCompraApplicationService = new OrdenDeCompraApplicationService(CurrentUser);
+                }
+                return this._ordenDeCompraApplicationService;
+            }
+        }
 
-        //    }
-        //    model.ListaMedios = medioApplicationService.GetAll();
-        //    model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
-        //    model.ListaClientes = clienteApplicationService.GetClientes();
-
-
-        //    model.NroOrden = ordenApplicationService.GetNroOrden();
-        //    model.UsuarioId = CurrentUser.Id;
-
-        //    return View(model);
-        //}
         public ActionResult Create()
         {
             Orden_Create_Model model = new Orden_Create_Model();
@@ -240,6 +232,7 @@ namespace Publinter.Controllers
                 model.Lineas.Add(nueva);
             }
 
+            model.TotalOrdenSegundos = aCopiar.TotalSegundos;
             model.TotalOrden = aCopiar.Total;
 
             return View("Create", model);
@@ -330,11 +323,25 @@ namespace Publinter.Controllers
         {
             List<Get_Orden_Select> ordenes = ordenApplicationService.GetOrdenesSelect(campaniaId, medioId);
 
-            var html = "<option value='0'>Seleccione orden</orden>";
+            var html = "<option value='0'>Ninguna</orden>";
 
             foreach (Get_Orden_Select item in ordenes)
             {
                 html += "<option value='" + item.OrdenId + "'>" + item.Descripcion + "</option>";
+            }
+
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOrdenesDeCompraSelect(int medioId)
+        {
+            List<Get_OrdenDeCompra_Select> ordenes = ordenDeCompraApplicationService.GetOrdenesDeCompraSelect(medioId);
+
+            var html = "<option value='0'>Ninguna</orden>";
+
+            foreach (Get_OrdenDeCompra_Select item in ordenes)
+            {
+                html += "<option value='" + item.OrdenDeCompraId + "' data-saldo='" + item.Saldo + "'>" + item.Descripcion + "</option>";
             }
 
             return Json(html, JsonRequestBehavior.AllowGet);
@@ -1120,6 +1127,7 @@ namespace Publinter.Controllers
             model.NroOrden = orden.NroOrden;
             model.OrdenId = orden.OrdenId;
             model.TotalOrden = orden.Total;
+            model.TotalOrdenSegundos = orden.TotalSegundos;
             model.UsuarioId = orden.UsuarioId;
             return model;
         }

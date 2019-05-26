@@ -11,7 +11,11 @@ namespace BusinessLogic.ApplicationServices
     public interface IOrdenDeCompraApplicationService
     {
         bool Add(OrdenDeCompra model);
+
         int GetUltimoNumeroOrdenDeCompra();
+
         List<Get_index_orden_decompra> GetAll();
+
+        List<Get_OrdenDeCompra_Select> GetOrdenesDeCompraSelect(int medioId);
     }
 }

@@ -36,7 +36,9 @@
     <div id="datosFooter" class="col-sm-12">
         <label class="inline-element lblTotal">INVERSIÓN TOTAL: $</label>
         <label id="totalOrden" class="inline-element lblTotal" onclick="javascript: OnclickInversionTotal();" style="cursor:pointer;">0.00</label>
-        @Html.TextBoxFor(x => x.TotalOrden, new { @style = "display:none;", @onchange = "javascript:TotalOrdenOnChange(this.val);", @focusOut= "javascript:TotalOrdenFocusOut();" })
+        @Html.TextBoxFor(x => x.TotalOrden, new { @style = "display:none;text-align:right", @onchange = "javascript:TotalOrdenOnChange(this.val);", @focusOut = "javascript:TotalOrdenFocusOut();" })
+        <label id="totalOrdenSegundos" class="inline-element lblTotal" style="color:lightgray"></label>
+        @Html.HiddenFor(x => x.TotalOrdenSegundos)
     </div>
 
 </div>

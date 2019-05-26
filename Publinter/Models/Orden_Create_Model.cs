@@ -88,7 +88,11 @@ namespace Publinter.Models
 
         public decimal TotalOrden { get; set; }
 
+        public decimal TotalOrdenSegundos { get; set; }
+
         public int OrdenAnulada { get; set; }
+
+        public int OrdenDeCompraId { get; set; }
 
         /// <summary>
         /// Para agregar una linea interna se pone aqui a que nro de linea se le agrega
@@ -125,9 +129,11 @@ namespace Publinter.Models
                 Emision = this.Emision,
                 NroOrden = this.NroOrden,
                 CampaniaId = this.CampaniaId,
+                TotalSegundos = this.TotalOrdenSegundos,
                 Total = this.TotalOrden,
                 UsuarioId = this.UsuarioId,
                 MedioId = this.MedioId,
+                OrdenDeCompraId = this.OrdenDeCompraId
             };
             this.Email.FechaEnviado = DateTime.Now;
             orden.Emails.Add(this.Email);
