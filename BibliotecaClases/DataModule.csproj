@@ -56,6 +56,7 @@
     <Compile Include="EntitiesResult\Get_All_Cliente.cs" />
     <Compile Include="EntitiesResult\Get_Anunciante_Data.cs" />
     <Compile Include="EntitiesResult\Get_Cliente_Data.cs" />
+    <Compile Include="EntitiesResult\Get_index_orden_decompra.cs" />
     <Compile Include="EntitiesResult\Get_Material_Data.cs" />
     <Compile Include="EntitiesResult\Get_orden_index.cs" />
     <Compile Include="EntitiesResult\Get_Orden_Select.cs" />
@@ -63,15 +64,18 @@
     <Compile Include="Entities\Anunciante.cs" />
     <Compile Include="Entities\Campania.cs" />
     <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\ConfiguracionEmail.cs" />
     <Compile Include="Entities\Contacto.cs" />
     <Compile Include="Entities\Dia.cs" />
     <Compile Include="Entities\LineaBonificada.cs" />
+    <Compile Include="Entities\Email.cs" />
     <Compile Include="Entities\LineaInternaOrden.cs" />
     <Compile Include="Entities\LineaOrden.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Medio.cs" />
     <Compile Include="Entities\Mes.cs" />
     <Compile Include="Entities\Orden.cs" />
+    <Compile Include="Entities\OrdenDeCompra.cs" />
     <Compile Include="Entities\Programa.cs" />
     <Compile Include="Entities\Rol.cs" />
     <Compile Include="Entities\TipoMaterial.cs" />

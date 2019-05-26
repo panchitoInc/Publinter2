@@ -13,6 +13,7 @@ namespace DataModule.EntitiesResult
         public string Descripcion { get; set; }
 
         public string Medio { get; set; }
+        public int MedioId { get; set; }
 
         public string Cliente { get; set; }
 

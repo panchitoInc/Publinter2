@@ -1,4 +1,4 @@
-﻿
+﻿@model Publinter.Models.Orden_Create_Model
 <style>
     .text-align-right {
         text-align: right;
@@ -9,18 +9,81 @@
     }
 </style>
 
-<script src="~/Content/Utils.js"></script>
-<script src="~/Content/JS/Orden.Datatable.ServerSide.js"></script>
+
 
 <script>
     $(document).ready(function () {
         var url = "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))/Orden/AjaxGetDataOrdenIndex";
         OrdenTableIndexServerSide(url);
+        $("#guardarYenviar").text("Enviar").attr({ "type": "button", "onclick": "javascript:EnviarOrdenPorEmail();" });
     })
 
     function CopiarOrden(ordenId)
     {
         window.location.href = "@Url.Action("CopiarOrden", "Orden")" + "?ordenId=" + ordenId;
+    }
+
+
+    function AbrirPopupEmail(ordenId, idMedio) {
+
+        $("#OrdenId").val(ordenId);
+        $("#Destinatario").html("<option>Cargando emails</option>");
+        $("#btnLunchModalEmail").click();
+        var data = { medioId: idMedio };
+        $.ajax({
+            url: '@Url.Action("GetEmailsPorMedio", "Medio")',
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                $("#Destinatario").html(data.html);
+
+            }
+        });
+    }
+    function onchangeEmailMedio(value) {
+        if (value != "-1") {
+            $("#Email_Destinatario").val(value).trigger("change");//.attr("disabled", "disabled");
+        }
+        else {
+            $("#Email_Destinatario").val("").trigger("change");//.removeAttr("disabled");
+
+        }
+    }
+
+    function OnchangeEmail(value) {
+        if (value != "") {
+            $("#guardarYenviar").removeAttr("disabled");
+        } else {
+            $("#guardarYenviar").attr("disabled", "disabled");
+        }
+    }
+    function EnviarOrdenPorEmail() {
+        var form = $("#formOrdenToSend");
+        $("#datosEmail").fadeOut();
+        $("#contenedor").fadeIn();
+        $.ajax(
+            {
+                url: '@Url.Action("EnviarOrdenPorEmail", "Orden")',
+                type: 'POST',
+                dataType: 'json',
+                data: form.serialize(),
+                success: function (data) {
+                    $(".cierraModal")[0].click();
+                    $("#Email_Destinatario").val("").trigger("change");
+                    $("#Email_Asunto").val("");
+                    $("#Email_Texto").val("");
+                    $("#datosEmail").fadeIn();
+                    $("#contenedor").fadeOut();
+                }, error: function (request, status, error) {
+                    $(".cierraModal")[0].click();
+                    $("#Email_Destinatario").val("").trigger("change");
+                    $("#Email_Asunto").val("");
+                    $("#Email_Texto").val("");
+                    $("#datosEmail").fadeIn();
+                    $("#contenedor").fadeOut();
+                }
+        });
     }
 </script>
 
@@ -34,7 +97,7 @@
     <div class="box-body">
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
             <div class="col-sm-12">
-                
+
                 <table id="OrdenIndexTabla" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr>
@@ -49,12 +112,21 @@
                         </tr>
                     </thead>
                 </table>
-                
             </div>
         </div>
     </div>
     <!-- /.box-body -->
+    <div>
+        @using (Html.BeginForm("EnviarOrdenPorEmail", "Orden", FormMethod.Post, new { @id = "formOrdenToSend" }))
+        {
+            @Html.HiddenFor(x => x.OrdenId)
+            <!--modal email-->
+            @Html.Partial("~/Views/Orden/Modal_Email.cshtml")
+        }
+    </div>
 </div>
+
 
 <script src="~/Content/Admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="~/Scripts/Utils.js"></script>
+<script src="~/Content/JS/Orden.Datatable.ServerSide.js"></script>

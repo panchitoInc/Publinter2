@@ -245,11 +245,14 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnuncianteController.cs" />
     <Compile Include="Controllers\CampaniaController.cs" />
+    <Compile Include="Controllers\ConfiguracionEmailController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\MedioController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\OrdenDeCompraController.cs" />
+    <Compile Include="Controllers\TipoMaterialController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Extensions\AppViewPage.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -2953,6 +2956,7 @@
     <Content Include="Content\Images\fondoLogin.png" />
     <Content Include="Content\Images\Logo-Publinter-dark-2017-final.png" />
     <Content Include="Content\Images\Logo-Publinter-light-2017.png" />
+    <Content Include="Content\Images\logoBlanco.png" />
     <Content Include="Content\JS\jsPdf\jspdf-autotable.js" />
     <Content Include="Content\JS\jsPdf\jspdf.debug.js" />
     <Content Include="Content\JS\jsPdf\jspdf.min.js" />
@@ -2961,6 +2965,15 @@
     <Content Include="Content\JS\ProgressButton\modernizr.custom.js" />
     <Content Include="Content\JS\ProgressButton\uiProgressButton.js" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\ProgressButton\css\component.css" />
+    <Content Include="Content\ProgressButton\css\demo.css" />
+    <Content Include="Content\ProgressButton\css\normalize.css" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\codropsicons.svg" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\license.txt" />
+    <Content Include="Content\ProgressButton\fonts\icomoon\icomoon.svg" />
+    <Content Include="Content\ProgressButton\js\classie.js" />
+    <Content Include="Content\ProgressButton\js\modernizr.custom.js" />
+    <Content Include="Content\ProgressButton\js\progressButton.js" />
     <Content Include="Content\Publinter\_layout.css" />
     <Content Include="Content\Utils.js" />
     <Content Include="favicon.ico" />
@@ -3427,6 +3440,16 @@
     <Content Include="Content\Admin\bower_components\moment\LICENSE" />
     <Content Include="Content\Admin\bower_components\moment\package-lock.json" />
     <Content Include="Content\Admin\bower_components\moment\README.md" />
+    <Content Include="Content\ProgressButton\css\.DS_Store" />
+    <Content Include="Content\ProgressButton\fonts\.DS_Store" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\.DS_Store" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\codropsicons.eot" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\codropsicons.ttf" />
+    <Content Include="Content\ProgressButton\fonts\codropsicons\codropsicons.woff" />
+    <Content Include="Content\ProgressButton\fonts\icomoon\icomoon.eot" />
+    <Content Include="Content\ProgressButton\fonts\icomoon\icomoon.ttf" />
+    <Content Include="Content\ProgressButton\fonts\icomoon\icomoon.woff" />
+    <Content Include="Content\ProgressButton\js\.DS_Store" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Publinter - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Publinter20180901062231 - Web Deploy.pubxml" />
@@ -3511,6 +3534,13 @@
     <Content Include="Views\Campania\Edit.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
     <Content Include="Views\Orden\AddLineaInterna.cshtml" />
+    <Content Include="Views\TipoMaterial\Index.cshtml" />
+    <Content Include="Views\TipoMaterial\Create.cshtml" />
+    <Content Include="Views\ConfiguracionEmail\Update.cshtml" />
+    <Content Include="Views\Orden\Modal_Email.cshtml" />
+    <Content Include="Views\Shared\_loader.cshtml" />
+    <Content Include="Views\OrdenDeCompra\Create.cshtml" />
+    <Content Include="Views\OrdenDeCompra\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

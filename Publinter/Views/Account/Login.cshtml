@@ -4,7 +4,7 @@
 }
 
 <!DOCTYPE html>
-<style>
+<style type="text/css">
     div#loginFondo {
         height: 100%;
         background-repeat: no-repeat;
@@ -27,10 +27,10 @@
         padding-left:34px;
     }
 
-        form#formLogin input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-            color: white;
-            opacity: 1; /* Firefox */
-        }
+    form#formLogin input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: white;
+        opacity: 1; /* Firefox */
+    }
 
     #validar {
         border-radius: 3px;
@@ -38,18 +38,23 @@
         opacity:0.7;
     }
 
-
-
-
     .form-control-feedback {
         left: 0!important;
         color:white!important;
     }
+
+    button#validar span.content[style] {
+        height: 30px !important;
+        min-height: 30px !important;
+        
+    }
+
+    .progress-button[data-style="shrink"][data-horizontal] .content {
+        height: 30px;
+        line-height: 2;
+    }
 </style>
 
-<script type="text/javascript">
-
-</script>
 <html>
 
 <head>
@@ -78,6 +83,10 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="~/Content/ProgressButton/css/normalize.css" rel="stylesheet" />
+    <link href="~/Content/ProgressButton/css/demo.css" rel="stylesheet" />
+    <link href="~/Content/ProgressButton/css/component.css" rel="stylesheet" />
+    <script src="~/Content/ProgressButton/js/modernizr.custom.js"></script>
 </head>
 <body class="hold-transition login-page">
     <div id="loginFondo" class="col-xs-12">
@@ -89,7 +98,7 @@
         </div>
 
         <div class="col-xs-10 col-xs-offset-1" style="margin-top:3%;">
-           <div class="login-box-body col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4">
+            <div class="login-box-body col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4">
 
                 <p class="login-box-msg" style="padding-left:0; font-family: 'Source Sans Pro', sans-serif;font-family: 'Raleway', sans-serif; font-size:30px;color:white;text-align:left;">Bienvenido</p>
 
@@ -113,15 +122,15 @@
                     </div>
                     <div class="row">
                         @*<div class="col-xs-8">
-                            <div class="checkbox icheck">
-                                <label>
-                                    <input type="checkbox"> Recordarme
-                                </label>
-                            </div>
-                        </div>*@
+                                <div class="checkbox icheck">
+                                    <label>
+                                        <input type="checkbox"> Recordarme
+                                    </label>
+                                </div>
+                            </div>*@
                         <!-- /.col -->
                         <div class="col-xs-12">
-                            <button id="validar" type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript: ValidarLogin();">Entrar</button>
+                            <button id="validar" type="button" class="progress-button btn btn-primary btn-block btn-flat" data-style="shrink"  data-horizontal style="height:35px;">Entrar</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -130,7 +139,7 @@
             <!-- /.login-box-body -->
         </div>
     </div>
-    
+
     <!-- /.login-box -->
     <!-- jQuery 3 -->
 
@@ -151,5 +160,34 @@
         });</script>*@
     <script src="~/Scripts/Utils.js"></script>
     <script src="~/Scripts/Publinter/Login.js"></script>
+    <script src="~/Content/ProgressButton/js/classie.js"></script>
+    <script src="~/Content/ProgressButton/js/progressButton.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            initAnimateProgres();
+        });
+        function initAnimateProgres() {//onclick="javascript: ValidarLogin();"
+
+
+            [].slice.call(document.querySelectorAll('button.progress-button')).forEach(function (bttn) {
+               instancia =  new ProgressButton(bttn, {
+                   callback: function (instance) {
+                       $("#error").fadeOut(200);
+                        ValidarLogin();
+                        
+							interval = setInterval(function () {
+							    progress = Math.min(progress + Math.random() * 0.1, 1);
+							    instance._setProgress(progress);
+							    //UIProgressButton.prototype.stop;
+							    //if (progress === 1) {
+							    //    instance._stop(1);
+							    //    clearInterval(interval);
+							    //}
+							}, 300);
+                    }
+                });
+            })
+        }
+    </script>
 </body>
 </html>

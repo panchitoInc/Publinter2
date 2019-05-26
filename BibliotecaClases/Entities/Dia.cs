@@ -15,7 +15,7 @@ namespace DataModule.Entities
 
         public string DiaNombre { get; set; }
 
-        public int NroEmisiones { get; set; }
+        public int? NroEmisiones { get; set; }
 
         public decimal TotalDia { get; set; }
     }

@@ -6,6 +6,7 @@
 }
 
 <link href="~/Content/Admin/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+<link href="~/Content/Admin/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <script src="~/Content/Admin/bower_components/moment/min/moment.min.js"></script>
 <script src="~/Content/Admin/bower_components/moment/min/moment-with-locales.min.js"></script>
@@ -68,7 +69,7 @@
     }
 
     .tdBlack {
-        width: 100px;
+        width: 200px;
         background-color: black;
         color: white;
     }
@@ -102,9 +103,14 @@
 
             }
         });
-
         $("#CampaniaId").trigger("change");
-
+        $("#SelectOrdenAnulaA").select2(
+            {
+                language: "es"//,
+                //allowClear: true,
+                //placeholder: "Cliente"
+            }
+            );
         var cantLineas = $(".lineaOrden").length;
         for (var i = 0; i < cantLineas; i++) {
             var cantLineasInternas = $(".LineaInterna_" + i).length;
@@ -126,6 +132,10 @@
             }
         });
 
+        $("#TotalOrden").focusout(function () {
+            TotalOrdenOnChange();
+        });
+
         SetPorcentajeBonificado();
 
         doc = new jsPDF();
@@ -134,6 +144,7 @@
                 return true;
             }
         };
+
     });
 
     function AgregarPrimeraLinea()
@@ -486,13 +497,46 @@
 
         CalcularTotalLinea(index);
     }
+    function onchangeEmailMedio(value) {
+        if (value != "-1") {
+            $("#Email_Destinatario").val(value);//.attr("disabled", "disabled");
+        }
+        else {
+            $("#Email_Destinatario").val("");//.removeAttr("disabled");
 
-
+        }
+    }
+    function GetEmailsPorMedioSuccess(data, index) {
+        $("#Email_destino").html(data);
+    }
+    function OnchangeEmail(value) {
+        if (value != "") {
+            $("#guardarYenviar").removeAttr("disabled");
+        } else {
+            $("#guardarYenviar").attr("disabled", "disabled");
+        }
+    }
     //funcion para exportar el form a pdf.
-    function ExportPdf(val)
-    {
+    function ExportPdf(val) {
         $("#GuardarEnviarDescargar").val(val);
-        $("#formOrden").submit();
+        if (val == 2) {
+            $("#btnLunchModalEmail").click();
+            $("#formOrden").attr("action", "/Orden/SendEmailWithPdf");
+        } else {
+            $("#formOrden").submit();
+        }
+    }
+
+    function OnclickInversionTotal() {
+        $("#totalOrden").hide();
+        $("#TotalOrden").fadeIn().focus();
+    }
+    function TotalOrdenOnChange() {
+        $(".totalMes").text("-");
+        $("#TotalOrden").hide();
+        $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals($("#TotalOrden").val(), 2))).show();
+        
+        
     }
 
     function SetPorcentajeBonificado()
@@ -617,6 +661,18 @@
     }
 
 </div>
+<div class=" register-box-body col-sm-12">
+
+    @using (Html.BeginForm("EnviarOrdenPorEmail", "Orden", FormMethod.Post, new { @id = "formSendOrden" }))
+    {
+
+        @Html.HiddenFor(x => x.GuardarEnviarDescargar)
+        <!--modal email-->
+        @Html.Partial("~/Views/Orden/Modal_Email.cshtml")
+
+    }
+
+</div>
 
 <div id="mensajeExito">
     <div style="opacity: 1; margin-top: 0px;">
@@ -643,8 +699,9 @@
 </div>
 
 <script src="~/Scripts/Utils.js"></script>
-<script src="~/Content/JS/jsPdf/jspdf.min.js"></script>
+<script src="~/Content/Admin/bower_components/select2/dist/js/select2.min.js"></script>
+@*<script src="~/Content/JS/jsPdf/jspdf.min.js"></script>
 <script src="~/Content/JS/jsPdf/jspdf-autotable.js"></script>
-<script src="~/Scripts/html2canvas.js"></script>
+<script src="~/Scripts/html2canvas.js"></script>*@
 
 

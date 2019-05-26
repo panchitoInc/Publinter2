@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using BusinessLogic.ApplicationServices;
@@ -100,12 +101,31 @@ namespace Publinter.Controllers
             }
         }
 
+        //public ActionResult Create()
+        //{
+        //    Orden_Create_Model model = new Orden_Create_Model();
+        //    model.ListaCampanias = campaniaAplicationService.GetAll();
+        //    if(model.ListaCampanias.Count > 0)
+        //    {
+        //        var PrimerCampania = model.ListaCampanias.FirstOrDefault();
+        //        var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
+        //        model.ListaMateriales = CampaniaConDependencias.Materiales;
+
+        //    }
+        //    model.ListaMedios = medioApplicationService.GetAll();
+        //    model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
+        //    model.ListaClientes = clienteApplicationService.GetClientes();
+
+
+        //    model.NroOrden = ordenApplicationService.GetNroOrden();
+        //    model.UsuarioId = CurrentUser.Id;
+
+        //    return View(model);
+        //}
         public ActionResult Create()
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
-
-            if (model.ListaCampanias.Count > 0)
             {
                 var PrimerCampania = model.ListaCampanias.FirstOrDefault();
                 var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
@@ -113,12 +133,26 @@ namespace Publinter.Controllers
             }
 
             model.ListaMedios = medioApplicationService.GetAll();
-            model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
+            if (model.ListaMedios.Count > 0)
+            {
+                model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
+            }
             model.ListaClientes = clienteApplicationService.GetClientes();
 
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
-           
+            List<SelectListItem> ListaMediosEmails = new List<SelectListItem>();
+            if (model.ListaMedios.Count > 0)
+            {
+
+                ListaMediosEmails = medioApplicationService.GetEmailsPorMedio(model.ListaMedios.FirstOrDefault().MedioId)
+                      .Select(x => new SelectListItem { Text = x, Value = x })
+                      .ToList();
+            }
+            SelectListItem unIten = new SelectListItem() { Value = "-1", Text = "Seleccione un email." };
+            ListaMediosEmails.Insert(0, unIten);
+            ViewBag.ListaEmails = ListaMediosEmails;
+
             return View(model);
         }
 
@@ -221,11 +255,11 @@ namespace Publinter.Controllers
                 Orden nueva = model.ToOrden();
                 ordenApplicationService.CrearOrden(nueva);
 
-                if(model.GuardarEnviarDescargar == 1)
+                if (model.GuardarEnviarDescargar == 1)
                 {
                     createPdf(model);
                 }
-                else if(model.GuardarEnviarDescargar == 2)
+                else if (model.GuardarEnviarDescargar == 2)
                 {
                     SendEmailWithPdf(model);
                 }
@@ -246,6 +280,10 @@ namespace Publinter.Controllers
         // GET: Orden
         public ActionResult Index()
         {
+            List<SelectListItem> ListaMediosEmails = new List<SelectListItem>();
+            SelectListItem unIten = new SelectListItem() { Value = "-1", Text = "Cargando emails." };
+            ListaMediosEmails.Insert(0, unIten);
+            ViewBag.ListaEmails = ListaMediosEmails;
             return View();
         }
 
@@ -561,6 +599,7 @@ namespace Publinter.Controllers
         }
         private MemoryStream CreateDocumentPdf(Orden_Create_Model model)
         {
+
             model.Campania = campaniaAplicationService.Get(model.CampaniaId);
             model.Medio = medioApplicationService.Get(model.MedioId);
             MemoryStream workStream = new MemoryStream();
@@ -570,39 +609,69 @@ namespace Publinter.Controllers
 
             document.Open();
             // setting image 
-            string imagePath = "C:/Users/germa/Desktop/Publinter2/Publinter2/Publinter/Content/Images/Logo-Publinter-dark-2017-final.png";
+            string imagePath = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\Logo-Publinter-dark-2017-final.png";
             iTextSharp.text.Image tif = iTextSharp.text.Image.GetInstance(imagePath);
-            tif.ScalePercent(24f);
-            tif.SetAbsolutePosition(document.PageSize.Width - 36f - 140f,
-            document.PageSize.Height - 75f);
+            tif.ScalePercent(30f);
+            tif.Alignment = Element.ALIGN_RIGHT;
+            //tif.SetAbsolutePosition(document.PageSize.Width - 36f - 140f,document.PageSize.Height - 75f);
             document.Add(tif);
             // fin imagenes
-            //Titulo Orden
+            // declaracion de texto
             iTextSharp.text.Font titleFont = FontFactory.GetFont("Garamond", 20);
-            iTextSharp.text.Font regularFont = FontFactory.GetFont("Arial", 14);
-
-            Paragraph OrdenNumero = new Paragraph("Órden Nro. " + model.NroOrden.ToString(), titleFont);
-            OrdenNumero.Alignment = Element.ALIGN_LEFT;
+            iTextSharp.text.Font regularFont = FontFactory.GetFont("Garamond", 14);
+            iTextSharp.text.Font blueFont = FontFactory.GetFont("Garamond", 14);
+            //Titulo Orden
+            blueFont.Color = BaseColor.BLUE;
+            Paragraph OrdenDePublicidad = new Paragraph("Orden de publicidad", regularFont);
+            OrdenDePublicidad.Alignment = Element.ALIGN_RIGHT;
+            document.Add(OrdenDePublicidad);
+            Paragraph OrdenNumero = new Paragraph("No. " + model.NroOrden.ToString(), titleFont);
+            OrdenNumero.Alignment = Element.ALIGN_RIGHT;
             document.Add(OrdenNumero);
             //fin titulo orden
             //Linea separadora titulo
             Paragraph pLineaSeparadora = new Paragraph(new Chunk(new LineSeparator(0.01F, 100.0F, BaseColor.LIGHT_GRAY, Element.ALIGN_LEFT, 1)));
-            //   pLineaSeparadora.ExtraParagraphSpace =30;
-            document.Add(pLineaSeparadora);
             //
-
-            CreateTableMedioCampaniaEmision(document, model);
+            Paragraph medioTitle = new Paragraph("Sres de:             " + model.Medio.Nombre);
+            document.Add(medioTitle);
+            Paragraph AnunciateTitle = new Paragraph("De nto. Cliente:  " + model.Campania.Cliente.Nombre);
+            document.Add(AnunciateTitle);
+            var c = new Chunk("www.Publinter.com.uy", blueFont);
+            c.SetAnchor("www.Publinter.com.uy");
+            Paragraph EmisionPh = new Paragraph("Fecha:                " + model.Emision.ToString("dd/MM/yyyy"));
+            document.Add(EmisionPh);
+            Paragraph link = new Paragraph("                              Link para descargar materiales " + c, FontFactory.GetFont("Garamond", 11));
+            document.Add(link);
+            //Paragraph CampaniaPh = new Paragraph("Campaña: " + model.Campania.Nombre);
+            //document.Add(CampaniaPh);
+            //CreateTableMedioCampaniaEmision(document, model);
 
             document.Add(pLineaSeparadora);
             //Table
             CreateTable(document, model);
             //Agrego linea footer
 
-            document.Add(pLineaSeparadora);
             //Linea separadora footer
+            document.Add(pLineaSeparadora);
             Paragraph InversionTotal = new Paragraph("INVERSIÓN TOTAL: $" + model.TotalOrden.ToString());
             InversionTotal.Alignment = Element.ALIGN_CENTER;
             document.Add(InversionTotal);
+            pLineaSeparadora.SpacingAfter = 5;
+            pLineaSeparadora.SpacingBefore = 5;
+            document.Add(pLineaSeparadora);
+            //dator del Fotter
+            Paragraph footer = new Paragraph("Por consultas y dudas sobre esta orden, comunicarse inmediatamente al 2403 4489", FontFactory.GetFont("Garamond", 10));
+            footer.Alignment = Element.ALIGN_CENTER;
+            document.Add(footer);
+            document.Add(new Paragraph(""));
+            footer = new Paragraph("Facturar a xxxx.SA - Dorección y RUT XXXX XXXX XXXX", FontFactory.GetFont("Garamond", 10));
+            footer.Alignment = Element.ALIGN_CENTER;
+            document.Add(footer);
+            document.Add(new Paragraph(""));
+            footer = new Paragraph("Todas las facturas deben incluir el número de orden correspondiente.", FontFactory.GetFont("Garamond", 10));
+            footer.Alignment = Element.ALIGN_CENTER;
+            document.Add(footer);
+            document.Add(new Paragraph(""));
             document.Close();
             byte[] byteInfo = workStream.ToArray();
             workStream.Write(byteInfo, 0, byteInfo.Length);
@@ -692,7 +761,7 @@ namespace Publinter.Controllers
             return retorno;
         }
 
-        private Document  CreateTable(Document document, Orden_Create_Model model)
+        private Document CreateTable(Document document, Orden_Create_Model model)
         {
             try
             {
@@ -851,7 +920,7 @@ namespace Publinter.Controllers
                     }
 
                     //table.SpacingAfter = 5;
-                    table.SpacingBefore = 8;
+                    table.SpacingBefore = 6;
                     document.Add(table);
                 }
             }
@@ -859,16 +928,16 @@ namespace Publinter.Controllers
             {
                 return document;
             }
-            
-            
+
+
 
             return document;
         }
         private Document CreateTableMedioCampaniaEmision(Document document, Orden_Create_Model model)
         {
-          
+
             Phrase CampaniaPh = new Phrase("Campaña: " + model.Campania.Nombre);
-            Phrase MedioPh = new Phrase("Medio: " + model.Medio.Nombre );
+            Phrase MedioPh = new Phrase("Medio: " + model.Medio.Nombre);
             Phrase EmisionPh = new Phrase("Emisión: " + model.Emision.ToString("dd/MM/yyyy"));
             PdfPTable TableMedioCampaniaEmision = new PdfPTable(3);
             TableMedioCampaniaEmision.WidthPercentage = 100;
@@ -902,34 +971,160 @@ namespace Publinter.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SendEmailWithPdf(Orden_Create_Model model)
         {
+
+            try
+            {
+                Orden nueva = model.ToOrden();
+                ordenApplicationService.CrearOrden(nueva);
+            }
+            catch (Exception e)
+            {
+                throw new System.ArgumentException("error al guardar", "original");
+            }
+            try
+            {
+
+                //MailMessage message = new MailMessage();
+                //message.To.Add(new MailAddress(model.Email.Destinatario));
+                //message.From = new MailAddress("prueba@publinter.com.uy");
+                //message.Subject = model.Email.Asunto;
+                //string imagePath = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\Logo-Publinter-dark-2017-final.png";
+                //LinkedResource res = new LinkedResource(imagePath);
+                //res.ContentId = Guid.NewGuid().ToString();
+                //var doc = CreateDocumentPdf(model);
+                //Attachment attachment = new Attachment(doc, "Pdf");
+                //attachment.Name = "OrdenNro" + model.NroOrden + "_Medio" + model.Medio.Nombre + "_Campaña" + model.Campania.Nombre + ".pdf";
+                //message.Attachments.Add(attachment);
+                //string imagePathLogoBlanco = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\logoBlanco.png";
+                //message.AlternateViews.Add(getEmbeddedImage(imagePathLogoBlanco, model));
+                //IConfiguracionEmailApplicationService configuracionEmailApplicationService = new ConfiguracionEmailApplicationService(CurrentUser);
+                //ConfiguracionEmail configE = configuracionEmailApplicationService.Get();
+
+                //using (var smtp = new SmtpClient())
+                //{
+                //    var credential = new NetworkCredential
+                //    {
+                //        UserName = configE.UserName,
+                //        Password = configE.Password
+                //    };
+                //    smtp.Credentials = credential;
+                //    smtp.Host = configE.Host;//"smtp.gmail.com";//"smtp.webfaction.com";  
+                //    smtp.Port = configE.Port;// 587;
+                //    smtp.EnableSsl = true;
+                //    await smtp.SendMailAsync(message);
+                var a = await EnviarConPdf(model);
+                return RedirectToAction("Create");
+
+            }
+            catch (Exception e)
+            {
+
+                throw new System.ArgumentException("Error al enviar Email", "original");
+            }
+        }
+
+        private AlternateView getEmbeddedImage(String filePath, Orden_Create_Model model)
+        {
+            LinkedResource res = new LinkedResource(filePath);
+            res.ContentId = Guid.NewGuid().ToString();
+            string htmlBody = @"<div style='width:100%;position:absoluted;top:0;background-color:#2aa12e;height:50px;'>" +
+                                    "<a href ='http://www.publinter.com.uy/wp/index.php'> <img style='width:18%;float:left;padding-left:9px;padding-top:10px;' class ='pull-left' src='cid:" + res.ContentId + @"'/> </a>" +
+                               "</div>" +
+                               "<div class='cuerpo'>" +
+                                    "<p style='font-size:16px;margin-bottom:35px;margin-top:35px;padding-left:9px;'>" + model.Email.Texto + " </p>" +
+                               "</div>" +
+                               "<div style='background-color:#c7c2c2;height:1px; width: 100%;'>" +
+                               "</div>";
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(htmlBody, null, MediaTypeNames.Text.Html);
+            alternateView.LinkedResources.Add(res);
+            return alternateView;
+        }
+
+        public ActionResult GetEmailsPorMedio(int medioId)
+        {
+            IMedioApplicationServices medioApplicationServices = new MedioApplicationServices(CurrentUser);
+            var listaEmails = medioApplicationServices.GetEmailsPorMedio(medioId);
+            return Json(listaEmails, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public async Task <JsonResult> EnviarOrdenPorEmail(Orden_Create_Model model)
+        {
+            try
+            {
+                IOrdenApplicationService ordenApplicationService = new OrdenApplicationService(CurrentUser);
+                Orden ordenAEniar = ordenApplicationService.Get(model.OrdenId);
+                model = ToModel(model, ordenAEniar);
+
+              var retorno = await EnviarConPdf(model);
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
             
-                var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
-                var message = new MailMessage();
-                message.To.Add(new MailAddress("analiacortimorales@gmail.com"));  // replace with valid value 
-                message.From = new MailAddress("hernanfaggiani@gmail.com");  // replace with valid value
-                message.Subject = "Prueba";
-                message.Body = string.Format(body, "Hernan","hernanfaggiani@gmail.com", "mensaje de prueba");
-                message.IsBodyHtml = true;
+        }
+        public async Task<bool> EnviarConPdf(Orden_Create_Model model)
+        {
+            try
+            {
+                MailMessage message = new MailMessage();
+                message.To.Add(new MailAddress(model.Email.Destinatario));
+                message.From = new MailAddress("prueba@publinter.com.uy");
+                message.Subject = model.Email.Asunto;
+                string imagePath = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\Logo-Publinter-dark-2017-final.png";
+                LinkedResource res = new LinkedResource(imagePath);
+                res.ContentId = Guid.NewGuid().ToString();
+                var doc = CreateDocumentPdf(model);
+                Attachment attachment = new Attachment(doc, "Pdf");
+                attachment.Name = "OrdenNro" + model.NroOrden + "_Medio" + model.Medio.Nombre + "_Campaña" + model.Campania.Nombre + ".pdf";
+                message.Attachments.Add(attachment);
+                string imagePathLogoBlanco = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\logoBlanco.png";
+                message.AlternateViews.Add(getEmbeddedImage(imagePathLogoBlanco, model));
+                IConfiguracionEmailApplicationService configuracionEmailApplicationService = new ConfiguracionEmailApplicationService(CurrentUser);
+                ConfiguracionEmail configE = configuracionEmailApplicationService.Get();
 
                 using (var smtp = new SmtpClient())
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "hernanfaggiani@gmail.com",  // replace with valid value
-                        Password = "2442003manumanu"  // replace with valid value
+                        UserName = configE.UserName,
+                        Password = configE.Password
                     };
                     smtp.Credentials = credential;
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.Port = 587;
+                    smtp.Host = configE.Host;//"smtp.gmail.com";//"smtp.webfaction.com";  
+                    smtp.Port = configE.Port;// 587;
                     smtp.EnableSsl = true;
                     await smtp.SendMailAsync(message);
-                    return RedirectToAction("Create");
                 }
+                return true;
+            }
+            catch
+            {
+                return false;
+                
+            }
             
         }
+        public Orden_Create_Model ToModel(Orden_Create_Model model, Orden orden)
+        {
+            model.CampaniaId = orden.CampaniaId;
+            model.Campania = orden.Campania;
+            model.Emision = orden.Emision;
+            model.Lineas = orden.LineasOrden;
+            model.MedioId = orden.MedioId;
+            model.Medio = orden.Medio;
+            model.NroOrden = orden.NroOrden;
+            model.OrdenId = orden.OrdenId;
+            model.TotalOrden = orden.Total;
+            model.UsuarioId = orden.UsuarioId;
+            return model;
+        }
+
+        
 
     }
 }

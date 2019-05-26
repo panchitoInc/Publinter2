@@ -29,13 +29,16 @@ namespace DataModule
         public DbSet<Anunciante> Anunciante { get; set; }
         public DbSet<Campania> Campania { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<ConfiguracionEmail> ConfiguracionEmail { get; set; }
         public DbSet<Contacto> Contacto { get; set; }
         public DbSet<Dia> Dia { get; set; }
+        public DbSet<Email> Email { get; set; }
         public DbSet<Mes> Mes { get; set; }
         public DbSet<Medio> Medio { get; set; }
         public DbSet<Material> Material { get; set; }
         public DbSet<Programa> Programa { get; set; }
         public DbSet<Orden> Orden { get; set; }
+        public DbSet<OrdenDeCompra> OrdenDeCompra { get; set; }
         public DbSet<TipoMaterial> TipoMaterial { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Rol> Rol { get; set; }

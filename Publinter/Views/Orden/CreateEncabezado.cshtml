@@ -17,6 +17,9 @@
         border-bottom: 1px solid #eeecec;
         margin-bottom: 10px;
     }
+    .anulaOrden_wrap .select2-selection {
+        border: 1px solid #ccc;
+    }
 </style>
 
 <div class="col-sm-12">
@@ -36,9 +39,10 @@
     <div id="datosEncabezado" class="col-sm-12">
         <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Campaña: </label>
-            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
+            @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style ="width: 161px;height: 28px;padding-left: 4px;border-radius: 3px;border: 1px solid #ccc;", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
         </div>
         <div class="col-sm-3">
+            
             <label class="inline-element" style="width:75px">Medio: </label>
             @Html.DropDownListFor(x => x.MedioId, new SelectList(Model.ListaMedios, "MedioId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarProgramas();GetOrdenesSelect();SetPorcentajeBonificado()" })
         </div>
@@ -55,15 +59,13 @@
         </div>
         <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Emisión: </label>
-            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "width:130px;height:21.33px;padding-left:4px;" })
+            @Html.TextBoxFor(x => x.Emision, new { @class = "inline-element pull-right", style = "width: 161px;height: 28px;padding-left: 4px;border-radius: 3px;border: 1px solid #ccc;padding-left:4px;" })
         </div>
-        <div class="col-sm-12" style="margin-top:15px">
-            <label class="inline-element" style="width:75px">Anula a: </label>
-            <select id="SelectOrdenAnulaA" class="inline-element" onchange="SetOrdenAnulaA()" style="padding-left:4px;">
                 <option value="0">Seleccione orden</option>
             </select>
             @Html.HiddenFor(x => x.OrdenAnulada)
         </div>
     </div>
+   
 </div>
 

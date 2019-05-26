@@ -57,7 +57,7 @@ namespace AccesoDatos.Repository
 
             using (var context = new PublinterContext())
             {
-                retorno = context.TipoMaterial.ToList();
+                retorno = context.TipoMaterial.Where(x => x.Deshabilitado == false).ToList();
             }
             return retorno.ToList();
         }

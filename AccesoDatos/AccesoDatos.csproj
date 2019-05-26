@@ -54,19 +54,25 @@
     <Compile Include="Repository\AnuncianteRepository.cs" />
     <Compile Include="Repository\CampaniaRepository.cs" />
     <Compile Include="Repository\ClienteRepository.cs" />
+    <Compile Include="Repository\ConfiguracionEmailRepository.cs" />
     <Compile Include="Repository\IAccountRepository.cs" />
     <Compile Include="Repository\IAnuncianteRepository.cs" />
     <Compile Include="Repository\ICampaniaRepository.cs" />
     <Compile Include="Repository\IClienteRepository.cs" />
+    <Compile Include="Repository\IConfiguracionEmailRepository.cs" />
     <Compile Include="Repository\IMaterialRepository.cs" />
     <Compile Include="Repository\IMedioRepository.cs" />
+    <Compile Include="Repository\IOrdenDeCompraRepository.cs" />
     <Compile Include="Repository\IOrdenRepository.cs" />
     <Compile Include="Repository\IProgramaRepository.cs" />
+    <Compile Include="Repository\ITipoMaterialRepository.cs" />
     <Compile Include="Repository\IUsuarioRepository.cs" />
     <Compile Include="Repository\MaterialRepository.cs" />
     <Compile Include="Repository\MedioRepository.cs" />
+    <Compile Include="Repository\OrdenDeCompraRepository.cs" />
     <Compile Include="Repository\OrdenRepository.cs" />
     <Compile Include="Repository\ProgramaRepository.cs" />
+    <Compile Include="Repository\TipoMaterialRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,154 @@
+﻿@model DataModule.Entities.OrdenDeCompra
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .title {
+        margin-top: 10px;
+    }
+    .NumeroOrdenCompra {
+        border: none;
+        pointer-events: none;
+    }
+    #mensajeExito {
+        display: none;
+        position: absolute;
+        left: CALC(50%);
+        bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        color: white;
+        background-color: rgb(63, 175, 82);
+        width: 200px;
+    }
+
+    #mensajeErrorBack {
+        display: none;
+        position: absolute;
+        left: CALC(50%);
+        bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        color: white;
+        background-color: #da6262;
+        width: 390px;
+    }
+</style>
+<script type="text/javascript">
+
+    
+    function CheckError() {
+        if (focusOutCantidadSalidas($("#Salidas")[0])) {
+            $("#OrdenDeCompraForm").submit();
+        } else {
+            $("#spanErrorCompBack").text("Cantidad de salidas debe ser mayor a cero.")
+            openMensajeErrorBack();
+            
+        }
+    }
+
+    function openMensajeExito() {
+        $("#mensajeExito").fadeIn();
+        setTimeout(function () { $("#mensajeExito").fadeOut(); $("#errorMsgDiv").fadeOut(); }, 10000)
+    }
+
+    function openMensajeErrorBack() {
+        $("#mensajeErrorBack").fadeIn();
+        setTimeout(function () { $("#mensajeErrorBack").fadeOut(); $("#errorMsgDivBack").fadeOut(); }, 10000)
+    }
+
+    function ShowMsgErrorComp() {
+        $("#errorMsgDiv").slideDown();
+    }
+
+    function closeMessage() {
+        $("#mensajeExito").fadeOut();
+        $("#mensajeError").fadeOut();
+        $("#errorMsgDiv").fadeOut();
+    }
+
+    function focusOutCantidadSalidas(element) {
+        if (parseInt(element.value) <= 0) {
+            SetBorderBottomFalse(element.id);
+            return false;
+        } else {
+            SetBorderBottomTrue(element.id);
+            return true;
+        }
+    }
+</script>
+<div class="register-box-body">
+    <h3 class="title">Órden de compra Nro. @Html.DisplayFor(x => x.NumeroDeOrdenDeCompra)</h3>
+
+    @using (Html.BeginForm("Create", "OrdenDeCompra", FormMethod.Post, new { @id = "OrdenDeCompraForm" }))
+    {
+
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    <label>Salidas</label>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    <label>Medio</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Salidas, new { type = "number", @min = "0", @step = "1", @value = "0", @class = "form-control", @placeholder = "Cantidad", onblur= "javascript:focusOutCantidadSalidas(this);", onchange = "javascript:focusOutCantidadSalidas(this);" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group has-feedback">
+                    @Html.DropDownListFor(x => x.MedioId, new SelectList(ViewBag.ListaMedios, "Value", "Text"), new { @class = "form-control", @placeholder = "Nombre" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-8 col-md-10">
+                <span id="Mensaje" style="display:none;"></span>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4 col-md-2">
+                <button id="btnSubmit" type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript:CheckError();">Guardar</button>
+            </div>
+            <!-- /.col -->
+        </div>
+        @Html.HiddenFor(x => x.NumeroDeOrdenDeCompra)
+    }
+    <div id="mensajeExito">
+        <div style="opacity: 1; margin-top: 0px;">
+            <div>
+                <a href="#" class="pull-right" onclick="closeMessage()" style="color:white"><i class="fa fa-close" aria-hidden="true"></i></a>
+                <a id="txtMensajeExito" target="_blank" href="" style="font-weight:bold;color:white"></a> generada correctamente.
+            </div>
+        </div>
+    </div>
+
+    <div id="mensajeErrorBack">
+        <div style="opacity: 1; margin-top: 0px;">
+            <div>
+                <a href="#" class="pull-right" onclick="closeMessage()" style="color:white"><i class="fa fa-close" aria-hidden="true"></i></a>
+                <span id="spanErrorCompBack">Hubo un error al generar la órden.</span>
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.register-box -->
+<!-- jQuery 3 -->
+<script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="~/Content/Admin/plugins/iCheck/icheck.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>
+<script src="~/Scripts/Publinter/Validar.js"></script>

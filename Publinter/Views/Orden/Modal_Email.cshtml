@@ -1,0 +1,56 @@
+﻿@model Publinter.Models.Orden_Create_Model
+
+<button id="btnLunchModalEmail" type="button" class="hidden" data-toggle="modal" data-target="#modal-default">
+    Launch Default Modal
+</button>
+<div class="modal fade" id="modal-default" style="display: none;">
+    <div id="contenideoModalEmail" class="modal-dialog">
+        <div class="modal-content" style="position:relative;height:394px;">
+            <div id="datosEmail">
+
+                <div class="modal-header">
+                    <button type="button" class="close cierraModal" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Datos de e-mail</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-2"><label>Para:</label></div>
+                        <div class="col-xs-10">
+                            @Html.TextBoxFor(x => x.Email.Destinatario, new { @placeholder = "Escriba o seleccione un email del medio.", @style = "width: 100%;height: 35px;margin-bottom: 8px;border-radius: 3px;border: 1px solid #ccc;padding-left:8px;", onchange = "javascript:OnchangeEmail(this.value);" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2"><label>Emails:</label></div>
+                        <div class="col-xs-10" style="height:43px;">
+                            @Html.DropDownList("Destinatario", new SelectList(ViewBag.ListaEmails, "value", "text"), new { @class = "inline-element", style = "width: 100%;height: 35px;margin - bottom: 8px;border-radius: 3px;border: 1px solid #ccc;padding-left:8px;", onchange = "javascript:onchangeEmailMedio(this.value);" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2"><label>Asunto:</label></div>
+                        <div class="col-xs-10">
+                            @Html.TextBoxFor(x => x.Email.Asunto, new { @placeholder = "Asunto.", @style = "width: 100%;height: 35px;margin-bottom: 8px;border-radius: 3px;border: 1px solid #ccc;padding-left:8px;" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2"><label>Texto:</label></div>
+                        <div class="col-xs-10">
+                            @Html.TextAreaFor(x => x.Email.Texto, new { @style = "width:100%;padding-left:8px;width: 100%;height: 101px;margin-bottom: 8px;border-radius: 3px;border: 1px solid #ccc;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left cierraModal" data-dismiss="modal">Cerrar</button>
+                    <button id="guardarYenviar" type="submit" class="btn btn-primary" disabled="disabled">Guardar y enviar</button>
+                </div>
+            </div>
+            @Html.Partial("~/Views/Shared/_loader.cshtml")
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+
+    
+</div>

@@ -55,6 +55,7 @@ namespace Publinter.Controllers
 
                 
                 ClaimsIdentity identity = new ClaimsIdentity(new[] {
+                    new Claim(ClaimTypes.Role, _usuario.RolId.ToString()),
                     new Claim(ClaimTypes.Name, _usuario.Nombre + " " +  _usuario.Apellido),
                     new Claim("NombreUsuario", _usuario.NombreUsuario),
                     new Claim(ClaimTypes.Sid, _usuario.UsuarioId.ToString()),

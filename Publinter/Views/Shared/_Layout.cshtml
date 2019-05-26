@@ -182,19 +182,6 @@
                         <li><a href="@Url.Action("Create", "Anunciante")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
-
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Usuarios</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="@Url.Action("Index", "Usuario")"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="@Url.Action("Create", "Usuario")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
-                    </ul>
-                </li>
                 <li class="treeview">
                     <a href="javascript:void(0);">
                         <span>Clientes</span>
@@ -207,6 +194,46 @@
                         <li><a href="@Url.Action("Create", "Cliente")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
+                @if (CurrentUser.IsAdmin)
+                {
+                    <li class="treeview">
+                        <a href="javascript:void(0);">
+                            <span>Usuarios</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "Usuario")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                            <li><a href="@Url.Action("Create", "Usuario")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="javascript:void(0);">
+                            <span>Tipo material</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "TipoMaterial")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                            <li><a href="@Url.Action("Create", "TipoMaterial")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="javascript:void(0);">
+                            <span>Órden de compra</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "OrdenDeCompra")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                            <li><a href="@Url.Action("Create", "OrdenDeCompra")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        </ul>
+                    </li>
+                }
 
                 <li class="treeview" style="display:none">
                     <a href="#">
@@ -299,6 +326,9 @@
                 </div>
                 <div class="col-xs-12">
                     <a href="../../Account/LogOut" class="btn btn-block btn-default btn-sm">Cerrar sesión</a>
+                </div>
+                <div class="col-xs-12" style="top:300px;">
+                    <a class="btn btn-block btn-default btn-sm" style="background-color:#3faf52;color:#fff;" href="../ConfiguracionEmail/Update">Configuracion</a>
                 </div>
             </div>
             <!-- /.tab-pane -->
