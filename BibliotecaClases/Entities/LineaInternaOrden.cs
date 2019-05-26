@@ -39,6 +39,11 @@ namespace DataModule.Entities
 
         public decimal TotalLineaInterna { get; set; }
 
+        public int? LineaBonificadaId { get; set; }
+
+        [ForeignKey("LineaBonificadaId")]
+        public LineaBonificada LineaBonificada { get; set; }
+
         [NotMapped]
         public bool Deleted { get; set; }
     }

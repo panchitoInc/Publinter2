@@ -85,6 +85,11 @@
         left: 6px;
         top: 48px;
     }
+
+    .inpBonificado {
+        background-color: #daffda;
+    }
+
 </style>
 
 <script>
@@ -121,6 +126,8 @@
             }
         });
 
+        SetPorcentajeBonificado();
+
         doc = new jsPDF();
         specialElementHandlers = {
             '#editor': function (element, renderer) {
@@ -147,6 +154,7 @@
                 SetPrograma(0,0);
                 SetMaterial(0,0);
                 CalcularTotalLinea(data.index);
+                CalcularBonificaciones();
             }
         });
     }
@@ -169,6 +177,7 @@
                 SetPrograma(data.index, 0);
                 SetMaterial(data.index, 0);
                 CalcularTotalLinea(data.index);
+                CalcularBonificaciones();
             }
         });
     }
@@ -195,6 +204,7 @@
                 }     
                 
                 CalcularTotalLinea(data.index);
+                CalcularBonificaciones();
             }
         });
     }
@@ -219,6 +229,7 @@
 
                 SetPrograma(indexLinea, data.indexLineaInterna);
                 SetMaterial(indexLinea, data.indexLineaInterna);
+                CalcularBonificacion(indexLinea, data.indexLineaInterna);
                 //CalcularTotalLineaInterna(data.index); //hacer
             }
         });
@@ -231,6 +242,7 @@
         $(".LineaInterna_" + index_linea + "_" + index_interna).hide();
         $(".LineaInterna_" + index_linea + "_" + index_interna).addClass("deleted");
 
+        CalcularBonificacion(index_linea, index_interna);
         CalcularTotalOrden();
     }
 
@@ -481,6 +493,105 @@
     {
         $("#GuardarEnviarDescargar").val(val);
         $("#formOrden").submit();
+    }
+
+    function SetPorcentajeBonificado()
+    {
+        var medio = $("#MedioId").val();
+        var desc_medio = $("#PorcentajeBonificado_Medio_" + medio).attr("value");
+
+        $("#PorcentajeBonificado").val(floatToStringDecimals(parseFloat(desc_medio), 2)).trigger("change");
+    }
+
+    function CalcularBonificaciones()
+    {
+        var porcentaje = parseFloat($("#PorcentajeBonificado").val());
+        var cantLineas = $(".lineaOrden").length;
+        
+        if(porcentaje > 0)
+        {
+            $(".LineaBonificacion").show();
+
+            for(var i = 0; i < cantLineas; i++)
+            {
+                var cantInternas = $(".LineaInterna_" + i).length;
+
+                for(var e = 0; e < cantInternas; e++)
+                {
+                    var emisiones = 0;
+                    var emisionesBonificadas = 0;
+                    var deleted = $(".LineaInterna_" + i + "_" + e).hasClass("deleted");
+                    var nroDias = $(".dia_" + i + "_" + e).length;
+
+                    if (!deleted)
+                    {   
+                        for (var d = 0; d < nroDias; d++)
+                        {
+                            var emisionesDia = parseInt($("#Lineas_" + i + "__LineasInternasOrden_" + e + "__Mes_Dias_" + d + "__NroEmisiones").val());
+                            var emisionesBonificadasDia = parseInt($("#Lineas_" + i + "__LineasInternasOrden_" + e + "__LineaBonificada_Mes_Dias_" + d + "__NroEmisiones").val());
+                        
+                            emisiones += emisionesDia;
+                            emisionesBonificadas += emisionesBonificadasDia;
+                        }
+                    
+                        var cantBonificadas = Math.round(emisiones / 100 * porcentaje);
+                    
+                        $("#Lineas_" + i + "__LineasInternasOrden_" + e + "__LineaBonificada_CantidadTotalBonificada").val(cantBonificadas);
+                    
+                        $("#Text_" + i + "_" + e + "_CantidadBonificadas").text("Bonificadas (" + (cantBonificadas - emisionesBonificadas) + " disponibles)");
+
+                        if(cantBonificadas < emisionesBonificadas)
+                        {
+                            $("#Text_" + i + "_" + e + "_CantidadBonificadas").css("color","red");
+                        }
+                        else
+                        {
+                            $("#Text_" + i + "_" + e + "_CantidadBonificadas").css("color","#666");
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            $(".LineaBonificacion").hide();
+        }      
+    }
+
+    function CalcularBonificacion(linea, lineaInterna)
+    {
+        var porcentaje = parseFloat($("#PorcentajeBonificado").val());
+        var emisiones = 0;
+        var emisionesBonificadas = 0;
+        var deleted = $(".LineaInterna_" + linea + "_" + lineaInterna).hasClass("deleted");
+        var nroDias = $(".dia_" + linea + "_" + lineaInterna).length;
+
+        if (!deleted)
+        {   
+            for (var d = 0; d < nroDias; d++)
+            {
+                var emisionesDia = parseInt($("#Lineas_" + linea + "__LineasInternasOrden_" + lineaInterna + "__Mes_Dias_" + d + "__NroEmisiones").val());
+                var emisionesBonificadasDia = parseInt($("#Lineas_" + linea + "__LineasInternasOrden_" + lineaInterna + "__LineaBonificada_Mes_Dias_" + d + "__NroEmisiones").val());
+                        
+                emisiones += emisionesDia;
+                emisionesBonificadas += emisionesBonificadasDia;
+            }
+                    
+            var cantBonificadas = Math.round(emisiones / 100 * porcentaje);
+                    
+            $("#Lineas_" + linea + "__LineasInternasOrden_" + lineaInterna + "__LineaBonificada_CantidadTotalBonificada").val(cantBonificadas);
+                    
+            $("#Text_" + linea + "_" + lineaInterna + "_CantidadBonificadas").text("Bonificadas (" + (cantBonificadas - emisionesBonificadas) + " disponibles)");
+
+            if(cantBonificadas < emisionesBonificadas)
+            {
+                $("#Text_" + linea + "_" + lineaInterna + "_CantidadBonificadas").css("color","red");
+            }
+            else
+            {
+                $("#Text_" + linea + "_" + lineaInterna + "_CantidadBonificadas").css("color","#666");
+            }
+        }
     }
 
 </script>

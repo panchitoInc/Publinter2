@@ -65,6 +65,7 @@
     <Compile Include="Entities\Cliente.cs" />
     <Compile Include="Entities\Contacto.cs" />
     <Compile Include="Entities\Dia.cs" />
+    <Compile Include="Entities\LineaBonificada.cs" />
     <Compile Include="Entities\LineaInternaOrden.cs" />
     <Compile Include="Entities\LineaOrden.cs" />
     <Compile Include="Entities\Material.cs" />

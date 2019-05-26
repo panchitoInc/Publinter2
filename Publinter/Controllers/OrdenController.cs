@@ -104,17 +104,17 @@ namespace Publinter.Controllers
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
-            if(model.ListaCampanias.Count > 0)
+
+            if (model.ListaCampanias.Count > 0)
             {
                 var PrimerCampania = model.ListaCampanias.FirstOrDefault();
                 var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
                 model.ListaMateriales = CampaniaConDependencias.Materiales;
-
             }
+
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
-
 
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
@@ -126,13 +126,14 @@ namespace Publinter.Controllers
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
+
             if (model.ListaCampanias.Count > 0)
             {
                 var PrimerCampania = model.ListaCampanias.FirstOrDefault();
                 var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
                 model.ListaMateriales = CampaniaConDependencias.Materiales;
-
             }
+
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
@@ -175,6 +176,28 @@ namespace Publinter.Controllers
                         nuevo.NroEmisiones = d.NroEmisiones;
 
                         nueva_interna.Mes.Dias.Add(d);
+                    }
+
+                    if (lio.LineaBonificadaId.HasValue)
+                    {
+                        nueva_interna.LineaBonificada = new LineaBonificada();
+                        nueva_interna.LineaBonificada.CantidadTotalBonificada = lio.LineaBonificada.CantidadTotalBonificada;
+                        nueva_interna.LineaBonificada.Mes = new Mes();
+                        nueva_interna.LineaBonificada.Mes.MesNombre = lio.LineaBonificada.Mes.MesNombre;
+                        nueva_interna.LineaBonificada.Mes.MesNumero = lio.LineaBonificada.Mes.MesNumero;
+                        nueva_interna.LineaBonificada.Mes.MesAnio = lio.LineaBonificada.Mes.MesAnio;
+                        nueva_interna.LineaBonificada.Mes.Dias = new List<Dia>();
+
+                        foreach (Dia d in lio.Mes.Dias)
+                        {
+                            Dia nuevo = new Dia();
+                            nuevo.DiaNombre = d.DiaNombre;
+                            nuevo.DiaNumero = d.DiaNumero;
+                            nuevo.TotalDia = d.TotalDia;
+                            nuevo.NroEmisiones = d.NroEmisiones;
+
+                            nueva_interna.LineaBonificada.Mes.Dias.Add(d);
+                        }
                     }
 
                     nueva.LineasInternasOrden.Add(nueva_interna);
@@ -321,6 +344,9 @@ namespace Publinter.Controllers
 
             primera.Mes = mesActual;
 
+            primera.LineaBonificada = new LineaBonificada();
+            primera.LineaBonificada.Mes = mesActual;
+
             nueva.LineasInternasOrden.Add(primera);
 
             viewModel.Lineas.Add(nueva);
@@ -388,6 +414,10 @@ namespace Publinter.Controllers
             }
 
             primera.Mes = mesActual;
+
+            primera.LineaBonificada = new LineaBonificada();
+            primera.LineaBonificada.Mes = mesActual;
+
             nueva.LineasInternasOrden.Add(primera);
 
             viewModel.Lineas.Add(nueva);
@@ -452,6 +482,30 @@ namespace Publinter.Controllers
 
                 interna.Mes = mesActual;
 
+                if (model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificadaId.HasValue)
+                {
+                    interna.LineaBonificada = new LineaBonificada();
+                    interna.LineaBonificada.CantidadTotalBonificada = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.CantidadTotalBonificada;
+
+                    interna.LineaBonificada.Mes = new Mes();
+                    interna.LineaBonificada.Mes.MesAnio = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesAnio;
+                    interna.LineaBonificada.Mes.MesNumero = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesNumero;
+                    interna.LineaBonificada.Mes.MesNombre = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesNombre;
+
+                    interna.LineaBonificada.Mes.Dias = new List<Dia>();
+
+                    foreach (Dia d in model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.Dias)
+                    {
+                        Dia dia = new Dia();
+                        dia.DiaNumero = d.DiaNumero;
+                        dia.DiaNombre = d.DiaNombre;
+                        dia.NroEmisiones = d.NroEmisiones;
+                        dia.TotalDia = d.TotalDia;
+
+                        interna.LineaBonificada.Mes.Dias.Add(dia);
+                    }
+                }
+
                 nueva.LineasInternasOrden.Add(interna);
             }
 
@@ -480,6 +534,9 @@ namespace Publinter.Controllers
             {
                 d.NroEmisiones = 0;
             }
+
+            nueva.LineaBonificada = new LineaBonificada();
+            nueva.LineaBonificada.Mes = nueva.Mes;
 
             model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Add(nueva);
 

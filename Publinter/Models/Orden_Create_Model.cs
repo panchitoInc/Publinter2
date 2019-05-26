@@ -19,6 +19,7 @@ namespace Publinter.Models
             this.ListaClientes = new List<Get_Cliente_Data>();
             this.ListaAnunciantes = new List<Get_Anunciante_Data>();
             this.ListaCampanias = new List<Get_all_campania>();
+            this.PorcentajeBonificado = 0;
 
             this.Lineas = new List<LineaOrden>();
 
@@ -54,6 +55,9 @@ namespace Publinter.Models
 
             LineaInternaOrden nuevali = new LineaInternaOrden();
             nuevali.Mes = mesActual;
+
+            nuevali.LineaBonificada = new LineaBonificada();
+            nuevali.LineaBonificada.Mes = mesActual;
 
             nueva.LineasInternasOrden.Add(nuevali);
 
@@ -92,6 +96,8 @@ namespace Publinter.Models
         public int IndexLineaParaAgregar { get; set; }
 
         public int IndexLineaInternaParaAgregar { get; set; }
+
+        public decimal PorcentajeBonificado { get; set; }
 
         public List<Medio> ListaMedios { get; set; }
 

@@ -48,5 +48,7 @@ namespace DataModule.Entities
         public int? AnulaA { get; set; }
 
         public int? AnuladaPor { get; set; }
+
+        public decimal? PorcentajeBonificado { get; set; }
     }
 }
