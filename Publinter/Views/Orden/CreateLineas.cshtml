@@ -21,7 +21,7 @@
                         <th colspan="31" style="background-color:lightgrey;font-size:16px">
                             @Model.Lineas[i].LineasInternasOrden[0].Mes.MesNombre
 
-                            <span id="totalMes_@i" class="pull-right">$ 0.00</span>
+                            <span id="totalMes_@i" class="pull-right totalMes">$ 0.00</span>
 
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].ProgramaId)
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesId)
@@ -91,7 +91,7 @@
                     {
                         <tr class="LineaInterna_@i">                    
                             <td rowspan="2">
-                                <select id="Programa_@(i)_@(e)" class="Programa" onchange="SetPrograma(@i, @e)" style="border:none;width: 100px">
+                                <select id="Programa_@(i)_@(e)" class="Programa" onchange="SetPrograma(@i, @e)" style="border:none;width: 100%;">
                                     @foreach (var p in Model.ListaProgramas)
                                     {
                                         <option value="@p.ProgramaId" data-precio="@p.Precio">@p.Nombre</option>
@@ -100,7 +100,7 @@
                                 @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].ProgramaId)
                             </td>
                             <td rowspan="2">
-                                <select id="Material_@(i)_@(e)" class="Material" onchange="SetMaterial(@i, @e)" style="border:none;width: 100px">
+                                <select id="Material_@(i)_@(e)" class="Material" onchange="SetMaterial(@i, @e)" style="border:none;width: 100%;">
                                     @foreach (var m in Model.ListaMateriales)
                                     {
                                         <option value="@m.MaterialId" data-duracion="@m.DuracionSegundos">@m.Titulo</option>

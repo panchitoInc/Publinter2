@@ -87,7 +87,7 @@ namespace Publinter.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(Campania model)
+        public ActionResult Create(Campania model)
         {
             try {
                 model.Materiales = model.Materiales.Where(x => x.Titulo != null && x.Titulo != "").ToList();
@@ -95,7 +95,7 @@ namespace Publinter.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             } catch (Exception e) {
 
-                return Json(false,e.Message, JsonRequestBehavior.AllowGet);
+                return View();
             }
         }
 

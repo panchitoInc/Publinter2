@@ -10,10 +10,10 @@ insert into TipoMedio values('Vía publica')
 insert into TipoMedio values('Digital')
 
 -- Tipo Material
-insert into TipoMaterial values('Spot')
-insert into TipoMaterial values('PNT')
-insert into TipoMaterial values('Auspicio')
-insert into TipoMaterial values('Mencion')
+insert into TipoMaterial values('Spot',0)
+insert into TipoMaterial values('PNT',0)
+insert into TipoMaterial values('Auspicio',0)
+insert into TipoMaterial values('Mencion',0)
 
 -- Medios
 insert into medio values('Del Sol FM', 'Radio Del Sol', 2, 10)

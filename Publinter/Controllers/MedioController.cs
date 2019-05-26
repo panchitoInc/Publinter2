@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using DataModule.EntitiesResult;
+using System.Linq;
 
 namespace Publinter.Controllers
 {
@@ -138,6 +139,22 @@ namespace Publinter.Controllers
             else
             {
                 html += "<option value='0' data-precio='0'>No hay programas</option>";
+            }
+
+            return Json(new { html }, JsonRequestBehavior.AllowGet);
+        }
+
+        public  JsonResult GetEmailsPorMedio(int medioId)
+        {
+            string html = string.Empty;
+            html += "<option value='-1'>Seleccione un Email</option>";
+            var ListaMediosEmails = medioApplicationService.GetEmailsPorMedio(medioId);
+            if (ListaMediosEmails != null)
+            {
+                foreach(var email in ListaMediosEmails)
+                {
+                    html += "<option value='" + email + "'>" + email + "</option>";
+                }
             }
 
             return Json(new { html }, JsonRequestBehavior.AllowGet);

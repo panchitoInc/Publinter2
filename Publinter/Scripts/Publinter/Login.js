@@ -1,5 +1,7 @@
-﻿
-
+﻿var interval = 0;
+var progress = 0;
+var bttn;
+var instancia;
 function ValidarLogin() {
 
     var user = $("#Usuario").val();
@@ -10,16 +12,25 @@ function ValidarLogin() {
         $("#Clave").css("border-bottom", "2px solid white");
         AjaxPost("../Account/Login", GetCurrentModel("formLogin"), ValidarLoginSuccess, 0);
     } else {
+        clearInterval(interval);
+        instancia._stop(-1);
+        UIProgressButton.prototype.stop;
         focusOutUser($("#Usuario").val());
         focusOutPass($("#Clave").val());
+
     }
     }
         
 function ValidarLoginSuccess(data, index) {
     if (data.access) {
-        window.location.href = "../Orden/Create";
+        clearInterval(interval);
+        instancia._stop(1);
+        
     } else {
+        clearInterval(interval);
+        instancia._stop(-1);
         $("#error").fadeIn();
+
     }
 
 }

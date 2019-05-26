@@ -70,12 +70,14 @@
 
                    var retorno = "";
                    if (!row.Anulada) {
+                       
                        retorno = '<div class="dropdown"><a class="dropdown-toggle text-align-right" data-toggle="dropdown" href="#" aria-expanded="false">' +
                                  'Acciones <span class="caret"></span>' +
                                  '</a>' +
                                  '<ul class="dropdown-menu">' +
                                  '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="../Orden/DescargarPdf?ordenId=' + row.OrdenId + '">Descargar Pdf</a></li>' +
                                  '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="javascript:CopiarOrden(' + row.OrdenId + ')">Copiar</a></li>' +
+                                 '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="javascript:AbrirPopupEmail(' + row.OrdenId +','+ row.MedioId + ')">Enviar</a></li>' +
                                  '</ul>' +
                                  '</div>';
                    }

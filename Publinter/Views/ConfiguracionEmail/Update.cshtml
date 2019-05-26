@@ -1,0 +1,96 @@
+﻿@model DataModule.Entities.ConfiguracionEmail
+
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function submitConfiguracion() {
+        if ($("#Host").val() == "") {
+            $("#Host").css("border-bottom", "1px solid red");
+            return false;
+        }
+        if ($("#Port").val() == "") {
+            $("#Port").css("border-bottom", "1px solid red");
+            return false;
+        }
+        if ($("#UserName").val() == "") {
+            $("#UserName").css("border-bottom", "1px solid red");
+            return false;
+        }
+        if ($("#Password").val() == "") {
+            $("#Password").css("border-bottom", "1px solid red");
+            return false;
+        }
+        $("#ConfiguracionEmailForm").submit();
+    }
+</script>
+<div class="register-box-body">
+    <p style="font-size: 22px;padding-bottom: 7px;margin-bottom:10px;">Configuración</p>
+
+    @using (Html.BeginForm("Update", "ConfiguracionEmail", FormMethod.Post, new { @id = "ConfiguracionEmailForm" }))
+    {
+        <div class="row">
+
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    <label>Host</label>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    <label>Port</label>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    <label>Nombre de usuario</label>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    <label>Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Host, new { @class = "form-control", @placeholder = "Host" })
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Port, new { @class = "form-control", @placeholder = "Port" })
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "UserName" })
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Password" })
+                    @Html.HiddenFor(x => x.ConfiguracionEmailId)
+                </div>
+            </div>
+            <div class="">
+                <div class="col-xs-2 pull-right">
+                    <button type="button" class="btn btn-primary btn-block btn-flat" onclick="submitConfiguracion();">Guardar</button>
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div><!-- /.register-box -->
+<!-- jQuery 3 -->
+<script src="~/Content/Admin/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="~/Content/Admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="~/Content/Admin/plugins/iCheck/icheck.min.js"></script>
+<script src="~/Scripts/Utils.js"></script>
+<script src="~/Scripts/Publinter/Validar.js"></script>

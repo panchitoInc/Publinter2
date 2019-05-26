@@ -1,9 +1,12 @@
 ﻿using AccesoDatos;
 using AccesoDatos.Repository;
+using DataModule;
 using DataModule.Entities;
 using Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace BusinessLogic.ApplicationServices
 {
@@ -41,6 +44,16 @@ namespace BusinessLogic.ApplicationServices
         {
             return medioRepository.Update(model);
         }
-       
+
+        public IList<string> GetEmailsPorMedio(int medioId)
+        {
+            IList<string> listaEmails = new List<string>();
+            using (var context = new PublinterContext())
+            {
+                var _medioId = new SqlParameter("@MedioId", medioId);
+                listaEmails = context.Database.SqlQuery<string>("GET_EMAILS_POR_MEDIIO @MedioId", _medioId).ToList();
+            }
+            return listaEmails;
+        }
     }
 }

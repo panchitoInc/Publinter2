@@ -123,7 +123,8 @@ namespace Publinter.Models
                 UsuarioId = this.UsuarioId,
                 MedioId = this.MedioId,
             };
-
+            this.Email.FechaEnviado = DateTime.Now;
+            orden.Emails.Add(this.Email);
             orden.MedioId = this.MedioId;
             
             foreach (LineaOrden l in this.Lineas)
@@ -132,7 +133,7 @@ namespace Publinter.Models
             }
 
             orden.LineasOrden = this.Lineas;
-
+            
             if (this.OrdenAnulada != 0) {
                 orden.AnulaA = this.OrdenAnulada;
             }
@@ -216,5 +217,7 @@ namespace Publinter.Models
 
             return retorno;
         }
+        public Email Email { get; set; }
+        
     }
 }
