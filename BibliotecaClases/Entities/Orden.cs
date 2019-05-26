@@ -56,7 +56,7 @@ namespace DataModule.Entities
         /// <summary>
         /// OrdenDeCompra Navigation
         /// </summary>
-        public int OrdenDeCompraId { get; set; }
+        public int? OrdenDeCompraId { get; set; }
         [ForeignKey("OrdenDeCompraId")]
         public OrdenDeCompra OrdenDeCompra { get; set; }
 

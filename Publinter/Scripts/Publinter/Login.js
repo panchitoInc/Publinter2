@@ -6,19 +6,21 @@ function ValidarLogin() {
 
     var user = $("#Usuario").val();
     var pass = $("#Clave").val();
-    if (user != "" && pass != "") {
+    if(!$("#validar").hasClass("disabled"))
+        if (user != "" && pass != "") {
 
-        $("#Usuario").css("border-bottom", "2px solid white");
-        $("#Clave").css("border-bottom", "2px solid white");
-        AjaxPost("../Account/Login", GetCurrentModel("formLogin"), ValidarLoginSuccess, 0);
-    } else {
-        clearInterval(interval);
-        instancia._stop(-1);
-        UIProgressButton.prototype.stop;
-        focusOutUser($("#Usuario").val());
-        focusOutPass($("#Clave").val());
+            $("#Usuario").css("border-bottom", "2px solid white");
+            $("#Clave").css("border-bottom", "2px solid white");
+            AjaxPost("../Account/Login", GetCurrentModel("formLogin"), ValidarLoginSuccess, 0);
+        } else {
+            clearInterval(interval);
+            instancia._stop(-1);
+            UIProgressButton.prototype.stop;
+            focusOutUser($("#Usuario").val());
+            focusOutPass($("#Clave").val());
+            
 
-    }
+        }
     }
         
 function ValidarLoginSuccess(data, index) {
