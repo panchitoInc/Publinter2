@@ -67,7 +67,7 @@
                "data": "Acciones",
                className: "text-align-right",
                "render": function (data, type, row) {
-
+                   debugger;
                    var retorno = "";
                    if (!row.Anulada) {
                        
@@ -75,6 +75,7 @@
                                  'Acciones <span class="caret"></span>' +
                                  '</a>' +
                                  '<ul class="dropdown-menu">' +
+                                 
                                  '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="../Orden/DescargarPdf?ordenId=' + row.OrdenId + '">Descargar Pdf</a></li>' +
                                  '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="javascript:CopiarOrden(' + row.OrdenId + ')">Copiar</a></li>' +
                                  '<li role="presentation"><a class="text-align-center" role="menuitem" tabindex="-1" href="javascript:AbrirPopupEmail(' + row.OrdenId +','+ row.MedioId + ')">Enviar</a></li>' +

@@ -123,8 +123,13 @@ namespace Publinter.Models
                 UsuarioId = this.UsuarioId,
                 MedioId = this.MedioId,
             };
-            this.Email.FechaEnviado = DateTime.Now;
-            orden.Emails.Add(this.Email);
+            //email
+            if(this.Email != null)
+            {
+                this.Email.FechaEnviado = DateTime.Now;
+                orden.Emails.Add(this.Email);
+            }
+            
             orden.MedioId = this.MedioId;
             
             foreach (LineaOrden l in this.Lineas)
