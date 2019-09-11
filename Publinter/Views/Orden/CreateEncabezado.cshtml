@@ -58,7 +58,7 @@
     <div id="datosEncabezado" class="col-sm-12">
         <div class="col-sm-3">
             <label class="inline-element" style="width:75px">Campaña: </label>
-            @Html.DropDownListConClases(lista, "elid", "elnombre", "clases clases2", "data-undata: valor1, data-undata: valor2")
+            
             @Html.DropDownListFor(x => x.CampaniaId, new SelectList(Model.ListaCampanias, "CampaniaId", "Nombre"), new { @class = "inline-element", @style = "width:130px", @onchange = "FiltrarMateriales();GetOrdenesSelect()" })
         </div>
         <div class="col-sm-3">
