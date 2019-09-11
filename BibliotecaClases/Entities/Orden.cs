@@ -52,13 +52,19 @@ namespace DataModule.Entities
         public int? AnulaA { get; set; }
 
         public int? AnuladaPor { get; set; }
+
         public List<Email> Emails{ get; set; }
+
         /// <summary>
         /// OrdenDeCompra Navigation
         /// </summary>
         public int? OrdenDeCompraId { get; set; }
+
         [ForeignKey("OrdenDeCompraId")]
         public OrdenDeCompra OrdenDeCompra { get; set; }
 
+        public decimal? PorcentajeBonificado { get; set; }
+
+        public decimal TotalSegundos { get; set; }
     }
 }

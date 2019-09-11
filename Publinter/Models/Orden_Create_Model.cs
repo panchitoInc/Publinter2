@@ -19,6 +19,7 @@ namespace Publinter.Models
             this.ListaClientes = new List<Get_Cliente_Data>();
             this.ListaAnunciantes = new List<Get_Anunciante_Data>();
             this.ListaCampanias = new List<Get_all_campania>();
+            this.PorcentajeBonificado = 0;
 
             this.Lineas = new List<LineaOrden>();
 
@@ -55,6 +56,9 @@ namespace Publinter.Models
             LineaInternaOrden nuevali = new LineaInternaOrden();
             nuevali.Mes = mesActual;
 
+            nuevali.LineaBonificada = new LineaBonificada();
+            nuevali.LineaBonificada.Mes = mesActual;
+
             nueva.LineasInternasOrden.Add(nuevali);
 
             this.Lineas.Add(nueva);
@@ -84,7 +88,11 @@ namespace Publinter.Models
 
         public decimal TotalOrden { get; set; }
 
+        public decimal TotalOrdenSegundos { get; set; }
+
         public int OrdenAnulada { get; set; }
+
+        public int OrdenDeCompraId { get; set; }
 
         /// <summary>
         /// Para agregar una linea interna se pone aqui a que nro de linea se le agrega
@@ -92,6 +100,8 @@ namespace Publinter.Models
         public int IndexLineaParaAgregar { get; set; }
 
         public int IndexLineaInternaParaAgregar { get; set; }
+
+        public decimal PorcentajeBonificado { get; set; }
 
         public List<Medio> ListaMedios { get; set; }
 
@@ -119,9 +129,11 @@ namespace Publinter.Models
                 Emision = this.Emision,
                 NroOrden = this.NroOrden,
                 CampaniaId = this.CampaniaId,
+                TotalSegundos = this.TotalOrdenSegundos,
                 Total = this.TotalOrden,
                 UsuarioId = this.UsuarioId,
                 MedioId = this.MedioId,
+                OrdenDeCompraId = this.OrdenDeCompraId
             };
             //email
             if(this.Email != null)

@@ -29,6 +29,7 @@ namespace Publinter.Controllers
         IClienteApplicationService _clienteApplicationService;
         IProgramaApplicationService _programaApplicationService;
         ICampaniaApplicationService _campaniaAplicationService;
+        IOrdenDeCompraApplicationService _ordenDeCompraApplicationService;
 
         private ICampaniaApplicationService campaniaAplicationService
         {
@@ -101,45 +102,34 @@ namespace Publinter.Controllers
             }
         }
 
-        //public ActionResult Create()
-        //{
-        //    Orden_Create_Model model = new Orden_Create_Model();
-        //    model.ListaCampanias = campaniaAplicationService.GetAll();
-        //    if(model.ListaCampanias.Count > 0)
-        //    {
-        //        var PrimerCampania = model.ListaCampanias.FirstOrDefault();
-        //        var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
-        //        model.ListaMateriales = CampaniaConDependencias.Materiales;
+        private IOrdenDeCompraApplicationService ordenDeCompraApplicationService
+        {
+            get
+            {
+                if (this._ordenDeCompraApplicationService == null)
+                {
+                    this._ordenDeCompraApplicationService = new OrdenDeCompraApplicationService(CurrentUser);
+                }
+                return this._ordenDeCompraApplicationService;
+            }
+        }
 
-        //    }
-        //    model.ListaMedios = medioApplicationService.GetAll();
-        //    model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
-        //    model.ListaClientes = clienteApplicationService.GetClientes();
-
-
-        //    model.NroOrden = ordenApplicationService.GetNroOrden();
-        //    model.UsuarioId = CurrentUser.Id;
-
-        //    return View(model);
-        //}
         public ActionResult Create()
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
-            if (model.ListaCampanias.Count > 0)
             {
                 var PrimerCampania = model.ListaCampanias.FirstOrDefault();
                 var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
                 model.ListaMateriales = CampaniaConDependencias.Materiales;
-
             }
+
             model.ListaMedios = medioApplicationService.GetAll();
             if (model.ListaMedios.Count > 0)
             {
                 model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             }
             model.ListaClientes = clienteApplicationService.GetClientes();
-
 
             model.NroOrden = ordenApplicationService.GetNroOrden();
             model.UsuarioId = CurrentUser.Id;
@@ -162,13 +152,14 @@ namespace Publinter.Controllers
         {
             Orden_Create_Model model = new Orden_Create_Model();
             model.ListaCampanias = campaniaAplicationService.GetAll();
+
             if (model.ListaCampanias.Count > 0)
             {
                 var PrimerCampania = model.ListaCampanias.FirstOrDefault();
                 var CampaniaConDependencias = campaniaAplicationService.Get(PrimerCampania.CampaniaId);
                 model.ListaMateriales = CampaniaConDependencias.Materiales;
-
             }
+
             model.ListaMedios = medioApplicationService.GetAll();
             model.ListaProgramas = programaApplicationService.GetProgramasByMedio(model.ListaMedios.FirstOrDefault().MedioId);
             model.ListaClientes = clienteApplicationService.GetClientes();
@@ -213,12 +204,35 @@ namespace Publinter.Controllers
                         nueva_interna.Mes.Dias.Add(d);
                     }
 
+                    if (lio.LineaBonificadaId.HasValue)
+                    {
+                        nueva_interna.LineaBonificada = new LineaBonificada();
+                        nueva_interna.LineaBonificada.CantidadTotalBonificada = lio.LineaBonificada.CantidadTotalBonificada;
+                        nueva_interna.LineaBonificada.Mes = new Mes();
+                        nueva_interna.LineaBonificada.Mes.MesNombre = lio.LineaBonificada.Mes.MesNombre;
+                        nueva_interna.LineaBonificada.Mes.MesNumero = lio.LineaBonificada.Mes.MesNumero;
+                        nueva_interna.LineaBonificada.Mes.MesAnio = lio.LineaBonificada.Mes.MesAnio;
+                        nueva_interna.LineaBonificada.Mes.Dias = new List<Dia>();
+
+                        foreach (Dia d in lio.Mes.Dias)
+                        {
+                            Dia nuevo = new Dia();
+                            nuevo.DiaNombre = d.DiaNombre;
+                            nuevo.DiaNumero = d.DiaNumero;
+                            nuevo.TotalDia = d.TotalDia;
+                            nuevo.NroEmisiones = d.NroEmisiones;
+
+                            nueva_interna.LineaBonificada.Mes.Dias.Add(d);
+                        }
+                    }
+
                     nueva.LineasInternasOrden.Add(nueva_interna);
                 }
 
                 model.Lineas.Add(nueva);
             }
 
+            model.TotalOrdenSegundos = aCopiar.TotalSegundos;
             model.TotalOrden = aCopiar.Total;
 
             return View("Create", model);
@@ -309,11 +323,25 @@ namespace Publinter.Controllers
         {
             List<Get_Orden_Select> ordenes = ordenApplicationService.GetOrdenesSelect(campaniaId, medioId);
 
-            var html = "<option value='0'>Seleccione orden</orden>";
+            var html = "<option value='0'>Ninguna</orden>";
 
             foreach (Get_Orden_Select item in ordenes)
             {
                 html += "<option value='" + item.OrdenId + "'>" + item.Descripcion + "</option>";
+            }
+
+            return Json(html, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOrdenesDeCompraSelect(int medioId)
+        {
+            List<Get_OrdenDeCompra_Select> ordenes = ordenDeCompraApplicationService.GetOrdenesDeCompraSelect(medioId);
+
+            var html = "<option value='0'>Ninguna</orden>";
+
+            foreach (Get_OrdenDeCompra_Select item in ordenes)
+            {
+                html += "<option value='" + item.OrdenDeCompraId + "' data-saldo='" + item.Saldo + "'>" + item.Descripcion + "</option>";
             }
 
             return Json(html, JsonRequestBehavior.AllowGet);
@@ -360,6 +388,9 @@ namespace Publinter.Controllers
             }
 
             primera.Mes = mesActual;
+
+            primera.LineaBonificada = new LineaBonificada();
+            primera.LineaBonificada.Mes = mesActual;
 
             nueva.LineasInternasOrden.Add(primera);
 
@@ -428,6 +459,10 @@ namespace Publinter.Controllers
             }
 
             primera.Mes = mesActual;
+
+            primera.LineaBonificada = new LineaBonificada();
+            primera.LineaBonificada.Mes = mesActual;
+
             nueva.LineasInternasOrden.Add(primera);
 
             viewModel.Lineas.Add(nueva);
@@ -492,6 +527,30 @@ namespace Publinter.Controllers
 
                 interna.Mes = mesActual;
 
+                if (model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificadaId.HasValue)
+                {
+                    interna.LineaBonificada = new LineaBonificada();
+                    interna.LineaBonificada.CantidadTotalBonificada = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.CantidadTotalBonificada;
+
+                    interna.LineaBonificada.Mes = new Mes();
+                    interna.LineaBonificada.Mes.MesAnio = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesAnio;
+                    interna.LineaBonificada.Mes.MesNumero = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesNumero;
+                    interna.LineaBonificada.Mes.MesNombre = model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.MesNombre;
+
+                    interna.LineaBonificada.Mes.Dias = new List<Dia>();
+
+                    foreach (Dia d in model.Lineas[cantLineas - 1].LineasInternasOrden[i].LineaBonificada.Mes.Dias)
+                    {
+                        Dia dia = new Dia();
+                        dia.DiaNumero = d.DiaNumero;
+                        dia.DiaNombre = d.DiaNombre;
+                        dia.NroEmisiones = d.NroEmisiones;
+                        dia.TotalDia = d.TotalDia;
+
+                        interna.LineaBonificada.Mes.Dias.Add(dia);
+                    }
+                }
+
                 nueva.LineasInternasOrden.Add(interna);
             }
 
@@ -520,6 +579,9 @@ namespace Publinter.Controllers
             {
                 d.NroEmisiones = 0;
             }
+
+            nueva.LineaBonificada = new LineaBonificada();
+            nueva.LineaBonificada.Mes = nueva.Mes;
 
             model.Lineas[model.IndexLineaParaAgregar].LineasInternasOrden.Add(nueva);
 
@@ -862,6 +924,54 @@ namespace Publinter.Controllers
                                 table.AddCell(simpleCel);
                             }
                         }
+
+                        // Linea Bonificada de la linea interna
+                        var LineaBonificada = lineaInterna.LineaBonificada;
+                        var BonificadaColSpan2 = new PdfPCell(new Phrase("Bonificada " + LineaBonificada.CantidadTotalBonificada.ToString()) );
+                        BonificadaColSpan2.Colspan = 2;
+                        BonificadaColSpan2.PaddingTop = 3;
+                        BonificadaColSpan2.Phrase.Font.Size = 10;
+                        BonificadaColSpan2.PaddingBottom = 3;
+                        BonificadaColSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                        BonificadaColSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                        BonificadaColSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);
+                        table.AddCell(BonificadaColSpan2);
+
+                        //BonificadaColSpan2.Phrase = new Phrase(model.Campania.Materiales.FirstOrDefault(x => x.MaterialId.Equals(lineaInterna.MaterialId)).Titulo);
+                        //BonificadaColSpan2.Phrase.Font.Size = 10;
+                        //table.AddCell(BonificadaColSpan2);
+                        //
+                        simpleCel = new PdfPCell();
+                        simpleCel.UseVariableBorders = true;
+                        simpleCel.BorderColor = BaseColor.BLACK;
+
+                        simpleCel.PaddingTop = 6;
+                        for (var d = 0; d < LineaBonificada.Mes.Dias.Count; d++)
+                        {
+                            simpleCel.Phrase = new Phrase(LineaBonificada.Mes.Dias[d].NroEmisiones.ToString());
+                            simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
+                            simpleCel.VerticalAlignment = Element.ALIGN_CENTER;
+                            table.AddCell(simpleCel);
+                        }
+                        if (LineaBonificada.Mes.Dias.Count < 31)
+                        {
+                            simpleCel = new PdfPCell(new Phrase(""));
+                            if (LineaBonificada.Mes.Dias.Count == 30)
+                            {
+                                table.AddCell(simpleCel);
+                            }
+                            else if (LineaBonificada.Mes.Dias.Count == 29)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                            if (LineaBonificada.Mes.Dias.Count == 28)
+                            {
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                                table.AddCell(simpleCel);
+                            }
+                        }
                     }
 
                     //table.SpacingAfter = 5;
@@ -1065,6 +1175,7 @@ namespace Publinter.Controllers
             model.NroOrden = orden.NroOrden;
             model.OrdenId = orden.OrdenId;
             model.TotalOrden = orden.Total;
+            model.TotalOrdenSegundos = orden.TotalSegundos;
             model.UsuarioId = orden.UsuarioId;
             return model;
         }

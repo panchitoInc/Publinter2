@@ -26,6 +26,8 @@
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[0].Mes.MesNumero)
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[0].Mes.MesAnio)
                     @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].TotalLinea)
+                    @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].TotalLineaSegundos)
+                    @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].Bonificada)
                 </th>
             </tr>
         </thead>
@@ -82,7 +84,7 @@
                     }
                 }
             </tr>
-            
+
             @for (int e = 0; e < Model.Lineas[Model.IndexLinea].LineasInternasOrden.Count; e++)
             {
                 <tr class="LineaInterna_@(Model.IndexLinea)">
@@ -109,7 +111,7 @@
                     @for (var d = 0; d < Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias.Count; d++)
                     {
                         <td rowspan="2" class="dato dia_@(Model.IndexLinea)_@e">
-                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + Model.IndexLinea, @onchange = "CalcularTotalLinea(" + Model.IndexLinea + ")" })
+                            @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + Model.IndexLinea, @onchange = "CalcularTotalLinea(" + Model.IndexLinea + ");CalcularBonificacion(" + Model.IndexLinea + ", " + e + ")" })
 
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].DiaId)
                             @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].Mes.Dias[d].DiaNombre)
@@ -139,8 +141,53 @@
                     }
                 </tr>
                 <tr></tr>
+
+                <!--Bonificada-->
+                <tr class="LineaBonificada_@(Model.IndexLinea)_@(e) LineaBonificacion" style="background-color:#daffda">
+                    <td rowspan="2" colspan="2">
+
+                        <!--Mostrar cantidad bonificadas disponibles aca-->
+                        <span id="Text_@(Model.IndexLinea)_@(e)_CantidadBonificadas">Bonificadas</span>
+
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.LineaBonificadaId)
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.CantidadTotalBonificada)
+                    </td>
+
+                    @for (var d = 0; d < Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count; d++)
+                    {
+                    <td rowspan="2" class="dato dia_bonificada_@(Model.IndexLinea)_@(e)">
+                        @Html.TextBoxFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones inpBonificado dias_" + Model.IndexLinea, @onchange = "CalcularBonificacion(" + Model.IndexLinea + ", " + e + ")" })
+
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaId)
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaNombre)
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaNumero)
+                        @Html.HiddenFor(x => x.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].TotalDia)
+                    </td>
+                    }
+
+                    @if (Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count < 31)
+                    {
+                        if (Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 30)
+                        {
+                            <td rowspan="2" class="dato hidden"></td>
+                        }
+                        if (Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 29)
+                        {
+                            <td rowspan="2" class="dato hidden"></td>
+                            <td rowspan="2" class="dato hidden"></td>
+                        }
+                        if (Model.Lineas[Model.IndexLinea].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 28)
+                        {
+                            <td rowspan="2" class="dato hidden"></td>
+                            <td rowspan="2" class="dato hidden"></td>
+                            <td rowspan="2" class="dato hidden"></td>
+                        }
+                    }
+                </tr>
+                <!--End bonificada-->
+                <tr class="LineaBonificacion"></tr>
             }
-            
+
         </tbody>
     </table>
 </div>

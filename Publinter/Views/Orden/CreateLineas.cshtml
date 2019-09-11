@@ -29,6 +29,7 @@
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesNumero)
                             @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[0].Mes.MesAnio)
                             @Html.HiddenFor(x => x.Lineas[i].TotalLinea)
+                            @Html.HiddenFor(x => x.Lineas[i].TotalLineaSegundos)
                             @Html.HiddenFor(x => x.Lineas[i].Bonificada)
                         </th>
                     </tr>
@@ -39,7 +40,7 @@
                         <td rowspan="2" class="tdBlack">Materiales</td>
                         @foreach (var dia in Model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
                         {
-                           <td class="dato">@dia.DiaNombre[0]</td>
+                            <td class="dato">@dia.DiaNombre[0]</td>
                         }
 
                         @if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)
@@ -86,10 +87,10 @@
                             }
                         }
                     </tr>
-                    
+
                     @for (int e = 0; e < Model.Lineas[i].LineasInternasOrden.Count; e++)
                     {
-                        <tr class="LineaInterna_@i">                    
+                        <tr class="LineaInterna_@i">
                             <td rowspan="2">
                                 <select id="Programa_@(i)_@(e)" class="Programa" onchange="SetPrograma(@i, @e)" style="border:none;width: 100%;">
                                     @foreach (var p in Model.ListaProgramas)
@@ -113,7 +114,7 @@
                             @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[e].Mes.Dias.Count; d++)
                             {
                                 <td rowspan="2" class="dato dia_@(i)_@(e)">
-                                    @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + i, @onchange = "CalcularTotalLinea(" + i + ")" })
+                                    @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones dias_" + i, @onchange = "CalcularTotalLinea(" + i + ");CalcularBonificacion(" + i + ", " + e + ")" })
 
                                     @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaId)
                                     @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].Mes.Dias[d].DiaNombre)
@@ -142,8 +143,53 @@
                             }
                         </tr>
                         <tr></tr>
+
+                        <!--Bonificada-->
+                        <tr class="LineaBonificada_@(i)_@(e) LineaBonificacion" style="background-color:#daffda">
+                            <td rowspan="2" colspan="2">
+
+                                <!--Mostrar cantidad bonificadas disponibles aca-->
+                                <span id="Text_@(i)_@(e)_CantidadBonificadas">Bonificadas</span>
+
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.LineaBonificadaId)
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.CantidadTotalBonificada)
+                            </td>
+
+                            @for (var d = 0; d < Model.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count; d++)
+                            {
+                            <td rowspan="2" class="dato dia_bonificada_@(i)_@(e)">
+                                @Html.TextBoxFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].NroEmisiones, new { @class = "txtEmisiones inpBonificado dias_" + i, @onchange = "CalcularBonificacion(" + i + ", " + e + ")" })
+
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaId)
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaNombre)
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].DiaNumero)
+                                @Html.HiddenFor(x => x.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias[d].TotalDia)
+                            </td>
+                            }
+
+                            @if (Model.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count < 31)
+                            {
+                                if (Model.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 30)
+                                {
+                                    <td rowspan="2" class="dato hidden"></td>
+                                }
+                                if (Model.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 29)
+                                {
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                }
+                                if (Model.Lineas[i].LineasInternasOrden[e].LineaBonificada.Mes.Dias.Count == 28)
+                                {
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                    <td rowspan="2" class="dato hidden"></td>
+                                }
+                            }
+                        </tr>
+                        <!--End bonificada-->
+                        <tr class="LineaBonificacion"></tr>
                     }
-                    
+
                 </tbody>
             </table>
         </div>

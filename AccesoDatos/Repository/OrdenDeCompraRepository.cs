@@ -4,6 +4,7 @@ using DataModule.EntitiesResult;
 using Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,19 @@ namespace AccesoDatos.Repository
                 lista = context.Database.SqlQuery<Get_index_orden_decompra>("GET_INDEX_ORDEN_DECOMPRA").ToList();
             }
             return lista;
+        }
+
+        public List<Get_OrdenDeCompra_Select> GetOrdenesSelect(int medioId)
+        {
+            List<Get_OrdenDeCompra_Select> ListaOrdenes = new List<Get_OrdenDeCompra_Select>();
+
+            using (var context = new PublinterContext())
+            {
+                var _medioid = new SqlParameter("@MEDIOID", medioId);
+                ListaOrdenes = context.Database.SqlQuery<Get_OrdenDeCompra_Select>("GET_ORDENES_DE_COMPRA_SELECT @MEDIOID", _medioid).ToList();
+            }
+
+            return ListaOrdenes;
         }
     }
 }

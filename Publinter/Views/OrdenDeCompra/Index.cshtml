@@ -3,7 +3,14 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style type="text/css">
+    a.previous{
+        margin-right:15px;
+    }
+    a.next {
+        margin-left: 15px;
+    }
+</style>
 <script type="text/javascript">
     $(document).ready(function(){
         InitTable("#ListadoOrdenDeCompras");
@@ -18,7 +25,7 @@
             <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Orden de compra</font></font></h3>
         </div>
         <div class="col-xs-3 col-xs-offset-6">
-            <a href="../../OrdenDeCompra/Create" type="button" class="btn btn-block btn-success pull-right">Nueva Orden de compra</a>
+            <a href="../../OrdenDeCompra/Create" type="button" class="btn btn-block btn-success pull-right" style="max-width:170px;">Nueva Orden de compra</a>
         </div>
     </div>
     <!-- /.box-header -->

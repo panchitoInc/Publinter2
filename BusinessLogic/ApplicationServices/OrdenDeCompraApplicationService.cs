@@ -40,5 +40,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return ordenDeCompraRepository.GetAll();
         }
+
+        public List<Get_OrdenDeCompra_Select> GetOrdenesDeCompraSelect(int medioId)
+        {
+            return ordenDeCompraRepository.GetOrdenesSelect(medioId);
+        }
     }
 }
