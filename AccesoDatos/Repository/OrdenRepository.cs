@@ -43,7 +43,16 @@ namespace AccesoDatos.Repository
                     if (nueva.OrdenDeCompraId.HasValue && nueva.OrdenDeCompraId.Value != 0)
                     {
                         OrdenDeCompra compra = context.OrdenDeCompra.FirstOrDefault(x => x.OrdenDeCompraId.Equals(nueva.OrdenDeCompraId.Value));
-                        compra.Saldo -= nueva.TotalSegundos;
+                        if(compra.Saldo > nueva.TotalSegundos)
+                        {
+                            compra.Saldo -= nueva.TotalSegundos;
+                        }
+                        else
+                        {
+                            nueva.TotalSegundos -= compra.Saldo;
+                            compra.Saldo = 0;
+                        }
+
                         context.Entry(compra).State = System.Data.Entity.EntityState.Modified;
                     }
 

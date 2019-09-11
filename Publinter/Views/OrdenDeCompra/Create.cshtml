@@ -37,8 +37,16 @@
     }
 </style>
 <script type="text/javascript">
-
+    $(document).ready(function () {
+        focusInSaidas();
+    });
     
+    function focusInSaidas() {
+        $("#Salidas").focusin(function () {
+            this.select();
+        });
+    }
+
     function CheckError() {
         if (focusOutCantidadSalidas($("#Salidas")[0])) {
             $("#OrdenDeCompraForm").submit();

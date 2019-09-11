@@ -140,12 +140,16 @@
 
         SetPorcentajeBonificado();
 
-        doc = new jsPDF();
+        //doc = new jsPDF();
         specialElementHandlers = {
             '#editor': function (element, renderer) {
                 return true;
             }
         };
+
+        $(".txtEmisiones").focusin(function () {
+            this.select();
+        });
 
     });
 

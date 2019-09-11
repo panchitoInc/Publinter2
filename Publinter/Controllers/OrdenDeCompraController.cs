@@ -48,6 +48,7 @@ namespace Publinter.Controllers
             IOrdenDeCompraApplicationService ordenDeCompraApplicationService = new OrdenDeCompraApplicationService(CurrentUser);
             model.Emision = DateTime.Now;
             model.FechaVencimiento = DateTime.Now;
+            model.Saldo = model.Salidas;
             ordenDeCompraApplicationService.Add(model);
             ViewBag.ListaMedios = medioApplicationService.GetAll().Select(x => new SelectListItem() { Value = x.MedioId.ToString(), Text = x.Nombre });
             OrdenDeCompra ordenC = new OrdenDeCompra();
