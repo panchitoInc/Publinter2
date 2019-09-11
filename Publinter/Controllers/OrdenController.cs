@@ -924,54 +924,59 @@ namespace Publinter.Controllers
                                 table.AddCell(simpleCel);
                             }
                         }
-
+                       
                         // Linea Bonificada de la linea interna
-                        var LineaBonificada = lineaInterna.LineaBonificada;
-                        var BonificadaColSpan2 = new PdfPCell(new Phrase("Bonificada " + LineaBonificada.CantidadTotalBonificada.ToString()) );
-                        BonificadaColSpan2.Colspan = 2;
-                        BonificadaColSpan2.PaddingTop = 3;
-                        BonificadaColSpan2.Phrase.Font.Size = 10;
-                        BonificadaColSpan2.PaddingBottom = 3;
-                        BonificadaColSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
-                        BonificadaColSpan2.VerticalAlignment = Element.ALIGN_CENTER;
-                        BonificadaColSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);
-                        table.AddCell(BonificadaColSpan2);
-
-                        //BonificadaColSpan2.Phrase = new Phrase(model.Campania.Materiales.FirstOrDefault(x => x.MaterialId.Equals(lineaInterna.MaterialId)).Titulo);
-                        //BonificadaColSpan2.Phrase.Font.Size = 10;
-                        //table.AddCell(BonificadaColSpan2);
-                        //
-                        simpleCel = new PdfPCell();
-                        simpleCel.UseVariableBorders = true;
-                        simpleCel.BorderColor = BaseColor.BLACK;
-
-                        simpleCel.PaddingTop = 6;
-                        for (var d = 0; d < LineaBonificada.Mes.Dias.Count; d++)
+                        if (lineaInterna.LineaBonificada !=null)
                         {
-                            simpleCel.Phrase = new Phrase(LineaBonificada.Mes.Dias[d].NroEmisiones.ToString());
-                            simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
-                            simpleCel.VerticalAlignment = Element.ALIGN_CENTER;
-                            table.AddCell(simpleCel);
+                            var LineaBonificada = lineaInterna.LineaBonificada;
+                            var BonificadaColSpan2 = new PdfPCell(new Phrase("Bonificada " + LineaBonificada.CantidadTotalBonificada.ToString()));
+                            BonificadaColSpan2.Colspan = 2;
+                            BonificadaColSpan2.PaddingTop = 3;
+                            BonificadaColSpan2.Phrase.Font.Size = 10;
+                            BonificadaColSpan2.PaddingBottom = 3;
+                            BonificadaColSpan2.HorizontalAlignment = Element.ALIGN_CENTER;
+                            BonificadaColSpan2.VerticalAlignment = Element.ALIGN_CENTER;
+                            BonificadaColSpan2.BackgroundColor = new iTextSharp.text.BaseColor(Color.White);
+                            table.AddCell(BonificadaColSpan2);
+
+                            //BonificadaColSpan2.Phrase = new Phrase(model.Campania.Materiales.FirstOrDefault(x => x.MaterialId.Equals(lineaInterna.MaterialId)).Titulo);
+                            //BonificadaColSpan2.Phrase.Font.Size = 10;
+                            //table.AddCell(BonificadaColSpan2);
+                            //
+                            simpleCel = new PdfPCell();
+                            simpleCel.UseVariableBorders = true;
+                            simpleCel.BorderColor = BaseColor.BLACK;
+
+                            simpleCel.PaddingTop = 6;
+                            for (var d = 0; d < LineaBonificada.Mes.Dias.Count; d++)
+                            {
+                                simpleCel.Phrase = new Phrase(LineaBonificada.Mes.Dias[d].NroEmisiones.ToString());
+                                simpleCel.HorizontalAlignment = Element.ALIGN_CENTER;
+                                simpleCel.VerticalAlignment = Element.ALIGN_CENTER;
+                                table.AddCell(simpleCel);
+                            }
+                            if (LineaBonificada.Mes.Dias.Count < 31)
+                            {
+                                simpleCel = new PdfPCell(new Phrase(""));
+                                if (LineaBonificada.Mes.Dias.Count == 30)
+                                {
+                                    table.AddCell(simpleCel);
+                                }
+                                else if (LineaBonificada.Mes.Dias.Count == 29)
+                                {
+                                    table.AddCell(simpleCel);
+                                    table.AddCell(simpleCel);
+                                }
+                                if (LineaBonificada.Mes.Dias.Count == 28)
+                                {
+                                    table.AddCell(simpleCel);
+                                    table.AddCell(simpleCel);
+                                    table.AddCell(simpleCel);
+                                }
+                            }
+
                         }
-                        if (LineaBonificada.Mes.Dias.Count < 31)
-                        {
-                            simpleCel = new PdfPCell(new Phrase(""));
-                            if (LineaBonificada.Mes.Dias.Count == 30)
-                            {
-                                table.AddCell(simpleCel);
-                            }
-                            else if (LineaBonificada.Mes.Dias.Count == 29)
-                            {
-                                table.AddCell(simpleCel);
-                                table.AddCell(simpleCel);
-                            }
-                            if (LineaBonificada.Mes.Dias.Count == 28)
-                            {
-                                table.AddCell(simpleCel);
-                                table.AddCell(simpleCel);
-                                table.AddCell(simpleCel);
-                            }
-                        }
+
                     }
 
                     //table.SpacingAfter = 5;
