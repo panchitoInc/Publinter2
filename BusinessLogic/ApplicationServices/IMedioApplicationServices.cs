@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using DataModule.EntitiesResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,9 @@ namespace BusinessLogic.ApplicationServices
         Medio Get(int id);
 
         bool Update(Medio model);
+
         IList<string> GetEmailsPorMedio(int medioId);
 
+        IList<Get_Medio_Data> GetMedios();
     }
 }

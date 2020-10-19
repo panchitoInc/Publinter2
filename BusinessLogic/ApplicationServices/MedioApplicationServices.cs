@@ -2,6 +2,7 @@
 using AccesoDatos.Repository;
 using DataModule;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,11 @@ namespace BusinessLogic.ApplicationServices
                 listaEmails = context.Database.SqlQuery<string>("GET_EMAILS_POR_MEDIIO @MedioId", _medioId).ToList();
             }
             return listaEmails;
+        }
+
+        public IList<Get_Medio_Data> GetMedios()
+        {
+            return medioRepository.GetMedios();
         }
     }
 }

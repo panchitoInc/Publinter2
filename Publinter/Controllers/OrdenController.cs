@@ -30,6 +30,7 @@ namespace Publinter.Controllers
         IProgramaApplicationService _programaApplicationService;
         ICampaniaApplicationService _campaniaAplicationService;
         IOrdenDeCompraApplicationService _ordenDeCompraApplicationService;
+        IAnuncianteApplicationService _anuncianteApplicationService;
 
         private ICampaniaApplicationService campaniaAplicationService
         {
@@ -42,6 +43,19 @@ namespace Publinter.Controllers
                 return this._campaniaAplicationService;
             }
         }
+
+        private IAnuncianteApplicationService anuncianteAplicationService
+        {
+            get
+            {
+                if (this._anuncianteApplicationService == null)
+                {
+                    this._anuncianteApplicationService = new AnuncianteApplicationService(CurrentUser);
+                }
+                return this._anuncianteApplicationService;
+            }
+        }
+
         private IOrdenApplicationService ordenApplicationService
         {
             get
@@ -289,14 +303,14 @@ namespace Publinter.Controllers
             SelectListItem unIten = new SelectListItem() { Value = "-1", Text = "Cargando emails." };
             ListaMediosEmails.Insert(0, unIten);
             ViewBag.ListaEmails = ListaMediosEmails;
+            
             return View();
         }
 
         [HttpPost]
-        public ActionResult AjaxGetDataOrdenIndex(int draw, int start, int length)
+        public ActionResult AjaxGetDataOrdenIndex(int draw, int start, int length, int anuncianteId, int campaniaId, int medioId, string search)
         {
             int TOTAL_ROWS = 0;
-            string search = Request["search[value]"];
             int sortColumn = 0;
             string sortDirection = "asc";
 
@@ -313,7 +327,7 @@ namespace Publinter.Controllers
 
             dataTableData.draw = draw;
 
-            var ordenes = ordenApplicationService.GetIndex(start, length, sortColumn, sortDirection, search).ToList();
+            var ordenes = ordenApplicationService.GetIndex(start, length, sortColumn, sortDirection, anuncianteId, campaniaId, medioId, search).ToList();
 
             if (ordenes != null && ordenes.Count > 0)
             {

@@ -159,5 +159,19 @@ namespace Publinter.Controllers
 
             return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetOptionsMedios()
+        {
+            IList<Get_Medio_Data> lista = medioApplicationService.GetMedios();
+
+            string options = "<option value='0'>Todos</option>";
+
+            foreach (var item in lista)
+            {
+                options += "<option value='" + item.MedioId + "'>" + item.Nombre + "</option>";
+            }
+
+            return Json(new { value = true, options }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

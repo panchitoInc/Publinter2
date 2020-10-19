@@ -15,5 +15,6 @@ namespace BusinessLogic.ApplicationServices
         int Add(Campania model);
         bool Edit(Campania model);
         List<Get_Material_Data> GetMaterialesByCampania(int campaniaId);
+        IList<Campania> GetCampaniasXAnunciante(int anuncianteId);
     }
 }

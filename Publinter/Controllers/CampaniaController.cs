@@ -180,5 +180,22 @@ namespace Publinter.Controllers
             return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetOptionsCampanias(int anuncianteId)
+        {
+            string options = "<option value='0'>Todas</option>";
+
+            if (anuncianteId > 0)
+            {
+                IList<Campania> lista = campaniaApplicationService.GetCampaniasXAnunciante(anuncianteId);
+
+                foreach (var item in lista)
+                {
+                    options += "<option value='" + item.CampaniaId + "'>" + item.Nombre + "</option>";
+                }
+            }
+
+            return Json(new { value = true, options }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

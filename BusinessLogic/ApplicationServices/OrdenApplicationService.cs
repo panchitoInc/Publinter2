@@ -29,9 +29,9 @@ namespace BusinessLogic.ApplicationServices
             return ordenRepository.CrearOrden(nueva);
         }
 
-        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, string search)
+        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, int anuncianteId, int campaniaId, int medioId, string search)
         {
-            return ordenRepository.GetIndex(start, length, sortColumn, sortDirection, search);
+            return ordenRepository.GetIndex(start, length, sortColumn, sortDirection, anuncianteId, campaniaId, medioId, search);
         }
 
         public Orden Get(int ordenId)

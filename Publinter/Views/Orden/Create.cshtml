@@ -521,8 +521,10 @@
             success: function (data) {
                 if(data.value)
                 {
-                    LimpiarDatos();
-                    //$("#txtMensajeExito").text(data.descripcion);
+                    //LimpiarDatos();
+                    AddNumero();
+                    $("#SelectOrdenAnulaA").val("0");
+
                     $("#txtMensajeExito").attr("href", "IndexDetalle");
                     $("#btnExportPdf").removeAttr("disabled");
                     openMensajeExito();

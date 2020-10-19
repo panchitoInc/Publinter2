@@ -7,16 +7,74 @@
     .text-align-left {
         text-align: left;
     }
+
+    #OrdenIndexTabla_filter {
+        display:none;
+    }
 </style>
 
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function () 
+    {
         var url = "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))/Orden/AjaxGetDataOrdenIndex";
         OrdenTableIndexServerSide(url);
+        
+        GetAnunciantes();
+        GetMedios();
+
         $("#guardarYenviar").text("Enviar").attr({ "type": "button", "onclick": "javascript:EnviarOrdenPorEmail();" });
-    })
+    });
+
+    function SetBusqueda(event)
+    {
+        if (event.which == 13 || event.keyCode == 13 || $("#inpBusqueda").val() == "") {
+            ReloadTable();
+        }
+    }
+
+    function GetAnunciantes()
+    {
+        $.ajax({
+            url: '@Url.Action("GetOptionsAnunciantes", "Anunciante")',
+            type: 'POST',
+            success: function (data) {
+                $("#selectAnunciante").html(data.options);
+            }
+        });
+    }
+
+    function GetMedios()
+    {
+        $.ajax({
+            url: '@Url.Action("GetOptionsMedios", "Medio")',
+            type: 'POST',
+            success: function (data) {
+                $("#selectMedio").html(data.options);
+            }
+        });
+    }
+
+    function GetCampanias()
+    {
+        var anuncianteId = $("#selectAnunciante").val();
+
+        $.ajax({
+            url: '@Url.Action("GetOptionsCampanias", "Campania")',
+            type: 'POST',
+            data: { "anuncianteId" : anuncianteId },
+            success: function (data) {
+                $("#selectCampania").html(data.options);
+                ReloadTable();
+            }
+        });
+    }
+
+    function ReloadTable()
+    {
+        $('table#OrdenIndexTabla').DataTable().ajax.reload();
+    }
 
     function CopiarOrden(ordenId)
     {
@@ -93,8 +151,29 @@
     <div class="box-header">
         <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Órdenes</font></font></h3>
     </div>
+
     <!-- /.box-header -->
     <div class="box-body">
+
+        <div style="padding-left:15px; margin-bottom:12px">
+            <div style="display:inline-block;width:200px">
+                <label for="inpBusqueda" style="display:block;position: relative;top: 5px;">Buscar</label>
+                <input id="inpBusqueda" type="text" onkeypress="SetBusqueda(event)" placeholder="Ingrese su búsqueda aquí" style="width:100%;height: 21px;" />
+            </div>
+            <div style="display:inline-block;width:150px">
+                <label for="selectAnunciante" style="display:block;position: relative;top: 5px;">Anunciante</label>
+                <select id="selectAnunciante" class="table-filtro display-inline" style="width:100%" onchange="GetCampanias()"><option value="0">Todos</option></select>
+            </div>
+            <div style="display:inline-block;width:150px">
+                <label for="selectCampania" style="display:block;position: relative;top: 5px;">Campaña</label>
+                <select id="selectCampania" class="table-filtro display-inline" style="width:100%" onchange="ReloadTable()"><option value="0">Todos</option></select>
+            </div>
+            <div style="display:inline-block;width:150px">
+                <label for="selectMedio" style="display:block;position: relative;top: 5px;">Medio</label>
+                <select id="selectMedio" class="table-filtro display-inline" style="width:100%" onchange="ReloadTable()"><option value="0">Todos</option></select>
+            </div>
+        </div>
+
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
             <div class="col-sm-12">
 

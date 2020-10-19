@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using DataModule.EntitiesResult;
 using DataModule;
 using Mvc;
 using System;
@@ -34,6 +35,7 @@ namespace AccesoDatos.Repository
 
             return Medios.ToList();
         }
+        
         public Medio Get(int id)
         {
             var med = new Medio();
@@ -233,6 +235,18 @@ namespace AccesoDatos.Repository
                 }
             }
 
+        }
+
+        IList<Get_Medio_Data> IMedioRepository.GetMedios()
+        {
+            List<Get_Medio_Data> medios;
+
+            using (var context = new PublinterContext())
+            {
+                medios = context.Database.SqlQuery<Get_Medio_Data>("GET_MEDIOS").ToList();
+            }
+
+            return medios;
         }
     }
 }
