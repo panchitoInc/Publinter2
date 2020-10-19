@@ -15,5 +15,6 @@ namespace DataModule.EntitiesResult
         public string RUT { get; set; }
         public string Email { get; set; }
         public string Telefono { get; set; }
+        public int TotalRows { get; set; }
     }
 }

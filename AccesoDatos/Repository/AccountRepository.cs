@@ -31,6 +31,8 @@ namespace AccesoDatos.Repository
                     {
                         useraccess.Msg = "Usuario no encontrado o contraseña incorrecta.";
                         useraccess.TypeAccess = 2;
+                        useraccess.Ip = ip;
+
                     }
                     else
                     {
@@ -38,6 +40,7 @@ namespace AccesoDatos.Repository
                         useraccess.UsuarioId = _user.UsuarioId;
                         useraccess.Msg = "Acceso concedido.";
                         useraccess.TypeAccess = 1;
+                        useraccess.Ip = ip;
 
                     }
                     context.UsuarioAccess.Add(useraccess);

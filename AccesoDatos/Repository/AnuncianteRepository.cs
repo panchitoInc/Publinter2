@@ -152,6 +152,18 @@ namespace AccesoDatos.Repository
             return unAnunciante;
         }
 
-        
+        public List<Get_Anunciante_Data> GetAnuncuantesSelect2Ajax(int anuncianteId, int start, int length, string search)
+        {
+            List<Get_Anunciante_Data> lista;
+            using (var context = new PublinterContext())
+            {
+                var _search = new SqlParameter("@SEARCH", search);
+                var _start = new SqlParameter("@START", start);
+                var _length = new SqlParameter("@LENGTH", length);
+
+                lista = context.Database.SqlQuery<Get_Anunciante_Data>("SET ARITHABORT ON; EXEC GET_ANUNCIATE_SELECT2_AJAX @SEARCH, @START, @LENGTH", _search,_start,_length).ToList();
+            }
+            return lista;
+        }
     }
 }

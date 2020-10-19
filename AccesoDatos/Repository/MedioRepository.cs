@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Publinter.Models;
+using System.Data.SqlClient;
 
 namespace AccesoDatos.Repository
 {
@@ -233,6 +235,19 @@ namespace AccesoDatos.Repository
                 }
             }
 
+        }
+        public List<Medio_Model> GetMediosSelect2Ajax(int medioId, int start, string search, int length)
+        {
+            List<Medio_Model> lista;
+            using (var context = new PublinterContext())
+            {
+                var _search = new SqlParameter("@SEARCH", search);
+                var _start = new SqlParameter("@START", start);
+                var _length = new SqlParameter("@LENGTH", length);
+
+                lista = context.Database.SqlQuery<Medio_Model>("SET ARITHABORT ON; EXEC GET_MEDIOS_SELECT2_AJAX @SEARCH, @START, @LENGTH", _search, _start, _length).ToList();
+            }
+            return lista;
         }
     }
 }

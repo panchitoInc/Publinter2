@@ -38,6 +38,11 @@ namespace AccesoDatos.Repository
                 using (var context = new PublinterContext())
                 {
                     context.Orden.Add(nueva);
+                    if(nueva.OrdenDeCompraId == 0)
+                    {
+                        nueva.OrdenDeCompraId = null;
+                        nueva.OrdenDeCompra = null;
+                    }
                     context.SaveChanges();
 
                     if (nueva.OrdenDeCompraId.HasValue && nueva.OrdenDeCompraId.Value != 0)

@@ -38,15 +38,16 @@
                 placeholder:"Cliente"
             }
             );
-        $("#AnuncianteId").select2(
-            {
-                language: "es",
-                placeholder: "Anunciante",
-                allowClear: true,
-                value:''
-            }
-            );
-        $("#AnuncianteId").val("").trigger("change");
+        //$("#AnuncianteId").select2(
+        //    {
+        //        language: "es",
+        //        placeholder: "Anunciante",
+        //        allowClear: true,
+        //        value:''
+        //    }
+        //    );
+        Get_Anunciante_Data();
+        //$("#AnuncianteId").val("").trigger("change");
         $("#ClienteId").val("").trigger("change");
         $("#Nombre").focus();
     });
@@ -75,6 +76,50 @@
     function DeleteRenglon(index) {
         $("#tr_" + index).fadeOut(200);
         $("#Contactos_" + index + "__Delete").prop('checked', true);
+    }
+    function Get_Anunciante_Data() {
+
+        var _url = '@Url.Action("GetAnuncuantesSelect2Ajax", "Anunciante")';
+        $("#AnuncianteId").select2({
+            language: "es",
+            placeholder: "Buscar anunciante.",
+            width: 'resolve',
+            allowClear: true,
+            //dropdownParent: $(),
+            ajax: {
+                url: _url,
+                width: 'resolve',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                cache: true,
+                delay: 600,
+                data: function (params) {
+                    return {
+                        anuncianteId: 0,
+                        search: params.term == undefined || params.term == null ? "" : params.term,
+                        start: params.page || 0
+                    };
+                },
+                
+                processResults: function (data, params) {
+                    var results = [];
+                    params.page = params.page || 1;
+                    $.each(data.ListaAnunciantes, function (index, account) {
+                        results.push({
+                            id: account.AnuncianteId,
+                            text: account.Nombre
+                        });
+                    });
+                    return {
+                        results: results,
+                        pagination: {
+                            more: (params.page * 20) < data.totalRow
+                        }
+                    };
+                }
+
+            }
+        });
     }
 </script>
 <link href="~/Content/Admin/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
@@ -125,11 +170,11 @@
                 <label>Materiales</label>
             </div>
         </div>
-        <div class="row">
+        @*<div class="row">
             <div class="col-xs-6">Titulo</div>
             <div class="col-xs-3">Tipo</div>
             <div class="col-xs-3">Duración<span style="font-size:10px;color:#ccc;margin-left:4px;">(seg)</span></div>
-        </div>
+        </div>*@
         <div id="container-material-renglones" style="margin-bottom:15px;">
 
             @Html.Partial("~/Views/Campania/Create/_create_renglones_material.cshtml")

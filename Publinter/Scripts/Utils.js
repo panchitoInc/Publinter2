@@ -528,6 +528,7 @@ var formatNumber = {
 
 function InitTable(selector)
 {
+    
     $(selector).DataTable({
         "language": {
             "sProcessing": "Procesando...",
@@ -543,10 +544,10 @@ function InitTable(selector)
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
             "oPaginate": {
-                "sFirst": " Primero",
-                "sLast": "Último ",
-                "sNext": "Siguiente",
-                "sPrevious": "Anterior"
+                "sFirst": " Primero ",
+                "sLast": " Último ",
+                "sNext": " | Siguiente | ",
+                "sPrevious": " | Anterior | "
             },
 
             "oAria": {

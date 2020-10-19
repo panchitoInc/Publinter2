@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using Publinter.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace AccesoDatos.Repository
         Medio GetByNameAndType(string nombre, int tipoMedio);
         int Add(Medio model);
         bool Update(Medio model);
+        List<Medio_Model> GetMediosSelect2Ajax(int medioId, int start, string search, int length);
     }
 }

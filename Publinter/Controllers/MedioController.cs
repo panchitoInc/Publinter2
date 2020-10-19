@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using DataModule.EntitiesResult;
 using System.Linq;
+using Publinter.Models;
 
 namespace Publinter.Controllers
 {
@@ -158,6 +159,19 @@ namespace Publinter.Controllers
             }
 
             return Json(new { html }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMediosSelect2Ajax(int medioId, int start, string search)
+        {
+            int totalRow = 0;
+            int length = 20;
+            start = start * length;
+            List<Medio_Model> ListaMedios = medioApplicationService.GetMediosSelect2Ajax(medioId, start, search, length);
+            if (ListaMedios != null && ListaMedios.Count > 0)
+            {
+                totalRow = ListaMedios[0].TotalRows;
+            }
+            return Json(new { ListaMedios, totalRow }, JsonRequestBehavior.AllowGet);
         }
     }
 }

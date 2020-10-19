@@ -63,5 +63,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return anuncianteRepository.Update(model);
         }
+
+        public List<Get_Anunciante_Data> GetAnuncuantesSelect2Ajax(int anuncianteId, int start, int length,string search)
+        {
+            return anuncianteRepository.GetAnuncuantesSelect2Ajax(anuncianteId, start,length, search);
+        }
     }
 }

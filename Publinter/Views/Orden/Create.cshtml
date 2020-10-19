@@ -97,14 +97,13 @@
 
     $(document).ready(function () {
 
-        $("input.txtEmisiones").keypress(function (e) {
+        //$("input.txtEmisiones").keypress(function (e) {
+        //    if (e.wich) {
 
-            if (e.wich) {
-
-            }
-        });
+        //    }
+        //});
         $("#CampaniaId").trigger("change");
-        $("#MedioId").trigger("change");
+        //$("#MedioId").trigger("change");
 
         $("#SelectOrdenAnulaA").select2(
             { language: "es" }
@@ -150,7 +149,7 @@
         $(".txtEmisiones").focusin(function () {
             this.select();
         });
-
+        Get_Anunciante_Data();
     });
 
     function AgregarPrimeraLinea()
@@ -565,6 +564,8 @@
             $("#guardarYenviar").removeAttr("disabled");
         } else {
             $("#guardarYenviar").attr("disabled", "disabled");
+            $("#Destinatario").val(-1);
+
         }
     }
     //funcion para exportar el form a pdf.
@@ -695,6 +696,50 @@
         }
     }
 
+
+    function Get_Anunciante_Data() {
+
+        var _url = '@Url.Action("GetMediosSelect2Ajax", "Medio")';
+        $("#MedioId").select2({
+            language: "es",
+            placeholder: "Buscar medio.",
+            width: 'resolve',
+            allowClear: true,
+            ajax: {
+                url: _url,
+                width: 'resolve',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                cache: true,
+                delay: 600,
+                data: function (params) {
+                    return {
+                        medioId: 0,
+                        search: params.term == undefined || params.term == null ? "" : params.term,
+                        start: params.page || 0
+                    };
+                },
+
+                processResults: function (data, params) {
+                    var results = [];
+                    params.page = params.page || 1;
+                    $.each(data.ListaMedios, function (index, account) {
+                        results.push({
+                            id: account.MedioId,
+                            text: account.Nombre
+                        });
+                    });
+                    return {
+                        results: results,
+                        pagination: {
+                            more: (params.page * 20) < data.totalRow
+                        }
+                    };
+                }
+
+            }
+        });
+    }
 </script>
 
 <div class=" register-box-body col-sm-12">
@@ -715,20 +760,23 @@
         </div>
 
         @Html.HiddenFor(x => x.GuardarEnviarDescargar)
+        <!--modal email-->
+        @Html.Partial("~/Views/Orden/Modal_Email.cshtml")
+        @Html.HiddenFor(x => x.GuardarEnviarDescargar)
     }
 
 </div>
 <div class=" register-box-body col-sm-12">
 
-    @using (Html.BeginForm("EnviarOrdenPorEmail", "Orden", FormMethod.Post, new { @id = "formSendOrden" }))
-    {
+    @* @using (Html.BeginForm("EnviarOrdenPorEmail", "Orden", FormMethod.Post, new { @id = "formSendOrden" }))
+        {
 
-        @Html.HiddenFor(x => x.GuardarEnviarDescargar)
-        <!--modal email-->
-        @Html.Partial("~/Views/Orden/Modal_Email.cshtml")
+            @Html.HiddenFor(x => x.GuardarEnviarDescargar)
+            <!--modal email-->
+            @Html.Partial("~/Views/Orden/Modal_Email.cshtml")
 
-    }
-
+        }
+    *@
 </div>
 
 <div id="mensajeExito">

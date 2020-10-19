@@ -257,7 +257,6 @@
     <Compile Include="Extensions\AppViewPage.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -265,6 +264,7 @@
     <Compile Include="Models\CampaniaModel.cs" />
     <Compile Include="Models\DataTableDataOrden.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\Medio_Model.cs" />
     <Compile Include="Models\Orden_Create_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -2954,6 +2954,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\component.css" />
     <Content Include="Content\demo.css" />
+    <Content Include="Content\Images\favicon.png" />
     <Content Include="Content\Images\fondoLogin.png" />
     <Content Include="Content\Images\Logo-Publinter-dark-2017-final.png" />
     <Content Include="Content\Images\Logo-Publinter-light-2017.png" />
@@ -3452,6 +3453,7 @@
     <Content Include="Content\ProgressButton\fonts\icomoon\icomoon.woff" />
     <Content Include="Content\ProgressButton\js\.DS_Store" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Publinter - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Publinter20180901062231 - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">

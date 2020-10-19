@@ -110,5 +110,17 @@ namespace Publinter.Controllers
         //    return Json(new { html }, JsonRequestBehavior.AllowGet);
         //}
 
+        public JsonResult GetAnuncuantesSelect2Ajax(int anuncianteId, int start, string search)
+        {
+            int totalRow = 0;
+            int length = 20;
+            start = start * length;
+            List<Get_Anunciante_Data> ListaAnunciantes = anuncianteApplicationService.GetAnuncuantesSelect2Ajax(anuncianteId, start, length, search);
+            if (ListaAnunciantes != null && ListaAnunciantes.Count > 0)
+            {
+                totalRow = ListaAnunciantes[0].TotalRows;
+            }
+            return Json(new { ListaAnunciantes, totalRow }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

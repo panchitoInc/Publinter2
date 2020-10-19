@@ -18,5 +18,14 @@ namespace AccesoDatos.Repository
 
         bool Update(Anunciante model);
         Anunciante GetByRut(string rut);
+        /// <summary>
+        /// retorna lista anuncuiante para select2 ajax Anunciante
+        /// </summary>
+        /// <param name="anuncianteId"></param>
+        /// <param name="start"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        List<Get_Anunciante_Data> GetAnuncuantesSelect2Ajax(int anuncianteId, int start, int length, string search);
+
     }
 }

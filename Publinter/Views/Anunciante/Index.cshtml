@@ -7,9 +7,9 @@
 
 <script>
     $(document).ready(function(){
-        //InitTable("#ListadoAnuncianteTable");
+        InitTable("#ListadoAnuncianteTable");
     });
-
+    
 </script>
 
 <link href="~/Content/Admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -27,7 +27,7 @@
                             <th>Razon social</th>
                             <th class="hidden">Rut</th>
                             <th>Email</th>
-                            <th>Telefono</th>
+                            <th>Teléfono</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +36,8 @@
                             foreach (var i in Model)
                             {
                                 <tr>
-                                    <td><a href="../../Anunciante/Edit/@i.AnuncianteId">@i.RazonSocial</a></td>
+                                    <td><span>@i.Nombre</span></td>
+                                    @*<td><a href="../../Anunciante/Edit/@i.AnuncianteId">@i.Nombre</a></td>*@
                                     <td class="hidden">@i.RUT</td>
                                     <td>@i.Email</td>
                                     <td>@i.Telefono</td>

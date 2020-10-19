@@ -12,6 +12,10 @@
         //    [{"targets": [2],"visible": false,"searchable": false},
         //     {"targets": [3],"visible": false}
         //    ],
+        "columnDefs": [ {
+            "targets": 6,
+            "orderable": false
+        } ],
         "language": {
             "sProcessing": "Procesando...",
             "sLengthMenu": "Mostrar _MENU_ registros",
@@ -58,7 +62,7 @@
                {
                    var retorno = "";
                    if (!row.Anulada) {
-                       retorno += "$ " + floatToStringDecimals(data, 2);
+                       retorno += "$ " + Math.round(data);
                    }
                    return retorno;
                }
@@ -67,7 +71,7 @@
                "data": "Acciones",
                className: "text-align-right",
                "render": function (data, type, row) {
-                   debugger;
+                   
                    var retorno = "";
                    if (!row.Anulada) {
                        

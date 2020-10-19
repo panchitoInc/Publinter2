@@ -1,3 +1,17 @@
 ﻿input[type=search] {
     -webkit-appearance: button;
 }
+/*.paginate_button {
+    padding: 0 5px;
+}*/
+div.dataTables_paginate.paging_simple_numbers{
+    cursor:pointer;
+}
+
+#sideBar_ul li.li_link_new {
+    height: 30px;
+}
+#sideBar_ul li.li_link_new a {
+    height: 30px;
+    padding-top: 4px;
+}

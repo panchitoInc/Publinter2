@@ -4,7 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+<style>
+    #ListadoClientesTable_paginate .paginate_button {
+        margin: 0 5px;
+    }
+</style>
 <script>
     $(document).ready(function(){
         InitTable("#ListadoClientesTable");
@@ -16,7 +20,7 @@
 <div class="box">
     <div class="box-header row">
         <div class="col-xs-6 box-header" style="padding-left:26px;">
-            <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Listado de campania</font></font></h3>
+            <h3 class="box-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Listado de campaña</font></font></h3>
         </div>
         <div class="col-xs-6">
             <a href="../../Campania/Create" type="button" class="btn btn-block btn-success pull-right" style="width: 124px;">Nueva campaña</a>
@@ -31,8 +35,8 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Cliente</th>
                             <th>Anunciamte</th>
+                            <th>Cliente</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,8 +46,8 @@
                             {
                                 <tr>
                                     <td><a href="../../Campania/Edit/@i.CampaniaId">@i.Nombre</a></td>
-                                    <td class="">@i.ClienteNombre</td>
                                     <td>@i.AnuncianteNombre</td>
+                                    <td class="">@i.ClienteNombre</td>
 
                                 </tr>
                             }

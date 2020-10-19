@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using Publinter.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace BusinessLogic.ApplicationServices
 
         bool Update(Medio model);
         IList<string> GetEmailsPorMedio(int medioId);
+        List<Medio_Model> GetMediosSelect2Ajax(int medioId, int start, string search, int length);
 
     }
 }

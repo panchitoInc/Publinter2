@@ -1023,10 +1023,18 @@ namespace Publinter.Controllers
         {
             Orden orden = ordenApplicationService.Get(ordenId);
             Orden_Create_Model model = new Orden_Create_Model();
+            model.OrdenId = orden.OrdenId;
+            model.NroOrden = orden.NroOrden;
+            model.OrdenDeCompraId = orden.OrdenDeCompraId??0;
+            model.PorcentajeBonificado = orden.PorcentajeBonificado??0;
+            model.TotalOrden = orden.Total;
+            model.TotalOrdenSegundos = orden.TotalSegundos;
+            model.UsuarioId = orden.UsuarioId;
             model.CampaniaId = orden.CampaniaId;
             model.Emision = orden.Emision;
             model.Lineas = orden.LineasOrden;
             model.MedioId = orden.MedioId;
+            model.Medio = orden.Medio;
             return createPdf(model);
         }
 

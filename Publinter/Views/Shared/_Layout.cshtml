@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Publinter</title>
+    <link rel="shortcut icon" href="~/Content/Images/favicon.png" type="image/x-icon">
     <!-- Tell the browser to be responsive to screen width -->
+    
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../../Content/Admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -111,25 +113,37 @@
             </div>
 
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree">
+            <ul id="sideBar_ul" class="sidebar-menu" data-widget="tree">
 
                 <li class="header">Acciones rápidas</li>
-                <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o text-red"></i> <span>Nueva Órden</span></a></li>
-                <li><a href="@Url.Action("Create", "Medio")"><i class="fa fa-circle-o text-yellow"></i> <span>Nuevo Medio</span></a></li>
-                <li><a href="@Url.Action("Create", "Anunciante")"><i class="fa fa-circle-o text-aqua"></i> <span>Nuevo anunciante</span></a></li>
+                <li class="li_link_new"><a href="@Url.Action("Create", "Anunciante")"><i class="fa fa-circle-o text-aqua"></i> <span>Nuevo anunciante</span></a></li>
+                <li class="li_link_new"><a href="@Url.Action("Create", "Material")"><i class="fa fa-circle-o text-yellow"></i> <span>Nuevo material</span></a></li>
+                <li class="li_link_new"><a href="@Url.Action("Create", "Campania")"><i class="fa fa-circle-o text-yellow"></i> <span>Nueva campaña</span></a></li>
+                <li class="li_link_new"><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o text-red"></i> <span>Nueva órden</span></a></li>
 
                 <li class="header">Navegación</li>
-
                 <li class="treeview">
                     <a href="#">
-                        <span>Órdenes</span>
+                        <span>Anunciante</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="@Url.Action("Index", "Orden")"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o"></i> Nueva</a></li>
+                        <li><a href="@Url.Action("Index", "Anunciante")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Anunciante")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <span>Materiales</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Material")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Material")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -146,17 +160,16 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <span>Materiales</span>
+                        <span>Órdenes</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="@Url.Action("Index", "Material")"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="@Url.Action("Create", "Material")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
+                        <li><a href="@Url.Action("Index", "Orden")"><i class="fa fa-circle-o"></i> Listado</a></li>
+                        <li><a href="@Url.Action("Create", "Orden")"><i class="fa fa-circle-o"></i> Nueva</a></li>
                     </ul>
                 </li>
-
                 <li class="treeview">
                     <a href="#">
                         <span>Medios</span>
@@ -167,19 +180,6 @@
                     <ul class="treeview-menu">
                         <li><a href="@Url.Action("Index", "Medio")"><i class="fa fa-circle-o"></i> Listado</a></li>
                         <li><a href="@Url.Action("Create", "Medio")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <span>Anunciante</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="@Url.Action("Index", "Anunciante")"><i class="fa fa-circle-o"></i> Listado</a></li>
-                        <li><a href="@Url.Action("Create", "Anunciante")"><i class="fa fa-circle-o"></i> Nuevo</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
