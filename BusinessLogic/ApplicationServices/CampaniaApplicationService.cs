@@ -45,5 +45,10 @@ namespace BusinessLogic.ApplicationServices
         {
             return campaniarepository.GetMaterialesByCampania(campaniaId);
         }
+
+        public IList<Campania> GetCampaniasXAnunciante(int anuncianteId)
+        {
+            return campaniarepository.GetCampaniasXAnunciante(anuncianteId);
+        }
     }
 }

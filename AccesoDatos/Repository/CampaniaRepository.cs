@@ -148,5 +148,24 @@ namespace AccesoDatos.Repository
             }
             return materiales;
         }
+
+        public IList<Campania> GetCampaniasXAnunciante(int anuncianteId)
+        {
+            try
+            {
+                List<Campania> lista = new List<Campania>();
+
+                using (var context = new PublinterContext())
+                {
+                    lista = context.Campania.Where(x => x.AnuncianteId == anuncianteId).ToList();
+                }
+
+                return lista;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
     }
 }

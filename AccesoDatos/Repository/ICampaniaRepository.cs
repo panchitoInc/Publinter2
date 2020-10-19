@@ -15,5 +15,6 @@ namespace AccesoDatos.Repository
         int Add(Campania model);
         bool Update(Campania model);
         List<Get_Material_Data> GetMaterialesByCampania(int campaniaId);
+        IList<Campania> GetCampaniasXAnunciante(int anuncianteId);
     }
 }

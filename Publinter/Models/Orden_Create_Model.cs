@@ -27,8 +27,8 @@ namespace Publinter.Models
        
             Mes mesActual = new Mes();
 
-            mesActual.MesNumero = DateTime.Now.AddMonths(1).Month;
-            mesActual.MesAnio = DateTime.Now.AddMonths(1).Year;
+            mesActual.MesNumero = DateTime.Now.Month;
+            mesActual.MesAnio = DateTime.Now.Year;
             mesActual.MesNombre = this.GetMesNombre(mesActual.MesNumero);
 
             mesActual.Dias = new List<Dia>();
@@ -132,8 +132,7 @@ namespace Publinter.Models
                 TotalSegundos = this.TotalOrdenSegundos,
                 Total = this.TotalOrden,
                 UsuarioId = this.UsuarioId,
-                MedioId = this.MedioId,
-                OrdenDeCompraId = this.OrdenDeCompraId
+                MedioId = this.MedioId
             };
             //email
             if(this.Email != null)
@@ -143,7 +142,12 @@ namespace Publinter.Models
             }
             
             orden.MedioId = this.MedioId;
-            
+
+            if (this.OrdenDeCompraId == 0)
+                orden.OrdenDeCompraId = null;
+            else
+                orden.OrdenDeCompraId = this.OrdenDeCompraId;
+
             foreach (LineaOrden l in this.Lineas)
             {
                 l.LineasInternasOrden = l.LineasInternasOrden.Where(x => !x.Deleted).ToList();
