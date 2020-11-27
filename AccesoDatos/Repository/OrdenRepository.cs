@@ -80,7 +80,7 @@ namespace AccesoDatos.Repository
             }
         }
 
-        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, string search)
+        public IEnumerable<Get_orden_index> GetIndex(int start, int length, int sortColumn, string sortDirection, int anuncianteId, int campaniaId, int medioId, string search)
         {
             IEnumerable<Get_orden_index> ListaOrdenes = new List<Get_orden_index>();
 
@@ -91,9 +91,12 @@ namespace AccesoDatos.Repository
                 var _cantidad = new SqlParameter("@CANTIDAD", length);
                 var _sortColumn = new SqlParameter("@SORTCOLUMN", sortColumn);
                 var _sortDirection = new SqlParameter("@SORTDIRECTION", sortDirection);
-                var _search = new SqlParameter("@SEARCH", search);
+                var _anuncianteid = new SqlParameter("@ANUNCIANTEID", anuncianteId);
+                var _campaniaid = new SqlParameter("@CAMPANIAID", campaniaId);
+                var _medioid = new SqlParameter("@MEDIOID", medioId);
+                var _search = new SqlParameter("@SEARCH", string.IsNullOrEmpty(search) ? "" : search);
 
-                ListaOrdenes = context.Database.SqlQuery<Get_orden_index>("INDEX_ORDEN_DATA_PAGE @USUARIOID, @DESDE, @CANTIDAD, @SORTCOLUMN, @SORTDIRECTION, @SEARCH", _usuid, _desde, _cantidad, _sortColumn, _sortDirection, _search).ToList();
+                ListaOrdenes = context.Database.SqlQuery<Get_orden_index>("INDEX_ORDEN_DATA_PAGE @USUARIOID, @DESDE, @CANTIDAD, @SORTCOLUMN, @SORTDIRECTION, @ANUNCIANTEID, @CAMPANIAID, @MEDIOID, @SEARCH", _usuid, _desde, _cantidad, _sortColumn, _sortDirection, _anuncianteid, _campaniaid, _medioid, _search).ToList();
             }
 
             return ListaOrdenes;
@@ -109,7 +112,10 @@ namespace AccesoDatos.Repository
                     //.Include(x => x.Campania.Anunciante)
                     .Include(x => x.LineasOrden)
                     .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden))
-                    .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.Mes)))
+                    //.Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.LineaBonificada)))
+                    //.Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.LineaBonificada).Select(m => m.Mes)))
+                    .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.LineaBonificada).Select(m => m.Mes).Select(dias => dias.Dias)))
+                    //.Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.Mes)))
                     .Include(x => x.LineasOrden.Select(lOrden => lOrden.LineasInternasOrden.Select(m => m.Mes).Select(dias => dias.Dias)))
                     .Include(x =>x.Usuario)
                     //.Include(x => x.Medio)

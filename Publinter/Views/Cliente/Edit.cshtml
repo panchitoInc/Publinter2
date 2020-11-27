@@ -73,7 +73,7 @@
             <div class="col-xs-4">
                 <div class="form-group has-feedback">
                     @*@Html.TextBoxFor(x => x.RUT, new { @class = "form-control", @placeholder = "RUT", onblur = "javascript:OnFocusOutRut(this.value);" })*@
-
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
                 </div>
             </div>
             <div class="col-xs-4">
@@ -83,7 +83,7 @@
             </div>
             <div class="col-xs-4">
                 <div class="form-group has-feedback">
-                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+                    
                 </div>
             </div>
         </div>

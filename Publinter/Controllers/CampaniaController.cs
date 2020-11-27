@@ -92,7 +92,7 @@ namespace Publinter.Controllers
             try {
                 model.Materiales = model.Materiales.Where(x => x.Titulo != null && x.Titulo != "").ToList();
                 campaniaApplicationService.Add(model);
-                return Json(true, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Create");
             } catch (Exception e) {
 
                 return View();

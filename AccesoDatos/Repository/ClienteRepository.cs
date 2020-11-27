@@ -95,20 +95,36 @@ namespace AccesoDatos.Repository
                         // Quito Vacios
                         model.Contactos = model.Contactos.Where(x => (x.ContactoId == 0 && x.Nombre != "" && (x.Email != "" || x.Telefono != "")) || x.ContactoId > 0).ToList();
 
+                        
                         //Eliminados, vacios o mal completos.
                         var ContactosEliminados = model.Contactos.Where(x => x.Delete.Equals(true)).ToList();
+
                         if (ContactosEliminados.Count > 0)
                         {
-                            ContactosEliminados.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Deleted);
+                            IEnumerable<Contacto> contactosIenumerable = model.Contactos;
+
+
+                            cliBd.Contactos.ForEach(x => {
+                                
+                                if(ContactosEliminados.Any(c => c.ContactoId == x.ContactoId))
+                                {
+                                    context.Entry(x).State = System.Data.Entity.EntityState.Deleted;
+                                }
+                            });
                             context.SaveChanges();
                         }
-
                         // los viejos que se pudireran modificar
                         var contactosModificados = model.Contactos.Where(x => x.ContactoId > 0 && x.Delete.Equals(false)).ToList();
                         if (contactosModificados.Count > 0)
                         {
                             UpdateContacto(cliBd, contactosModificados);
-                            cliBd.Contactos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                            //cliBd.Contactos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+                            cliBd.Contactos.ForEach(x => {
+                                if (contactosModificados.Any(c => c.ContactoId == x.ContactoId))
+                                {
+                                    context.Entry(x).State = System.Data.Entity.EntityState.Modified;
+                                }
+                            });
                             context.SaveChanges();
                         }
 
@@ -117,13 +133,22 @@ namespace AccesoDatos.Repository
                         if (contactosNuevos.Count > 0)
                         {
                             SaveNewContacto(cliBd, contactosNuevos);
-                            contactosNuevos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Added);
+                            //contactosNuevos.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Added);
+                            cliBd.Contactos.ForEach(x => {
+                                if (contactosNuevos.Any(c => c.ContactoId == x.ContactoId))
+                                {
+                                    context.Entry(x).State = System.Data.Entity.EntityState.Added;
+                                }
+                            });
                             context.SaveChanges();
                         }
                     }
                     context.Entry(cliBd).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                 }
+
+                // para que queden bien en la vista despues del update.
+                model.Contactos = model.Contactos.Where(x => x.Delete.Equals(false)).ToList();
                 return true;
             }catch (Exception e)
             {

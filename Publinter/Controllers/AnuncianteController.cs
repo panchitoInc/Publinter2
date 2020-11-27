@@ -89,6 +89,20 @@ namespace Publinter.Controllers
             return anuncianteApplicationService.GetAnunciantes();
         }
 
+        public JsonResult GetOptionsAnunciantes()
+        {
+            IList<Get_Anunciante_Data> lista = anuncianteApplicationService.GetAnunciantes();
+
+            string options = "<option value='0'>Todos</option>";
+
+            foreach (var item in lista)
+            {
+                options += "<option value='" + item.AnuncianteId + "'>" + item.Nombre + "</option>";
+            }
+
+            return Json(new { value = true, options }, JsonRequestBehavior.AllowGet);
+        }
+
         //public JsonResult GetMateriales(int anuncianteId)
         //{
         //    Anunciante unAunciante = anuncianteApplicationService.Get(anuncianteId);

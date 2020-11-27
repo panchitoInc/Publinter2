@@ -30,6 +30,7 @@ namespace Publinter.Controllers
         IProgramaApplicationService _programaApplicationService;
         ICampaniaApplicationService _campaniaAplicationService;
         IOrdenDeCompraApplicationService _ordenDeCompraApplicationService;
+        IAnuncianteApplicationService _anuncianteApplicationService;
 
         private ICampaniaApplicationService campaniaAplicationService
         {
@@ -42,6 +43,19 @@ namespace Publinter.Controllers
                 return this._campaniaAplicationService;
             }
         }
+
+        private IAnuncianteApplicationService anuncianteAplicationService
+        {
+            get
+            {
+                if (this._anuncianteApplicationService == null)
+                {
+                    this._anuncianteApplicationService = new AnuncianteApplicationService(CurrentUser);
+                }
+                return this._anuncianteApplicationService;
+            }
+        }
+
         private IOrdenApplicationService ordenApplicationService
         {
             get
@@ -214,7 +228,7 @@ namespace Publinter.Controllers
                         nueva_interna.LineaBonificada.Mes.MesAnio = lio.LineaBonificada.Mes.MesAnio;
                         nueva_interna.LineaBonificada.Mes.Dias = new List<Dia>();
 
-                        foreach (Dia d in lio.Mes.Dias)
+                        foreach (Dia d in lio.LineaBonificada.Mes.Dias)
                         {
                             Dia nuevo = new Dia();
                             nuevo.DiaNombre = d.DiaNombre;
@@ -234,6 +248,18 @@ namespace Publinter.Controllers
 
             model.TotalOrdenSegundos = aCopiar.TotalSegundos;
             model.TotalOrden = aCopiar.Total;
+
+            List<SelectListItem> ListaMediosEmails = new List<SelectListItem>();
+            if (model.ListaMedios.Count > 0)
+            {
+
+                ListaMediosEmails = medioApplicationService.GetEmailsPorMedio(model.ListaMedios.FirstOrDefault().MedioId)
+                      .Select(x => new SelectListItem { Text = x, Value = x })
+                      .ToList();
+            }
+            SelectListItem unIten = new SelectListItem() { Value = "-1", Text = "Seleccione un email." };
+            ListaMediosEmails.Insert(0, unIten);
+            ViewBag.ListaEmails = ListaMediosEmails;
 
             return View("Create", model);
         }
@@ -277,14 +303,14 @@ namespace Publinter.Controllers
             SelectListItem unIten = new SelectListItem() { Value = "-1", Text = "Cargando emails." };
             ListaMediosEmails.Insert(0, unIten);
             ViewBag.ListaEmails = ListaMediosEmails;
+            
             return View();
         }
 
         [HttpPost]
-        public ActionResult AjaxGetDataOrdenIndex(int draw, int start, int length)
+        public ActionResult AjaxGetDataOrdenIndex(int draw, int start, int length, int anuncianteId, int campaniaId, int medioId, string search)
         {
             int TOTAL_ROWS = 0;
-            string search = Request["search[value]"];
             int sortColumn = 0;
             string sortDirection = "asc";
 
@@ -301,7 +327,7 @@ namespace Publinter.Controllers
 
             dataTableData.draw = draw;
 
-            var ordenes = ordenApplicationService.GetIndex(start, length, sortColumn, sortDirection, search).ToList();
+            var ordenes = ordenApplicationService.GetIndex(start, length, sortColumn, sortDirection, anuncianteId, campaniaId, medioId, search).ToList();
 
             if (ordenes != null && ordenes.Count > 0)
             {
@@ -1054,37 +1080,38 @@ namespace Publinter.Controllers
             try
             {
 
-                //MailMessage message = new MailMessage();
-                //message.To.Add(new MailAddress(model.Email.Destinatario));
-                //message.From = new MailAddress("prueba@publinter.com.uy");
-                //message.Subject = model.Email.Asunto;
-                //string imagePath = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\Logo-Publinter-dark-2017-final.png";
-                //LinkedResource res = new LinkedResource(imagePath);
-                //res.ContentId = Guid.NewGuid().ToString();
-                //var doc = CreateDocumentPdf(model);
-                //Attachment attachment = new Attachment(doc, "Pdf");
-                //attachment.Name = "OrdenNro" + model.NroOrden + "_Medio" + model.Medio.Nombre + "_Campaña" + model.Campania.Nombre + ".pdf";
-                //message.Attachments.Add(attachment);
-                //string imagePathLogoBlanco = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\logoBlanco.png";
-                //message.AlternateViews.Add(getEmbeddedImage(imagePathLogoBlanco, model));
-                //IConfiguracionEmailApplicationService configuracionEmailApplicationService = new ConfiguracionEmailApplicationService(CurrentUser);
-                //ConfiguracionEmail configE = configuracionEmailApplicationService.Get();
+                MailMessage message = new MailMessage();
+                message.To.Add(new MailAddress(model.Email.Destinatario));
+                message.From = new MailAddress("prueba@publinter.com.uy");
+                message.Subject = model.Email.Asunto;
+                string imagePath = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\Logo-Publinter-dark-2017-final.png";
+                LinkedResource res = new LinkedResource(imagePath);
+                res.ContentId = Guid.NewGuid().ToString();
+                var doc = CreateDocumentPdf(model);
+                Attachment attachment = new Attachment(doc, "Pdf");
+                attachment.Name = "OrdenNro" + model.NroOrden + "_Medio" + model.Medio.Nombre + "_Campaña" + model.Campania.Nombre + ".pdf";
+                message.Attachments.Add(attachment);
+                string imagePathLogoBlanco = AppDomain.CurrentDomain.BaseDirectory + "Content\\Images\\logoBlanco.png";
+                message.AlternateViews.Add(getEmbeddedImage(imagePathLogoBlanco, model));
+                IConfiguracionEmailApplicationService configuracionEmailApplicationService = new ConfiguracionEmailApplicationService(CurrentUser);
+                ConfiguracionEmail configE = configuracionEmailApplicationService.Get();
 
-                //using (var smtp = new SmtpClient())
-                //{
-                //    var credential = new NetworkCredential
-                //    {
-                //        UserName = configE.UserName,
-                //        Password = configE.Password
-                //    };
-                //    smtp.Credentials = credential;
-                //    smtp.Host = configE.Host;//"smtp.gmail.com";//"smtp.webfaction.com";  
-                //    smtp.Port = configE.Port;// 587;
-                //    smtp.EnableSsl = true;
-                //    await smtp.SendMailAsync(message);
-                var a = await EnviarConPdf(model);
+                using (var smtp = new SmtpClient())
+                {
+                    var credential = new NetworkCredential
+                    {
+                        UserName = configE.UserName,
+                        Password = configE.Password
+                    };
+                    smtp.Credentials = credential;
+                    smtp.Host = configE.Host;//"smtp.gmail.com";//"smtp.webfaction.com";  
+                    smtp.Port = configE.Port;// 587;
+                    smtp.EnableSsl = true;
+                    await smtp.SendMailAsync(message);
+                    var a = await EnviarConPdf(model);
+                }
+
                 return RedirectToAction("Create");
-
             }
             catch (Exception e)
             {

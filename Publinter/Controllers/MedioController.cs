@@ -166,12 +166,26 @@ namespace Publinter.Controllers
             int totalRow = 0;
             int length = 20;
             start = start * length;
-            List<Medio_Model> ListaMedios = medioApplicationService.GetMediosSelect2Ajax(medioId, start, search, length);
+            List<Get_Medio_Data> ListaMedios = medioApplicationService.GetMediosSelect2Ajax(medioId, start, search, length);
             if (ListaMedios != null && ListaMedios.Count > 0)
             {
                 totalRow = ListaMedios[0].TotalRows;
             }
             return Json(new { ListaMedios, totalRow }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOptionsMedios()
+        {
+            IList<Get_Medio_Data> lista = medioApplicationService.GetMedios();
+
+            string options = "<option value='0'>Todos</option>";
+
+            foreach (var item in lista)
+            {
+                options += "<option value='" + item.MedioId + "'>" + item.Nombre + "</option>";
+            }
+
+            return Json(new { value = true, options }, JsonRequestBehavior.AllowGet);
         }
     }
 }

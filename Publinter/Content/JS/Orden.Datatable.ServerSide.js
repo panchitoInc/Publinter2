@@ -43,7 +43,13 @@
         "serverSide": true,
         "ajax": {
             "url": url,
-            "type": "POST"
+            "type": "POST",
+            "data": function (d) {
+                d.anuncianteId = $("#selectAnunciante").val();
+                d.campaniaId = $("#selectCampania").val();
+                d.medioId = $("#selectMedio").val();
+                d.search = $("#inpBusqueda").val();
+            }
         },
         "columns": [//datos con que se carga en las columnas y configuración
            { "data": "EmisionString", "orderable": true, "sType": 'date' },
@@ -71,7 +77,6 @@
                "data": "Acciones",
                className: "text-align-right",
                "render": function (data, type, row) {
-                   
                    var retorno = "";
                    if (!row.Anulada) {
                        

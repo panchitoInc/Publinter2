@@ -78,7 +78,7 @@ namespace Publinter.Controllers
             if (model.Contactos == null) model.Contactos = new List<Contacto>();
 
             var html = string.Empty;
-            ViewData["indexContacto"] = model.Contactos.Count == 0 ? 0 : model.Contactos.Count - 1;//indica el index del ultimo obj agregado.
+            ViewData["indexContacto"] = model.Contactos.Count == 0 ? 0 : model.Contactos.Count;//indica el index del ultimo obj agregado.
             html = RenderPartialViewToString("~/Views/Cliente/Contacto/contacto_renglon.cshtml", null);
             return Json(html, JsonRequestBehavior.AllowGet);
         }

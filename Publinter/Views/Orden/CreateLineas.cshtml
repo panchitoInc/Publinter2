@@ -40,7 +40,7 @@
                         <td rowspan="2" class="tdBlack">Materiales</td>
                         @foreach (var dia in Model.Lineas[i].LineasInternasOrden[0].Mes.Dias)
                         {
-                            <td class="dato">@dia.DiaNombre[0]</td>
+                            <td class="dato dato_@i">@dia.DiaNombre[0]</td>
                         }
 
                         @if (Model.Lineas[i].LineasInternasOrden[0].Mes.Dias.Count < 31)

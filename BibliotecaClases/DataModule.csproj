@@ -62,6 +62,7 @@
     <Compile Include="EntitiesResult\Get_orden_index.cs" />
     <Compile Include="EntitiesResult\Get_Orden_Select.cs" />
     <Compile Include="EntitiesResult\Get_Programa_Data.cs" />
+    <Compile Include="EntitiesResult\Get_Medio_Data.cs" />
     <Compile Include="Entities\Anunciante.cs" />
     <Compile Include="Entities\Campania.cs" />
     <Compile Include="Entities\Cliente.cs" />

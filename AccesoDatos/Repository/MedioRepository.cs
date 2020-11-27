@@ -1,4 +1,5 @@
 ﻿using DataModule.Entities;
+using DataModule.EntitiesResult;
 using DataModule;
 using Mvc;
 using System;
@@ -36,6 +37,7 @@ namespace AccesoDatos.Repository
 
             return Medios.ToList();
         }
+        
         public Medio Get(int id)
         {
             var med = new Medio();
@@ -236,18 +238,30 @@ namespace AccesoDatos.Repository
             }
 
         }
-        public List<Medio_Model> GetMediosSelect2Ajax(int medioId, int start, string search, int length)
+        public List<Get_Medio_Data> GetMediosSelect2Ajax(int medioId, int start, string search, int length)
         {
-            List<Medio_Model> lista;
+            List<Get_Medio_Data> lista;
             using (var context = new PublinterContext())
             {
                 var _search = new SqlParameter("@SEARCH", search);
                 var _start = new SqlParameter("@START", start);
                 var _length = new SqlParameter("@LENGTH", length);
 
-                lista = context.Database.SqlQuery<Medio_Model>("SET ARITHABORT ON; EXEC GET_MEDIOS_SELECT2_AJAX @SEARCH, @START, @LENGTH", _search, _start, _length).ToList();
+                lista = context.Database.SqlQuery<Get_Medio_Data>("SET ARITHABORT ON; EXEC GET_MEDIOS_SELECT2_AJAX @SEARCH, @START, @LENGTH", _search, _start, _length).ToList();
             }
             return lista;
+        }
+
+        IList<Get_Medio_Data> IMedioRepository.GetMedios()
+        {
+            List<Get_Medio_Data> medios;
+
+            using (var context = new PublinterContext())
+            {
+                medios = context.Database.SqlQuery<Get_Medio_Data>("GET_MEDIOS").ToList();
+            }
+
+            return medios;
         }
     }
 }

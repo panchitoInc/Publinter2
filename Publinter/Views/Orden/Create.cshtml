@@ -102,6 +102,7 @@
 
         //    }
         //});
+        
         $("#CampaniaId").trigger("change");
         //$("#MedioId").trigger("change");
 
@@ -121,7 +122,7 @@
             }
         }
 
-        $("#Emision").val(formattedDate($("#Emision").val()));
+     //   $("#Emision").val(formattedDate($("#Emision").val()));
 
         $("#Emision").daterangepicker({
             singleDatePicker: true,
@@ -520,8 +521,10 @@
             success: function (data) {
                 if(data.value)
                 {
-                    LimpiarDatos();
-                    //$("#txtMensajeExito").text(data.descripcion);
+                    //LimpiarDatos();
+                    AddNumero();
+                    $("#SelectOrdenAnulaA").val("0");
+
                     $("#txtMensajeExito").attr("href", "IndexDetalle");
                     $("#btnExportPdf").removeAttr("disabled");
                     openMensajeExito();
@@ -588,12 +591,13 @@
     {
         var total = $("#TotalOrden").val();
 
-        if(parseFloat(total) != 0)
+        if(total != "" && total != undefined && parseFloat(total) != 0)
         {
             $(".totalMes").text("-");
-            $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals($("#TotalOrden").val(), 2))).show();
+            $("#totalOrden").text(numberThousandSeparator(floatToStringDecimals($("#TotalOrden").val(), 2)));
         }
 
+        $("#totalOrden").show()
         $("#TotalOrden").hide();
     }
 

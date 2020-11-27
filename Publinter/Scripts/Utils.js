@@ -255,6 +255,7 @@ $.fn.allchange = function (callback) {
 };
 
 function formattedDate(date) {
+    
     var d = new Date(date || Date.now()),
         day = '' + d.getDate(),
         month = '' + (d.getMonth() + 1),

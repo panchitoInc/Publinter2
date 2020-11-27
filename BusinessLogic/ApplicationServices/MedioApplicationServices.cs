@@ -2,6 +2,7 @@
 using AccesoDatos.Repository;
 using DataModule;
 using DataModule.Entities;
+using DataModule.EntitiesResult;
 using Mvc;
 using Publinter.Models;
 using System;
@@ -57,9 +58,14 @@ namespace BusinessLogic.ApplicationServices
             return listaEmails;
         }
 
-        public List<Medio_Model> GetMediosSelect2Ajax(int medioid, int start, string search, int length)
+        public List<Get_Medio_Data> GetMediosSelect2Ajax(int medioid, int start, string search, int length)
         {
             return medioRepository.GetMediosSelect2Ajax(medioid, start, search, length);
+        }
+
+        public IList<Get_Medio_Data> GetMedios()
+        {
+            return medioRepository.GetMedios();
         }
     }
 }
